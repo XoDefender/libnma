@@ -1,0 +1,2263 @@
+# Afrikaans translation for network-manager-applet.
+# Copyright (C) 2011 network-manager-applet's COPYRIGHT HOLDER
+# This file is distributed under the same license as the network-manager-applet package.
+# Coert <coert.vandermerwe@gmail.com>, 2011.
+# F Wolff <friedel@translate.org.za>, 2011.
+msgid ""
+msgstr ""
+"Project-Id-Version: network-manager-applet master\n"
+"Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/libnma/\n"
+"POT-Creation-Date: 2020-06-23 09:41+0200\n"
+"PO-Revision-Date: 2011-04-04 08:18+0200\n"
+"Last-Translator: F Wolff <friedel@translate.org.za>\n"
+"Language-Team: translate-discuss-af@lists.sourceforge.net\n"
+"Language: af\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Virtaal 0.7.0-beta4\n"
+"X-Project-Style: gnome\n"
+
+#: org.gnome.nm-applet.gschema.xml.in:6
+msgid "Disable connected notifications"
+msgstr "Deaktiveer koppel-kennisgewings"
+
+#: org.gnome.nm-applet.gschema.xml.in:7
+#, fuzzy
+msgid "Set this to true to disable notifications when connecting to a network."
+msgstr ""
+"Stel dit na WAAR om kennisgewings wanneer aan 'n netwerk gekoppel word te "
+"deaktiveer."
+
+#: org.gnome.nm-applet.gschema.xml.in:11
+msgid "Disable disconnected notifications"
+msgstr "Deaktiveer ontkoppel-kennisgewings"
+
+#: org.gnome.nm-applet.gschema.xml.in:12
+#, fuzzy
+msgid ""
+"Set this to true to disable notifications when disconnecting from a network."
+msgstr ""
+"Stel dit na WAAR om kennisgewings wanneer van 'n netwerk ontkoppel word te "
+"deaktiveer."
+
+#: org.gnome.nm-applet.gschema.xml.in:16
+#, fuzzy
+msgid "Disable VPN notifications"
+msgstr "Deaktiveer koppel-kennisgewings"
+
+#: org.gnome.nm-applet.gschema.xml.in:17
+#, fuzzy
+msgid ""
+"Set this to true to disable notifications when connecting to or "
+"disconnecting from a VPN."
+msgstr ""
+"Stel dit na WAAR om kennisgewings wanneer van 'n netwerk ontkoppel word te "
+"deaktiveer."
+
+#: org.gnome.nm-applet.gschema.xml.in:21
+msgid "Suppress networks available notifications"
+msgstr "Onderdruk netwerkebeskikbaar-kennisgewings"
+
+#: org.gnome.nm-applet.gschema.xml.in:22
+#, fuzzy
+msgid ""
+"Set this to true to disable notifications when Wi-Fi networks are available."
+msgstr ""
+"Stel dit na WAAR om kennisgewings wanneer draadlose netwerke beskikbaar is "
+"te deaktiveer."
+
+#: org.gnome.nm-applet.gschema.xml.in:26
+msgid "Stamp"
+msgstr "Stempel"
+
+#: org.gnome.nm-applet.gschema.xml.in:27
+msgid "Used to determine whether settings should be migrated to a new version."
+msgstr ""
+"Word gebruik om te bepaal of instellings na 'n nuwe weergawe migreer moet "
+"word."
+
+#: org.gnome.nm-applet.gschema.xml.in:31
+#, fuzzy
+msgid "Disable WiFi Create"
+msgstr "Deaktiveer Wi-Fi-skep"
+
+#: org.gnome.nm-applet.gschema.xml.in:32
+#, fuzzy
+msgid ""
+"Set to true to disable creation of adhoc networks when using the applet."
+msgstr ""
+"Stel na WAAR om skep van ad hoc-netwerke te deaktiveer wanneer die "
+"miniprogram gebruik word."
+
+#: org.gnome.nm-applet.gschema.xml.in:36
+msgid "Show the applet in notification area"
+msgstr ""
+
+#: org.gnome.nm-applet.gschema.xml.in:37
+msgid "Set to FALSE to disable displaying the applet in the notification area."
+msgstr ""
+
+#: org.gnome.nm-applet.gschema.xml.in:43 org.gnome.nm-applet.gschema.xml.in:48
+#, fuzzy
+msgid "Ignore CA certificate"
+msgstr "W_agwoord:"
+
+#: org.gnome.nm-applet.gschema.xml.in:44
+#, fuzzy
+msgid ""
+"Set this to true to disable warnings about CA certificates in EAP "
+"authentication."
+msgstr ""
+"Stel dit na WAAR om kennisgewings wanneer aan 'n netwerk gekoppel word te "
+"deaktiveer."
+
+#: org.gnome.nm-applet.gschema.xml.in:49
+#, fuzzy
+msgid ""
+"Set this to true to disable warnings about CA certificates in phase 2 of EAP "
+"authentication."
+msgstr ""
+"Stel dit na WAAR om kennisgewings wanneer aan 'n netwerk gekoppel word te "
+"deaktiveer."
+
+#: shared/nm-utils/nm-shared-utils.c:793
+#, c-format
+msgid "object class '%s' has no property named '%s'"
+msgstr ""
+
+#: shared/nm-utils/nm-shared-utils.c:800
+#, c-format
+msgid "property '%s' of object class '%s' is not writable"
+msgstr ""
+
+#: shared/nm-utils/nm-shared-utils.c:807
+#, c-format
+msgid ""
+"construct property \"%s\" for object '%s' can't be set after construction"
+msgstr ""
+
+#: shared/nm-utils/nm-shared-utils.c:815
+#, c-format
+msgid "'%s::%s' is not a valid property name; '%s' is not a GObject subtype"
+msgstr ""
+
+#: shared/nm-utils/nm-shared-utils.c:824
+#, c-format
+msgid "unable to set property '%s' of type '%s' from value of type '%s'"
+msgstr ""
+
+#: shared/nm-utils/nm-shared-utils.c:835
+#, c-format
+msgid ""
+"value \"%s\" of type '%s' is invalid or out of range for property '%s' of "
+"type '%s'"
+msgstr ""
+
+#: src/nma-bar-code-widget.c:140
+msgid "Network"
+msgstr "Netwerk"
+
+#: src/nma-bar-code-widget.c:157
+#, fuzzy
+msgid "Password"
+msgstr "Wagwoord:"
+
+#: src/nma-bar-code-widget.ui:36
+msgid "Scan with your phone or <a href=\"nma:print\">Print</a>"
+msgstr ""
+
+#: src/nma-cert-chooser-button.c:153
+#, fuzzy
+msgid "(None)"
+msgstr "(geen)"
+
+#: src/nma-cert-chooser-button.c:161
+#, c-format
+msgid "Key in %s"
+msgstr ""
+
+#: src/nma-cert-chooser-button.c:162
+#, c-format
+msgid "Certificate in %s"
+msgstr ""
+
+#: src/nma-cert-chooser-button.c:181 src/nma-pkcs11-cert-chooser-dialog.c:169
+#, fuzzy
+msgid "(Unknown)"
+msgstr "Onbekend"
+
+#: src/nma-cert-chooser-button.c:203 src/nma-cert-chooser-button.c:233
+msgid "Select"
+msgstr ""
+
+#: src/nma-cert-chooser-button.c:204 src/nma-cert-chooser-button.c:234
+msgid "Cancel"
+msgstr ""
+
+#: src/nma-cert-chooser-button.c:460
+msgid "Select from file…"
+msgstr ""
+
+#: src/nma-file-cert-chooser.c:113 src/nma-pkcs11-cert-chooser.c:139
+msgid "No certificate set"
+msgstr ""
+
+#: src/nma-file-cert-chooser.c:131 src/nma-pkcs11-cert-chooser.c:163
+msgid "No key set"
+msgstr ""
+
+#: src/nma-file-cert-chooser.c:285 src/nma-pkcs11-cert-chooser.c:369
+#, c-format
+msgid "Choose a key for %s Certificate"
+msgstr ""
+
+#: src/nma-file-cert-chooser.c:289 src/nma-pkcs11-cert-chooser.c:373
+#, c-format
+msgid "%s private _key"
+msgstr ""
+
+#: src/nma-file-cert-chooser.c:293 src/nma-pkcs11-cert-chooser.c:377
+#, fuzzy, c-format
+msgid "%s key _password"
+msgstr "W_agwoord:"
+
+#: src/nma-file-cert-chooser.c:297
+#, c-format
+msgid "Choose %s Certificate"
+msgstr ""
+
+#: src/nma-file-cert-chooser.c:301 src/nma-pkcs11-cert-chooser.c:385
+#, fuzzy, c-format
+msgid "%s _certificate"
+msgstr "W_agwoord:"
+
+#: src/nma-file-cert-chooser.c:386 src/nma-ws/nma-eap-leap.ui:54
+#: src/nma-ws/nma-eap-simple.ui:71 src/nma-ws/nma-ws-leap.ui:55
+#: src/nma-ws/nma-ws-sae.ui:56 src/nma-ws/nma-ws-wpa-psk.ui:55
+msgid "Sho_w password"
+msgstr "_Wys wagwoord"
+
+#: src/nma-mobile-providers.c:787
+msgid "Default"
+msgstr "Verstek"
+
+#: src/nma-mobile-providers.c:976
+msgid "My country is not listed"
+msgstr "My land is nie gelys nie"
+
+#: src/nma-mobile-wizard.c:141
+msgid "GSM"
+msgstr "GSM"
+
+#: src/nma-mobile-wizard.c:144
+msgid "CDMA"
+msgstr "CDMA"
+
+#: src/nma-mobile-wizard.c:249 src/nma-mobile-wizard.c:281
+msgid "Unlisted"
+msgstr "Ongelys"
+
+#: src/nma-mobile-wizard.c:481
+#, fuzzy
+msgid "My plan is not listed…"
+msgstr "My land is nie gelys nie"
+
+#: src/nma-mobile-wizard.c:653
+msgid "Provider"
+msgstr "Verskaffer"
+
+#: src/nma-mobile-wizard.c:1025
+msgid "Installed GSM device"
+msgstr "Geïnstalleerde GSM-toestel"
+
+#: src/nma-mobile-wizard.c:1028
+msgid "Installed CDMA device"
+msgstr "Geïnstalleerde GSM-toestel"
+
+#: src/nma-mobile-wizard.c:1233
+msgid "Any device"
+msgstr "Enige toetstel"
+
+#: src/nma-mobile-wizard.ui:49
+msgid "New Mobile Broadband Connection"
+msgstr "Nuwe selfoon-breëbandverbinding"
+
+#: src/nma-mobile-wizard.ui:71
+msgid ""
+"This assistant helps you easily set up a mobile broadband connection to a "
+"cellular (3G) network."
+msgstr ""
+"Dié assistent help om maklik 'n selfoon-breëbandverbinding na 'n "
+"selfoonnetwerk (3G) op te stel."
+
+#: src/nma-mobile-wizard.ui:86
+msgid "You will need the following information:"
+msgstr "Die volgende inligting word benodig:"
+
+#: src/nma-mobile-wizard.ui:101
+#, fuzzy
+msgid "Your broadband provider’s name"
+msgstr "Die breëbandverskaffer se naam"
+
+#: src/nma-mobile-wizard.ui:115
+msgid "Your broadband billing plan name"
+msgstr ""
+
+#: src/nma-mobile-wizard.ui:129
+msgid "(in some cases) Your broadband billing plan APN (Access Point Name)"
+msgstr ""
+
+#: src/nma-mobile-wizard.ui:143
+msgid "Create a connection for _this mobile broadband device:"
+msgstr ""
+
+#: src/nma-mobile-wizard.ui:170
+msgid "Set up a Mobile Broadband Connection"
+msgstr "Stel 'n selfoon-breëbandverbinding op"
+
+#: src/nma-mobile-wizard.ui:188
+#, fuzzy
+msgid "Country or region:"
+msgstr "Land of streek"
+
+#: src/nma-mobile-wizard.ui:228
+#, fuzzy
+msgid "Choose your Provider’s Country or Region"
+msgstr "Kies die verskaffer se land of streek"
+
+#: src/nma-mobile-wizard.ui:243
+msgid "Select your provider from a _list:"
+msgstr ""
+
+#: src/nma-mobile-wizard.ui:288
+msgid "I can’t find my provider and I wish to set up the connection _manually:"
+msgstr ""
+
+#: src/nma-mobile-wizard.ui:309
+msgid "My provider uses GSM technology (GPRS, EDGE, UMTS, HSPA)"
+msgstr "My verskaffer gebruik GSM-tegnologie (GPRS, EDGE, UMTS, HSPA)"
+
+#: src/nma-mobile-wizard.ui:310
+msgid "My provider uses CDMA technology (1xRTT, EVDO)"
+msgstr "My verskaffer gebruik CDMA-tegnologie (1xRTT, EVDO)"
+
+#: src/nma-mobile-wizard.ui:321
+msgid "Choose your Provider"
+msgstr "Kies die verskaffer"
+
+#: src/nma-mobile-wizard.ui:338
+msgid "_Select your plan:"
+msgstr "Kie_s die plan:"
+
+#: src/nma-mobile-wizard.ui:365
+msgid "Selected plan _APN (Access Point Name):"
+msgstr ""
+
+#: src/nma-mobile-wizard.ui:415
+msgid ""
+"Warning: Selecting an incorrect plan may result in billing issues for your "
+"broadband account or may prevent connectivity.\n"
+"\n"
+"If you are unsure of your plan please ask your provider for your plan’s APN."
+msgstr ""
+
+#: src/nma-mobile-wizard.ui:436
+msgid "Choose your Billing Plan"
+msgstr ""
+
+#: src/nma-mobile-wizard.ui:454
+msgid ""
+"Your mobile broadband connection is configured with the following settings:"
+msgstr ""
+"Die selfoon-breëbandverbinding is gekonfigureer met die volgende instellings:"
+
+#: src/nma-mobile-wizard.ui:468
+msgid "Your Device:"
+msgstr "Toestel:"
+
+#: src/nma-mobile-wizard.ui:494
+msgid "Your Provider:"
+msgstr "Verskaffer:"
+
+#: src/nma-mobile-wizard.ui:520
+msgid "Your Plan:"
+msgstr "Diensplan:"
+
+#: src/nma-mobile-wizard.ui:575
+msgid ""
+"A connection will now be made to your mobile broadband provider using the "
+"settings you selected. If the connection fails or you cannot access network "
+"resources, double-check your settings. To modify your mobile broadband "
+"connection settings, choose “Network Connections” from the System → "
+"Preferences menu."
+msgstr ""
+
+#: src/nma-mobile-wizard.ui:589
+msgid "Confirm Mobile Broadband Settings"
+msgstr "Bevestig selfoon-breëbandinstellings"
+
+#: src/nma-pkcs11-cert-chooser-dialog.c:241
+msgid "Error logging in: "
+msgstr ""
+
+#: src/nma-pkcs11-cert-chooser-dialog.c:263
+msgid "Error opening a session: "
+msgstr ""
+
+#: src/nma-pkcs11-cert-chooser-dialog.ui:20
+#, fuzzy
+msgid "_Unlock token"
+msgstr "Ontsl_uit"
+
+#: src/nma-pkcs11-cert-chooser-dialog.ui:116
+msgid "Name"
+msgstr ""
+
+#: src/nma-pkcs11-cert-chooser-dialog.ui:126
+msgid "Issued By"
+msgstr ""
+
+#: src/nma-pkcs11-cert-chooser.c:381
+#, c-format
+msgid "Choose a %s Certificate"
+msgstr ""
+
+#: src/nma-pkcs11-cert-chooser.c:389
+#, fuzzy, c-format
+msgid "%s certificate _password"
+msgstr "W_agwoord:"
+
+#: src/nma-pkcs11-cert-chooser.c:441
+msgid "Sho_w passwords"
+msgstr ""
+
+#: src/nma-pkcs11-token-login-dialog.c:132
+#, c-format
+msgid "Enter %s PIN"
+msgstr ""
+
+#: src/nma-pkcs11-token-login-dialog.ui:19 src/nma-vpn-password-dialog.ui:23
+#: src/nma-wifi-dialog.c:1107
+msgid "_Cancel"
+msgstr ""
+
+#: src/nma-pkcs11-token-login-dialog.ui:35
+msgid "_Login"
+msgstr ""
+
+#: src/nma-pkcs11-token-login-dialog.ui:82
+msgid "_Remember PIN"
+msgstr ""
+
+#: src/nma-ui-utils.c:36
+msgid "Store the password only for this user"
+msgstr ""
+
+#: src/nma-ui-utils.c:37
+msgid "Store the password for all users"
+msgstr ""
+
+#: src/nma-ui-utils.c:38
+#, fuzzy
+msgid "Ask for this password every time"
+msgstr "Vra tel_kens vir 'n wagwoord"
+
+#: src/nma-ui-utils.c:39
+#, fuzzy
+msgid "The password is not required"
+msgstr "'n Wagwoord word benodig om aan '%s' te verbind."
+
+#: src/nma-vpn-password-dialog.ui:39
+msgid "_OK"
+msgstr ""
+
+#: src/nma-vpn-password-dialog.ui:73
+#, fuzzy
+msgid "Sh_ow passwords"
+msgstr "_Wys wagwoord"
+
+#: src/nma-vpn-password-dialog.ui:130
+#, fuzzy
+msgid "_Tertiary Password:"
+msgstr "W_agwoord:"
+
+#: src/nma-vpn-password-dialog.ui:144
+#, fuzzy
+msgid "_Secondary Password:"
+msgstr "W_agwoord:"
+
+#: src/nma-vpn-password-dialog.ui:158
+msgid "_Password:"
+msgstr "W_agwoord:"
+
+#: src/nma-wifi-dialog.c:117
+#, fuzzy
+msgid "Click to connect"
+msgstr "Ontkoppel"
+
+#: src/nma-wifi-dialog.c:448
+msgid "New…"
+msgstr ""
+
+#: src/nma-wifi-dialog.c:929
+msgctxt "Wifi/wired security"
+msgid "None"
+msgstr "Geen"
+
+#: src/nma-wifi-dialog.c:945
+msgid "WEP 40/128-bit Key (Hex or ASCII)"
+msgstr ""
+
+#: src/nma-wifi-dialog.c:952
+msgid "WEP 128-bit Passphrase"
+msgstr ""
+
+#: src/nma-wifi-dialog.c:967 src/nma-ws/nma-ws-802-1x.c:370
+#, fuzzy
+msgid "LEAP"
+msgstr "LEAP"
+
+#: src/nma-wifi-dialog.c:978
+#, fuzzy
+msgid "Dynamic WEP (802.1x)"
+msgstr "Dinamiese-WEP"
+
+#: src/nma-wifi-dialog.c:990
+msgid "WPA & WPA2 Personal"
+msgstr ""
+
+#: src/nma-wifi-dialog.c:1006
+msgid "WPA & WPA2 Enterprise"
+msgstr ""
+
+#: src/nma-wifi-dialog.c:1017
+msgid "WPA3 Personal"
+msgstr ""
+
+#: src/nma-wifi-dialog.c:1111
+msgid "C_reate"
+msgstr "S_kep"
+
+#: src/nma-wifi-dialog.c:1113
+msgid "C_onnect"
+msgstr "_Verbind"
+
+#: src/nma-wifi-dialog.c:1191
+#, fuzzy, c-format
+msgid ""
+"Passwords or encryption keys are required to access the Wi-Fi network “%s”."
+msgstr ""
+"Wagwoorde of enkripsiesleutels word benodig vir toegang tot die draadlose "
+"netwerk '%s'."
+
+#: src/nma-wifi-dialog.c:1193
+msgid "Wi-Fi Network Authentication Required"
+msgstr ""
+
+#: src/nma-wifi-dialog.c:1195
+#, fuzzy
+msgid "Authentication required by Wi-Fi network"
+msgstr "Gebruikersmagtiging vereis vir draadlose netwerk '%s'..."
+
+#: src/nma-wifi-dialog.c:1200
+#, fuzzy
+msgid "Create New Wi-Fi Network"
+msgstr "Skep nuwe draadlose netwerk"
+
+#: src/nma-wifi-dialog.c:1202
+#, fuzzy
+msgid "New Wi-Fi network"
+msgstr "Nuwe draadlose netwerk"
+
+#: src/nma-wifi-dialog.c:1203
+#, fuzzy
+msgid "Enter a name for the Wi-Fi network you wish to create."
+msgstr "Gee 'n naam vir die draadlose netwerk om te skep."
+
+#: src/nma-wifi-dialog.c:1205
+#, fuzzy
+msgid "Connect to Hidden Wi-Fi Network"
+msgstr "Verbind aan verskuilde draadlose netwerk"
+
+#: src/nma-wifi-dialog.c:1207
+#, fuzzy
+msgid "Hidden Wi-Fi network"
+msgstr "Verskuilde draadlose netwerk"
+
+#: src/nma-wifi-dialog.c:1208
+#, fuzzy
+msgid ""
+"Enter the name and security details of the hidden Wi-Fi network you wish to "
+"connect to."
+msgstr ""
+"Gee die naam en sekuriteitbesonderhede van die verskuilde draadlose netwerk "
+"waaraan u wil verbind."
+
+#: src/nma-ws/nma-eap-fast.c:59
+msgid "missing EAP-FAST PAC file"
+msgstr ""
+
+#: src/nma-ws/nma-eap-fast.c:256 src/nma-ws/nma-eap-peap.c:312
+#: src/nma-ws/nma-eap-ttls.c:366
+msgid "GTC"
+msgstr "GTC"
+
+#: src/nma-ws/nma-eap-fast.c:272 src/nma-ws/nma-eap-peap.c:280
+#: src/nma-ws/nma-eap-ttls.c:300
+msgid "MSCHAPv2"
+msgstr ""
+
+#: src/nma-ws/nma-eap-fast.c:395
+msgid "Choose a PAC file"
+msgstr ""
+
+#: src/nma-ws/nma-eap-fast.c:402
+msgid "PAC files (*.pac)"
+msgstr ""
+
+#: src/nma-ws/nma-eap-fast.c:406
+msgid "All files"
+msgstr ""
+
+#: src/nma-ws/nma-eap-fast.ui:23
+msgid "Anonymous"
+msgstr ""
+
+#: src/nma-ws/nma-eap-fast.ui:26
+#, fuzzy
+msgid "Authenticated"
+msgstr "DSL-magtiging"
+
+#: src/nma-ws/nma-eap-fast.ui:29
+msgid "Both"
+msgstr ""
+
+#: src/nma-ws/nma-eap-fast.ui:42 src/nma-ws/nma-eap-peap.ui:42
+#: src/nma-ws/nma-eap-ttls.ui:113
+msgid "Anony_mous identity"
+msgstr ""
+
+#: src/nma-ws/nma-eap-fast.ui:68
+msgid "PAC _file"
+msgstr ""
+
+#: src/nma-ws/nma-eap-fast.ui:107 src/nma-ws/nma-eap-peap.ui:115
+#: src/nma-ws/nma-eap-ttls.ui:71
+#, fuzzy
+msgid "_Inner authentication"
+msgstr "DSL-magtiging"
+
+#: src/nma-ws/nma-eap-fast.ui:136
+msgid "Allow automatic PAC pro_visioning"
+msgstr ""
+
+#: src/nma-ws/nma-eap-leap.c:55
+msgid "missing EAP-LEAP username"
+msgstr ""
+
+#: src/nma-ws/nma-eap-leap.c:64
+msgid "missing EAP-LEAP password"
+msgstr ""
+
+#: src/nma-ws/nma-eap-leap.ui:15 src/nma-ws/nma-eap-simple.ui:15
+#: src/nma-ws/nma-ws-leap.ui:15
+#, fuzzy
+msgid "_Username"
+msgstr "Gebr_uikernaam:"
+
+#: src/nma-ws/nma-eap-leap.ui:29 src/nma-ws/nma-eap-simple.ui:29
+#: src/nma-ws/nma-ws-leap.ui:29 src/nma-ws/nma-ws-sae.ui:14
+#: src/nma-ws/nma-ws-wpa-psk.ui:14
+#, fuzzy
+msgid "_Password"
+msgstr "W_agwoord:"
+
+#: src/nma-ws/nma-eap-peap.c:296 src/nma-ws/nma-eap-ttls.c:350
+#: src/nma-ws/nma-ws-802-1x.c:346
+msgid "MD5"
+msgstr "MD5"
+
+#: src/nma-ws/nma-eap-peap.ui:23
+msgid "Automatic"
+msgstr "Outomaties"
+
+#: src/nma-ws/nma-eap-peap.ui:26
+msgid "Version 0"
+msgstr "Weergawe 0"
+
+#: src/nma-ws/nma-eap-peap.ui:29
+msgid "Version 1"
+msgstr "Weergawe 1"
+
+#: src/nma-ws/nma-eap-peap.ui:66 src/nma-ws/nma-eap-tls.ui:38
+#: src/nma-ws/nma-eap-ttls.ui:83
+msgid "No CA certificate is _required"
+msgstr ""
+
+#: src/nma-ws/nma-eap-peap.ui:83
+msgid "PEAP _version"
+msgstr ""
+
+#: src/nma-ws/nma-eap-peap.ui:162 src/nma-ws/nma-eap-tls.ui:56
+#: src/nma-ws/nma-eap-ttls.ui:127
+msgid "Suffix of the server certificate name."
+msgstr ""
+
+#: src/nma-ws/nma-eap-peap.ui:163 src/nma-ws/nma-eap-tls.ui:57
+#: src/nma-ws/nma-eap-ttls.ui:128
+msgid "_Domain"
+msgstr ""
+
+#: src/nma-ws/nma-eap-simple.c:79
+msgid "missing EAP username"
+msgstr ""
+
+#: src/nma-ws/nma-eap-simple.c:95
+msgid "missing EAP password"
+msgstr ""
+
+#: src/nma-ws/nma-eap-simple.c:109
+msgid "missing EAP client Private Key passphrase"
+msgstr ""
+
+#: src/nma-ws/nma-eap-simple.ui:97
+msgid "P_rivate Key Passphrase"
+msgstr ""
+
+#: src/nma-ws/nma-eap-simple.ui:122
+#, fuzzy
+msgid "Sh_ow passphrase"
+msgstr "_Wys wagwoord"
+
+#: src/nma-ws/nma-eap-tls.c:47
+msgid "missing EAP-TLS identity"
+msgstr ""
+
+#: src/nma-ws/nma-eap-tls.c:234
+msgid "no user certificate selected"
+msgstr ""
+
+#: src/nma-ws/nma-eap-tls.c:239
+msgid "selected user certificate file does not exist"
+msgstr ""
+
+#: src/nma-ws/nma-eap-tls.c:259
+msgid "no key selected"
+msgstr ""
+
+#: src/nma-ws/nma-eap-tls.c:264
+msgid "selected key file does not exist"
+msgstr ""
+
+#: src/nma-ws/nma-eap-tls.ui:14
+msgid "I_dentity"
+msgstr ""
+
+#: src/nma-ws/nma-eap-ttls.c:268
+msgid "PAP"
+msgstr ""
+
+#: src/nma-ws/nma-eap-ttls.c:284
+msgid "MSCHAP"
+msgstr ""
+
+#: src/nma-ws/nma-eap-ttls.c:317
+msgid "MSCHAPv2 (no EAP)"
+msgstr ""
+
+#: src/nma-ws/nma-eap-ttls.c:334
+msgid "CHAP"
+msgstr ""
+
+#: src/nma-ws/nma-eap.c:40
+msgid "undefined error in 802.1X security (wpa-eap)"
+msgstr ""
+
+#: src/nma-ws/nma-eap.c:348
+msgid "no CA certificate selected"
+msgstr ""
+
+#: src/nma-ws/nma-eap.c:353
+msgid "selected CA certificate file does not exist"
+msgstr ""
+
+#: src/nma-ws/nma-ws-802-1x.c:358
+msgid "TLS"
+msgstr "TLS"
+
+#: src/nma-ws/nma-ws-802-1x.c:382
+msgid "PWD"
+msgstr ""
+
+#: src/nma-ws/nma-ws-802-1x.c:393
+msgid "FAST"
+msgstr ""
+
+#: src/nma-ws/nma-ws-802-1x.c:404
+msgid "Tunneled TLS"
+msgstr ""
+
+#: src/nma-ws/nma-ws-802-1x.c:415
+msgid "Protected EAP (PEAP)"
+msgstr ""
+
+#: src/nma-ws/nma-ws-802-1x.c:430
+#, fuzzy
+msgid "Unknown"
+msgstr "Onbekend"
+
+#: src/nma-ws/nma-ws-802-1x.c:444
+msgid "Externally configured"
+msgstr ""
+
+#: src/nma-ws/nma-ws-802-1x.ui:25 src/nma-ws/nma-ws-wep-key.ui:95
+#, fuzzy
+msgid "Au_thentication"
+msgstr "DSL-magtiging"
+
+#: src/nma-ws/nma-ws-leap.c:71
+msgid "missing leap-username"
+msgstr ""
+
+#: src/nma-ws/nma-ws-leap.c:87
+msgid "missing leap-password"
+msgstr ""
+
+#: src/nma-ws/nma-ws-sae.c:73
+#, fuzzy
+msgid "missing password"
+msgstr "W_agwoord:"
+
+#: src/nma-ws/nma-ws-sae.ui:44 src/nma-ws/nma-ws-wpa-psk.ui:43
+msgid "_Type"
+msgstr ""
+
+#: src/nma-ws/nma-ws-wep-key.c:110
+msgid "missing wep-key"
+msgstr ""
+
+#: src/nma-ws/nma-ws-wep-key.c:117
+#, c-format
+msgid "invalid wep-key: key with a length of %zu must contain only hex-digits"
+msgstr ""
+
+#: src/nma-ws/nma-ws-wep-key.c:125
+#, c-format
+msgid ""
+"invalid wep-key: key with a length of %zu must contain only ascii characters"
+msgstr ""
+
+#: src/nma-ws/nma-ws-wep-key.c:131
+#, c-format
+msgid ""
+"invalid wep-key: wrong key length %zu. A key must be either of length 5/13 "
+"(ascii) or 10/26 (hex)"
+msgstr ""
+
+#: src/nma-ws/nma-ws-wep-key.c:138
+msgid "invalid wep-key: passphrase must be non-empty"
+msgstr ""
+
+#: src/nma-ws/nma-ws-wep-key.c:140
+msgid "invalid wep-key: passphrase must be shorter than 64 characters"
+msgstr ""
+
+#: src/nma-ws/nma-ws-wep-key.ui:12
+msgid "Open System"
+msgstr ""
+
+#: src/nma-ws/nma-ws-wep-key.ui:15
+msgid "Shared Key"
+msgstr ""
+
+#: src/nma-ws/nma-ws-wep-key.ui:26
+msgid "1 (Default)"
+msgstr ""
+
+#: src/nma-ws/nma-ws-wep-key.ui:48
+msgid "_Key"
+msgstr ""
+
+#: src/nma-ws/nma-ws-wep-key.ui:77
+msgid "Sho_w key"
+msgstr ""
+
+#: src/nma-ws/nma-ws-wep-key.ui:128
+msgid "WEP inde_x"
+msgstr ""
+
+#: src/nma-ws/nma-ws-wpa-psk.c:80
+#, c-format
+msgid ""
+"invalid wpa-psk: invalid key-length %zu. Must be [8,63] bytes or 64 hex "
+"digits"
+msgstr ""
+
+#: src/nma-ws/nma-ws-wpa-psk.c:87
+msgid "invalid wpa-psk: cannot interpret key with 64 bytes as hex"
+msgstr ""
+
+#: src/nma-ws/nma-ws.c:38
+msgid "Unknown error validating 802.1X security"
+msgstr ""
+
+#. The %s is a mobile provider name, eg "T-Mobile"
+#: src/utils/utils.c:161
+#, fuzzy, c-format
+msgid "%s connection"
+msgstr "Verbi_nding:"
+
+#: src/utils/utils.c:535
+#, fuzzy
+msgid "PEM certificates (*.pem, *.crt, *.cer)"
+msgstr "DER- of PEM-sertifikate (*.der, *.pem, *.crt, *.cer)"
+
+#: src/utils/utils.c:547
+#, fuzzy
+msgid "DER, PEM, or PKCS#12 private keys (*.der, *.pem, *.p12, *.key)"
+msgstr "DER-, PEM-, of PKCS#12- privaate sleutels (*.der, *.pem, *.p12)"
+
+#: src/wifi.ui:97
+#, fuzzy
+msgid "Wi-Fi _security"
+msgstr "_Draadloos-sekuriteit:"
+
+#: src/wifi.ui:129
+#, fuzzy
+msgid "_Network name"
+msgstr "_Netwerk-naam:"
+
+#: src/wifi.ui:154
+#, fuzzy
+msgid "C_onnection"
+msgstr "Verbi_nding:"
+
+#: src/wifi.ui:179
+#, fuzzy
+msgid "Wi-Fi _adapter"
+msgstr "Draadlosenetwerk-p_asstuk:"
+
+#~ msgid "Manage your network connections"
+#~ msgstr "Bestuur u netwerkverbindings"
+
+#, fuzzy
+#~ msgid "Advanced Network Configuration"
+#~ msgstr "Aktiewe netwerkverbindings"
+
+#~ msgid "Manage and change your network connection settings"
+#~ msgstr "Bestuur en verander u netwerkverbinding-instellings"
+
+#, fuzzy
+#~ msgid "NetworkManager"
+#~ msgstr "NetworkManager-miniprogram"
+
+#, fuzzy
+#~ msgid "NetworkManager connection editor"
+#~ msgstr "Geen netwerkverbinding"
+
+#, fuzzy
+#~ msgid "The NetworkManager Developers"
+#~ msgstr "NetworkManager-miniprogram"
+
+#, fuzzy
+#~ msgid "802.1X authentication"
+#~ msgstr "DSL-magtiging"
+
+#, fuzzy
+#~ msgid "Failed to add/activate connection"
+#~ msgstr "Geen geldige aktiewe verbindings gevind nie!"
+
+#, fuzzy
+#~ msgid "Unknown error"
+#~ msgstr "Onbekend"
+
+#, fuzzy
+#~ msgid "Connection failure"
+#~ msgstr "VPN-verbinding het misluk"
+
+#, fuzzy
+#~ msgid "Device disconnect failed"
+#~ msgstr "ontkoppel"
+
+#, fuzzy
+#~ msgid "Disconnect failure"
+#~ msgstr "Geontkoppel"
+
+#, fuzzy
+#~ msgid "Connection activation failed"
+#~ msgstr "VPN-verbinding het misluk"
+
+#, fuzzy
+#~ msgid "Don’t show this message again"
+#~ msgstr "Moenie weer hierdie boodskap wys nie"
+
+#, fuzzy, c-format
+#~ msgid ""
+#~ "\n"
+#~ "The VPN connection “%s” disconnected because the network connection was "
+#~ "interrupted."
+#~ msgstr ""
+#~ "\n"
+#~ "Die VPN-verbinding '%s' het ontkoppel, want die netwerk verbinding was "
+#~ "onderbreek."
+
+#, fuzzy, c-format
+#~ msgid ""
+#~ "\n"
+#~ "The VPN connection “%s” failed because the network connection was "
+#~ "interrupted."
+#~ msgstr ""
+#~ "\n"
+#~ "Die VPN-verbinding '%s' het misluk, want die netwerk verbinding was "
+#~ "onderbreek."
+
+#, fuzzy, c-format
+#~ msgid ""
+#~ "\n"
+#~ "The VPN connection “%s” failed because the VPN service stopped "
+#~ "unexpectedly."
+#~ msgstr ""
+#~ "\n"
+#~ "Die VPN-verbinding '%s' het misluk, want die VPN-diens het onverwags "
+#~ "gestop."
+
+#, fuzzy, c-format
+#~ msgid ""
+#~ "\n"
+#~ "The VPN connection “%s” failed because the VPN service returned invalid "
+#~ "configuration."
+#~ msgstr ""
+#~ "\n"
+#~ "Die VPN-verbinding '%s' het misluk, want die VPN-diens het ongeldige "
+#~ "konfigurasie teruggestuur."
+
+#, fuzzy, c-format
+#~ msgid ""
+#~ "\n"
+#~ "The VPN connection “%s” failed because the connection attempt timed out."
+#~ msgstr ""
+#~ "\n"
+#~ "Die VPN-verbinding '%s' het misluk, want die verbindingspoging het "
+#~ "uitgetel."
+
+#, fuzzy, c-format
+#~ msgid ""
+#~ "\n"
+#~ "The VPN connection “%s” failed because the VPN service did not start in "
+#~ "time."
+#~ msgstr ""
+#~ "\n"
+#~ "Die VPN-verbinding '%s' het misluk, want die VPN-diens het nie betyds "
+#~ "begin nie."
+
+#, fuzzy, c-format
+#~ msgid ""
+#~ "\n"
+#~ "The VPN connection “%s” failed because the VPN service failed to start."
+#~ msgstr ""
+#~ "\n"
+#~ "Die VPN-verbinding '%s' het misluk, want die VPN-diens kon nie begin nie."
+
+#, fuzzy, c-format
+#~ msgid ""
+#~ "\n"
+#~ "The VPN connection “%s” failed because there were no valid VPN secrets."
+#~ msgstr ""
+#~ "\n"
+#~ "Die VPN-verbinding '%s' het misluk, want daar was geen geldige VPN-"
+#~ "geheime nie."
+
+#, fuzzy, c-format
+#~ msgid ""
+#~ "\n"
+#~ "The VPN connection “%s” failed because of invalid VPN secrets."
+#~ msgstr ""
+#~ "\n"
+#~ "Die VPN-verbinding '%s' het misluk as gevolg van ongeldige VPN-geheime."
+
+#, fuzzy, c-format
+#~ msgid ""
+#~ "\n"
+#~ "The VPN connection “%s” failed."
+#~ msgstr ""
+#~ "\n"
+#~ "Die VPN-verbinding '%s' het misluk."
+
+#~ msgid "VPN Login Message"
+#~ msgstr "VPN-aanmeldboodskap"
+
+#~ msgid "VPN Connection Failed"
+#~ msgstr "VPN-verbinding het misluk"
+
+#, fuzzy, c-format
+#~ msgid ""
+#~ "\n"
+#~ "The VPN connection “%s” failed because the VPN service failed to start.\n"
+#~ "\n"
+#~ "%s"
+#~ msgstr ""
+#~ "\n"
+#~ "Die VPN-verbinding '%s' het misluk, want die VPN-diens kon nie begin "
+#~ "nie.\n"
+#~ "\n"
+#~ "%s"
+
+#, fuzzy, c-format
+#~ msgid ""
+#~ "\n"
+#~ "The VPN connection “%s” failed to start.\n"
+#~ "\n"
+#~ "%s"
+#~ msgstr ""
+#~ "\n"
+#~ "Die VPN-verbinding '%s' kon nie begin nie.\n"
+#~ "\n"
+#~ "%s"
+
+#~ msgid "device not ready (firmware missing)"
+#~ msgstr "toestel nie gereed nie (vermiste fermware)"
+
+#~ msgid "device not ready"
+#~ msgstr "toestel nie gereed nie"
+
+#~ msgid "disconnected"
+#~ msgstr "ontkoppel"
+
+#~ msgid "Disconnect"
+#~ msgstr "Ontkoppel"
+
+#~ msgid "device not managed"
+#~ msgstr "toestel word nie bestuur nie"
+
+#~ msgid "No network devices available"
+#~ msgstr "Geen netwerktoestelle beskikbaar nie"
+
+#~ msgid "_VPN Connections"
+#~ msgstr "_VPN-verbindings"
+
+#, fuzzy
+#~ msgid "_Configure VPN…"
+#~ msgstr "_Stel VPN op..."
+
+#, fuzzy
+#~ msgid "_Add a VPN connection…"
+#~ msgstr "_VPN-verbindings"
+
+#, fuzzy
+#~ msgid "NetworkManager is not running…"
+#~ msgstr "NetworkManager loop nie tans nie..."
+
+#~ msgid "Networking disabled"
+#~ msgstr "Netwerke gedeaktiveer"
+
+#~ msgid "Enable _Networking"
+#~ msgstr "Aktiveer _netwerke"
+
+#, fuzzy
+#~ msgid "Enable _Wi-Fi"
+#~ msgstr "Aktiveer _draadloos"
+
+#~ msgid "Enable _Mobile Broadband"
+#~ msgstr "Aktiveer _selfoonbreëband"
+
+#~ msgid "Enable N_otifications"
+#~ msgstr "Aktiveer _kennisgewings"
+
+#~ msgid "Connection _Information"
+#~ msgstr "_Verbindingsinligting"
+
+#, fuzzy
+#~ msgid "Edit Connections…"
+#~ msgstr "Redigeer verbindings..."
+
+#~ msgid "_About"
+#~ msgstr "_Aangaande"
+
+#, fuzzy, c-format
+#~ msgid "You are now connected to “%s”."
+#~ msgstr "U is nou verbind aan '%s'."
+
+#~ msgid "Disconnected"
+#~ msgstr "Geontkoppel"
+
+#~ msgid "The network connection has been disconnected."
+#~ msgstr "Die netwerkverbinding is ontkoppel."
+
+#, fuzzy, c-format
+#~ msgid "Preparing network connection “%s”…"
+#~ msgstr "Berei tans netwerkverbinding '%s' voor..."
+
+#, fuzzy, c-format
+#~ msgid "User authentication required for network connection “%s”…"
+#~ msgstr "Gebruikersmagtiging vereis vir netwerkverbinding '%s'..."
+
+#, fuzzy, c-format
+#~ msgid "Requesting a network address for “%s”…"
+#~ msgstr "Vra tans 'n netwerkadres aan vir '%s'..."
+
+#, fuzzy, c-format
+#~ msgid "Network connection “%s” active"
+#~ msgstr "Netwerkverbinding '%s' is aktief"
+
+#, fuzzy, c-format
+#~ msgid "Starting VPN connection “%s”…"
+#~ msgstr "Begin tans VPN-verbinding '%s'..."
+
+#, fuzzy, c-format
+#~ msgid "User authentication required for VPN connection “%s”…"
+#~ msgstr "Gebruikersmagtiging vereis vir VPN-verbinding '%s'..."
+
+#, fuzzy, c-format
+#~ msgid "Requesting a VPN address for “%s”…"
+#~ msgstr "Vra tans 'n VPN-adres aan vir '%s'..."
+
+#, fuzzy
+#~ msgid "VPN connection active"
+#~ msgstr "VPN-verbinding '%s' is aktief"
+
+#~ msgid "No network connection"
+#~ msgstr "Geen netwerkverbinding"
+
+#~ msgid "NetworkManager Applet"
+#~ msgstr "NetworkManager-miniprogram"
+
+#~ msgid "Wrong PUK code; please contact your provider."
+#~ msgstr "Verkeerde PUK-kode. Kontak asseblief u verskaffer."
+
+#~ msgid "Wrong PIN code; please contact your provider."
+#~ msgstr "Verkeerde PIN-kode. Kontak asseblief u verskaffer."
+
+#, fuzzy
+#~ msgid "Sending unlock code…"
+#~ msgstr "Stuur tans ontsluitkode..."
+
+#, c-format
+#~ msgid "Mobile Broadband (%s)"
+#~ msgstr "Selfoonbreëband (%s)"
+
+#~ msgid "Mobile Broadband"
+#~ msgstr "Selfoonbreëband"
+
+#~ msgid "Available"
+#~ msgstr "Beskikbaar"
+
+#, fuzzy
+#~ msgid "New Mobile Broadband connection…"
+#~ msgstr "Nuwe selfoon-breëbandverbinding"
+
+#~ msgid "Connection Established"
+#~ msgstr "Verbinding bewerkstellig"
+
+#, fuzzy
+#~ msgid "You are now connected to the Mobile Broadband network."
+#~ msgstr "U is nou aan die selfoon-breëbandnetwerk verbind."
+
+#, fuzzy
+#~ msgid "Mobile Broadband network."
+#~ msgstr "Selfoon-breëbandnetwerk-wagwoord"
+
+#, fuzzy
+#~ msgid "You are now registered on the home network."
+#~ msgstr "U is nou aan die draadnetwerk verbind."
+
+#, fuzzy
+#~ msgid "You are now registered on a roaming network."
+#~ msgstr "U is nou aan die draadnetwerk verbind."
+
+#~ msgid "You are now connected to the mobile broadband network."
+#~ msgstr "U is nou aan die selfoon-breëbandnetwerk verbind."
+
+#, fuzzy, c-format
+#~ msgid "Preparing mobile broadband connection “%s”…"
+#~ msgstr "Berei tans selfoon-breëbandverbinding '%s' voor..."
+
+#, fuzzy, c-format
+#~ msgid "Configuring mobile broadband connection “%s”…"
+#~ msgstr "Konfigureer tans selfoon-breëbandverbinding '%s'..."
+
+#, fuzzy, c-format
+#~ msgid "User authentication required for mobile broadband connection “%s”…"
+#~ msgstr "Gebruikersmagtiging vereis vir selfoon-breëbandverbinding '%s'..."
+
+#, fuzzy, c-format
+#~ msgid "Mobile broadband connection “%s” active"
+#~ msgstr "Selfoon-breëbandverbinding '%s' is aktief"
+
+#~ msgid "Auto Ethernet"
+#~ msgstr "Outo-Ethernet"
+
+#, fuzzy, c-format
+#~ msgid "Ethernet Networks (%s)"
+#~ msgstr "Draadnetwerke (%s)"
+
+#, fuzzy, c-format
+#~ msgid "Ethernet Network (%s)"
+#~ msgstr "Draadnetwerk (%s)"
+
+#, fuzzy
+#~ msgid "Ethernet Networks"
+#~ msgstr "Draadnetwerke"
+
+#, fuzzy
+#~ msgid "Ethernet Network"
+#~ msgstr "Draadnetwerk"
+
+#, fuzzy
+#~ msgid "You are now connected to the ethernet network."
+#~ msgstr "U is nou aan die draadnetwerk verbind."
+
+#, fuzzy, c-format
+#~ msgid "Preparing ethernet network connection “%s”…"
+#~ msgstr "Berei tans draadnetwerkverbinding '%s' voor..."
+
+#, fuzzy, c-format
+#~ msgid "Configuring ethernet network connection “%s”…"
+#~ msgstr "Konfigureer tans draadnetwerkverbinding '%s'..."
+
+#, fuzzy, c-format
+#~ msgid "User authentication required for ethernet network connection “%s”…"
+#~ msgstr "Gebruikersmagtiging vereis vir draadnetwerkverbinding '%s'..."
+
+#, fuzzy, c-format
+#~ msgid "Requesting an ethernet network address for “%s”…"
+#~ msgstr "Vra tans 'n draadnetwerkadres aan vir '%s'..."
+
+#, fuzzy, c-format
+#~ msgid "Ethernet network connection “%s” active"
+#~ msgstr "Draadnetwerkverbinding '%s' is aktief"
+
+#~ msgid "DSL authentication"
+#~ msgstr "DSL-magtiging"
+
+#, fuzzy
+#~ msgid "_Connect to Hidden Wi-Fi Network…"
+#~ msgstr "Verbind aan verskuilde draadlose netwerk"
+
+#, fuzzy
+#~ msgid "Create _New Wi-Fi Network…"
+#~ msgstr "Skep nuwe draadlose netwerk"
+
+#~ msgid "(none)"
+#~ msgstr "(geen)"
+
+#, fuzzy
+#~ msgid "Failed to add new connection"
+#~ msgstr "Geen netwerkverbinding"
+
+#, fuzzy, c-format
+#~ msgid "Wi-Fi Networks (%s)"
+#~ msgstr "Draadnetwerke (%s)"
+
+#, fuzzy, c-format
+#~ msgid "Wi-Fi Network (%s)"
+#~ msgstr "Draadnetwerk (%s)"
+
+#, fuzzy
+#~ msgid "Wi-Fi Network"
+#~ msgid_plural "Wi-Fi Networks"
+#~ msgstr[0] "Draadnetwerk"
+#~ msgstr[1] "Draadnetwerk"
+
+#, fuzzy
+#~ msgid "Wi-Fi is disabled"
+#~ msgstr "WiMAX is gedeaktiveer"
+
+#, fuzzy
+#~ msgid "Wi-Fi is disabled by hardware switch"
+#~ msgstr "WiMAX is gedeaktiveer deur 'n hardewareskakelaar"
+
+#~ msgid "More networks"
+#~ msgstr "Meer netwerke"
+
+#, fuzzy
+#~ msgid "Wi-Fi Networks Available"
+#~ msgstr "Draadlose netwerke beskikbaar"
+
+#, fuzzy
+#~ msgid "Use the network menu to connect to a Wi-Fi network"
+#~ msgstr "Gebruik die netwerk-kieslys om aan 'n draadlose netwerk te verbind"
+
+#, fuzzy, c-format
+#~ msgid "You are now connected to the Wi-Fi network “%s”."
+#~ msgstr "U is nou aan die draadlose netwerk verbind '%s'."
+
+#, fuzzy, c-format
+#~ msgid "Preparing Wi-Fi network connection “%s”…"
+#~ msgstr "Berei tans netwerkverbinding '%s' voor..."
+
+#, fuzzy, c-format
+#~ msgid "Configuring Wi-Fi network connection “%s”…"
+#~ msgstr "Konfigureer tans draadnetwerkverbinding '%s'..."
+
+#, fuzzy, c-format
+#~ msgid "User authentication required for Wi-Fi network “%s”…"
+#~ msgstr "Gebruikersmagtiging vereis vir draadlose netwerk '%s'..."
+
+#, fuzzy, c-format
+#~ msgid "Requesting a Wi-Fi network address for “%s”…"
+#~ msgstr "Vra tans 'n netwerkadres aan vir '%s'..."
+
+#, fuzzy, c-format
+#~ msgid "Wi-Fi network connection “%s” active: %s (%d%%)"
+#~ msgstr "Draadlosenetwerkverbinding '%s' is aktief: %s (%d%%)"
+
+#, fuzzy, c-format
+#~ msgid "Wi-Fi network connection “%s” active"
+#~ msgstr "Draadnetwerkverbinding '%s' is aktief"
+
+#, fuzzy
+#~ msgid "Failed to activate connection"
+#~ msgstr "Geen geldige aktiewe verbindings gevind nie!"
+
+#~ msgid "Error displaying connection information:"
+#~ msgstr "Daar is 'n fout met die vertoon van verbindingsinligting:"
+
+#, fuzzy
+#~ msgid "Dynamic WEP"
+#~ msgstr "Dinamiese-WEP"
+
+#~ msgid "WPA/WPA2"
+#~ msgstr "WPA/WPA2"
+
+#, fuzzy
+#~ msgid "More addresses"
+#~ msgstr "Adresse"
+
+#~ msgid "WEP"
+#~ msgstr "WEP"
+
+#, fuzzy
+#~ msgctxt "Wi-Fi/Ethernet security"
+#~ msgid "None"
+#~ msgstr "Geen"
+
+#, c-format
+#~ msgid "%u Mb/s"
+#~ msgstr "%u MG/s"
+
+#~ msgctxt "Speed"
+#~ msgid "Unknown"
+#~ msgstr "Onbekend"
+
+#~ msgctxt "Address"
+#~ msgid "Unknown"
+#~ msgstr "Onbekend"
+
+#~ msgid "IP Address"
+#~ msgstr "IP-adres"
+
+#~ msgid "Broadcast Address"
+#~ msgstr "Uitsaai-adres"
+
+#~ msgctxt "Subnet Mask"
+#~ msgid "Unknown"
+#~ msgstr "Onbekend"
+
+#~ msgid "Subnet Mask"
+#~ msgstr "Subnetmasker"
+
+#, fuzzy
+#~ msgid "Primary DNS"
+#~ msgstr "Eerste DNS:"
+
+#, fuzzy
+#~ msgid "Secondary DNS"
+#~ msgstr "Tweede DNS:"
+
+#, fuzzy
+#~ msgid "Tertiary DNS"
+#~ msgstr "Derde DNS:"
+
+#, c-format
+#~ msgid "Ethernet (%s)"
+#~ msgstr "Ethernet (%s)"
+
+#, c-format
+#~ msgid "802.11 Wi-Fi (%s)"
+#~ msgstr "802.11 Wi-Fi (%s)"
+
+#, c-format
+#~ msgid "GSM (%s)"
+#~ msgstr "GSM (%s)"
+
+#, c-format
+#~ msgid "CDMA (%s)"
+#~ msgstr "CDMA (%s)"
+
+#~ msgid "General"
+#~ msgstr "Algemeen"
+
+#~ msgid "Interface"
+#~ msgstr "Koppelvlak"
+
+#~ msgid "Hardware Address"
+#~ msgstr "Hardeware-adres"
+
+#~ msgid "Driver"
+#~ msgstr "Drywer"
+
+#~ msgid "Speed"
+#~ msgstr "Spoed"
+
+#, fuzzy
+#~ msgid "Security"
+#~ msgstr "Sekuriteit:"
+
+#~ msgid "IPv4"
+#~ msgstr "IPv4"
+
+#~ msgid "Default Route"
+#~ msgstr "Verstekroete"
+
+#~ msgid "IPv6"
+#~ msgstr "IPv6"
+
+#, fuzzy
+#~ msgid "VPN Username"
+#~ msgstr "Gebr_uikernaam:"
+
+#, fuzzy
+#~ msgid "Base Connection"
+#~ msgstr "Verbi_nding:"
+
+#~ msgid "No valid active connections found!"
+#~ msgstr "Geen geldige aktiewe verbindings gevind nie!"
+
+#, fuzzy
+#~ msgid ""
+#~ "Copyright © 2004-2017 Red Hat, Inc.\n"
+#~ "Copyright © 2005-2008 Novell, Inc.\n"
+#~ "and many other community contributors and translators"
+#~ msgstr ""
+#~ "Kopiereg © 2004-2011 Red Hat, Inc.\n"
+#~ "Kopiereg © 2005-2008 Novell, Inc.\n"
+#~ "en baie ander gemeenskapsbydraers en vertalers"
+
+#~ msgid ""
+#~ "Notification area applet for managing your network devices and "
+#~ "connections."
+#~ msgstr ""
+#~ "Kennisgewingarea-miniprogram om u netwerktoestelle en verbindings te "
+#~ "bestuur."
+
+#~ msgid "NetworkManager Website"
+#~ msgstr "NetworkManager-webwerf"
+
+#~ msgid ""
+#~ "The NetworkManager Applet could not find some required resources (the .ui "
+#~ "file was not found)."
+#~ msgstr ""
+#~ "Die NetworkManager-miniprogram kon party vereiste hulpbronne (die .ui-"
+#~ "lêer) nie vind nie."
+
+#~ msgid "Missing resources"
+#~ msgstr "Vermiste hulpbronne"
+
+#~ msgid "Mobile broadband network password"
+#~ msgstr "Selfoon-breëbandnetwerk-wagwoord"
+
+#, fuzzy, c-format
+#~ msgid "A password is required to connect to “%s”."
+#~ msgstr "'n Wagwoord word benodig om aan '%s' te verbind."
+
+#~ msgid "Password:"
+#~ msgstr "Wagwoord:"
+
+#~ msgid "SIM PIN unlock required"
+#~ msgstr "SIM PIN-ontsluit vereis"
+
+#~ msgid "SIM PIN Unlock Required"
+#~ msgstr "SIM PIN-ontsluit vereis"
+
+#, fuzzy, c-format
+#~ msgid ""
+#~ "The mobile broadband device “%s” requires a SIM PIN code before it can be "
+#~ "used."
+#~ msgstr ""
+#~ "Die selfoon-breëbandtoestel '%s' vereis 'n SIM PIN-kode voordat dit "
+#~ "gebruik kan word."
+
+#~ msgid "PIN code:"
+#~ msgstr "PIN-kode:"
+
+#~ msgid "Show PIN code"
+#~ msgstr "Wys PIN-kode"
+
+#~ msgid "SIM PUK unlock required"
+#~ msgstr "SIM PUK-ontsluit vereis"
+
+#~ msgid "SIM PUK Unlock Required"
+#~ msgstr "SIM PUK-ontsluit vereis"
+
+#, fuzzy, c-format
+#~ msgid ""
+#~ "The mobile broadband device “%s” requires a SIM PUK code before it can be "
+#~ "used."
+#~ msgstr ""
+#~ "Die selfoon-breëbandtoestel '%s' vereis 'n SIM PUK-kode voordat dit "
+#~ "gebruik kan word."
+
+#~ msgid "PUK code:"
+#~ msgstr "PUK-kode:"
+
+#~ msgid "New PIN code:"
+#~ msgstr "Nuwe PIN-kode:"
+
+#~ msgid "Re-enter new PIN code:"
+#~ msgstr "Sleutel nuwe PIN-kode weer in:"
+
+#~ msgid "Show PIN/PUK codes"
+#~ msgstr "Wys PIN/PUK-kodes"
+
+#, fuzzy
+#~ msgid "Connection had no VPN setting"
+#~ msgstr "Verbindingsinligting"
+
+#, fuzzy, c-format
+#~ msgid "Failed to write connection to VPN UI: %s (%d)"
+#~ msgstr "Geen geldige aktiewe verbindings gevind nie!"
+
+#, fuzzy
+#~ msgid ""
+#~ "IP addresses identify your computer on the network. Click the “Add” "
+#~ "button to add an IP address."
+#~ msgstr ""
+#~ "IP-adresse identifiseer u rekenaar op die netwerk. Kliek die \"Voeg by\"-"
+#~ "knoppie om 'n IP-adres by te voeg."
+
+#, fuzzy
+#~ msgid "C_reate…"
+#~ msgstr "S_kep"
+
+#, fuzzy
+#~ msgid "_Device"
+#~ msgstr "Dien_s:"
+
+#, fuzzy
+#~ msgid "Broadcast"
+#~ msgstr "Uitsaai-adres:"
+
+#, fuzzy
+#~ msgid "Bonded _connections"
+#~ msgstr "Verbi_nding:"
+
+#, fuzzy
+#~ msgid "_Interface name"
+#~ msgstr "Koppelvlak:"
+
+#, fuzzy
+#~ msgid "_Primary"
+#~ msgstr "Eerste DNS:"
+
+#, fuzzy
+#~ msgid "_Priority"
+#~ msgstr "Eerste DNS:"
+
+#, fuzzy
+#~ msgid "Bridged _connections"
+#~ msgstr "Verbi_nding:"
+
+#, fuzzy
+#~ msgid "Enable I_GMP snooping"
+#~ msgstr "Aktiveer _netwerke"
+
+#~ msgid "automatic"
+#~ msgstr "outomaties"
+
+#, fuzzy
+#~ msgid "MAC address"
+#~ msgstr "Adresse"
+
+#, fuzzy
+#~ msgid "HW address"
+#~ msgstr "IP-adres:"
+
+#, fuzzy
+#~ msgid "invalid hardware address"
+#~ msgstr "Hardeware-adres:"
+
+#, fuzzy
+#~ msgid "device"
+#~ msgstr "Enige toetstel"
+
+#, fuzzy
+#~ msgid "_Service"
+#~ msgstr "Dien_s:"
+
+#, fuzzy
+#~ msgid "PPP _interface"
+#~ msgstr "Koppelvlak"
+
+#, fuzzy
+#~ msgid "P_arent interface"
+#~ msgstr "Koppelvlak:"
+
+#, fuzzy
+#~ msgid "C_laim interface"
+#~ msgstr "Koppelvlak:"
+
+#~ msgid "10 Mb/s"
+#~ msgstr "10 Mb/s"
+
+#~ msgid "100 Mb/s"
+#~ msgstr "100 Mb/s"
+
+#~ msgid "1 Gb/s"
+#~ msgstr "1 Gb/s"
+
+#~ msgid "10 Gb/s"
+#~ msgstr "10 Gb/s"
+
+#, fuzzy
+#~ msgid "C_loned MAC address"
+#~ msgstr "Adresse"
+
+#, fuzzy
+#~ msgid "De_fault"
+#~ msgstr "Verstek"
+
+#, fuzzy
+#~ msgid "_Ignore"
+#~ msgstr "Geïgnoreer"
+
+#, fuzzy
+#~ msgid "_Broadcast"
+#~ msgstr "Uitsaai-adres:"
+
+#, fuzzy
+#~ msgid "_Wake on LAN password"
+#~ msgstr "_Wys wagwoord"
+
+#, fuzzy
+#~ msgid "_Speed"
+#~ msgstr "Spoed"
+
+#, fuzzy
+#~ msgid "No"
+#~ msgstr "Geen"
+
+#, fuzzy
+#~ msgid "All _users may connect to this network"
+#~ msgstr "U is nou aan die draadnetwerk verbind."
+
+#, fuzzy
+#~ msgid "_Metered connection"
+#~ msgstr "Verbi_nding:"
+
+#, fuzzy
+#~ msgid ""
+#~ "IP addresses identify your computer on the network. Click the “Add” "
+#~ "button to add static IP address to be configured in addition to the "
+#~ "automatic ones."
+#~ msgstr ""
+#~ "IP-adresse identifiseer u rekenaar op die netwerk. Kliek die \"Voeg by\"-"
+#~ "knoppie om 'n IP-adres by te voeg."
+
+#~ msgid "Addresses"
+#~ msgstr "Adresse"
+
+#, fuzzy
+#~ msgid "Connected"
+#~ msgstr "_Verbind"
+
+#, fuzzy
+#~ msgid "Device name"
+#~ msgstr "Dien_s:"
+
+#, fuzzy
+#~ msgid "Parent device"
+#~ msgstr "Ethernet (%s)"
+
+#~ msgid "Automatic with manual DNS settings"
+#~ msgstr "Outomaties met handmatige DNS-instellings"
+
+#~ msgid ""
+#~ "Domains used when resolving host names. Use commas to separate multiple "
+#~ "domains."
+#~ msgstr ""
+#~ "Domeine gebruik wanneer gasheername opgelos word. Gebruik kommas om "
+#~ "veelvuldige domeine te skei."
+
+#, fuzzy
+#~ msgid "D_HCP client ID"
+#~ msgstr "D_HCP-kliënt-ID:"
+
+#, fuzzy
+#~ msgid "_Device name"
+#~ msgstr "Dien_s:"
+
+#, fuzzy
+#~ msgid "_Parent device"
+#~ msgstr "Ethernet (%s)"
+
+#, fuzzy
+#~ msgid "N_etwork ID"
+#~ msgstr "Netwerk"
+
+#, fuzzy
+#~ msgid "None"
+#~ msgstr "Geen"
+
+#, fuzzy
+#~ msgid "Ethernet port state"
+#~ msgstr "Draadnetwerke"
+
+#, fuzzy
+#~ msgid "Send _interval"
+#~ msgstr "Koppelvlak:"
+
+#, fuzzy
+#~ msgid "From the team device"
+#~ msgstr "Ethernet (%s)"
+
+#, fuzzy
+#~ msgid "_Teamed connections"
+#~ msgstr "Verbi_nding:"
+
+#, fuzzy
+#~ msgid "Ethernet"
+#~ msgstr "Outo-Ethernet"
+
+#, fuzzy
+#~ msgid "IP"
+#~ msgstr "IPv4"
+
+#, fuzzy
+#~ msgid "TCP"
+#~ msgstr "GTC"
+
+#, fuzzy
+#~ msgid "_Hardware Address"
+#~ msgstr "Hardeware-adres:"
+
+#, fuzzy
+#~ msgid "_Hardware address policy"
+#~ msgstr "Hardeware-adres:"
+
+#, fuzzy
+#~ msgid "_Parent interface"
+#~ msgstr "Koppelvlak:"
+
+#, fuzzy
+#~ msgid "VLAN inter_face name"
+#~ msgstr "Koppelvlak:"
+
+#, fuzzy
+#~ msgid "Cloned MAC _address"
+#~ msgstr "Adresse"
+
+#, fuzzy
+#~ msgid "S_ecurity"
+#~ msgstr "Sekuriteit:"
+
+#, fuzzy
+#~ msgid "Hardware"
+#~ msgstr "Hardeware-adres:"
+
+#, fuzzy
+#~ msgid "_New Connection"
+#~ msgstr "_VPN-verbindings"
+
+#, fuzzy
+#~ msgid "Missing connection name"
+#~ msgstr "Daar is 'n fout met die vertoon van verbindingsinligting:"
+
+#, fuzzy
+#~ msgid "Connection cannot be modified"
+#~ msgstr "Verbinding bewerkstellig"
+
+#, fuzzy
+#~ msgid "Could not create connection"
+#~ msgstr "Geen netwerkverbinding"
+
+#, fuzzy
+#~ msgid "Connection _name"
+#~ msgstr "VPN-verbinding het misluk"
+
+#, fuzzy
+#~ msgid "_Relabel"
+#~ msgstr "etiket"
+
+#, fuzzy
+#~ msgid "Relabel"
+#~ msgstr "etiket"
+
+#, fuzzy
+#~ msgid "Connection cannot be deleted"
+#~ msgstr "Verbinding bewerkstellig"
+
+#, fuzzy
+#~ msgid "Select a connection to edit"
+#~ msgstr ""
+#~ "\n"
+#~ "Die VPN-verbinding '%s' het misluk."
+
+#, fuzzy
+#~ msgid "Select a connection to delete"
+#~ msgstr ""
+#~ "\n"
+#~ "Die VPN-verbinding '%s' het misluk."
+
+#, fuzzy
+#~ msgid "Unrecognized connection type"
+#~ msgstr "Geen netwerkverbinding"
+
+#, fuzzy, c-format
+#~ msgid "Don’t know how to import “%s” connections"
+#~ msgstr "Geen netwerkverbinding"
+
+#, fuzzy
+#~ msgid "Error importing connection"
+#~ msgstr "Daar is 'n fout met die vertoon van verbindingsinligting:"
+
+#, fuzzy
+#~ msgid "Connection type not specified."
+#~ msgstr "Verbinding bewerkstellig"
+
+#, fuzzy, c-format
+#~ msgid "Don’t know how to create “%s” connections"
+#~ msgstr "Geen netwerkverbinding"
+
+#~ msgid "Network Connections"
+#~ msgstr "Netwerkverbindings"
+
+#, fuzzy
+#~ msgid "Add a new connection"
+#~ msgstr "_VPN-verbindings"
+
+#, fuzzy, c-format
+#~ msgid "Bluetooth connection %d"
+#~ msgstr "Geen netwerkverbinding"
+
+#, fuzzy
+#~ msgid "_Personal Area Network"
+#~ msgstr "Aktiveer _netwerke"
+
+#, fuzzy
+#~ msgid "_Dial-Up Network"
+#~ msgstr "Draadlose netwerk"
+
+#, fuzzy
+#~ msgid "primary"
+#~ msgstr "Eerste DNS:"
+
+#, fuzzy, c-format
+#~ msgid "Bond connection %d"
+#~ msgstr "Geen netwerkverbinding"
+
+#, fuzzy, c-format
+#~ msgid "Bridge connection %d"
+#~ msgstr "Begin tans VPN-verbinding '%s'..."
+
+#, fuzzy
+#~ msgid "missing parent interface"
+#~ msgstr "Koppelvlak:"
+
+#, fuzzy
+#~ msgid "ignored"
+#~ msgstr "Geïgnoreer"
+
+#, fuzzy
+#~ msgid "Ethernet device"
+#~ msgstr "Ethernet (%s)"
+
+#, fuzzy, c-format
+#~ msgid "Ethernet connection %d"
+#~ msgstr "Geen netwerkverbinding"
+
+#, fuzzy, c-format
+#~ msgid "IP tunnel connection %d"
+#~ msgstr "Geen netwerkverbinding"
+
+#~ msgid "IPv4 Settings"
+#~ msgstr "IPv4-instellings"
+
+#~ msgid "IPv6 Settings"
+#~ msgstr "IPv6-instellings"
+
+#, fuzzy, c-format
+#~ msgid "MACSEC connection %d"
+#~ msgstr "VPN-verbinding het misluk"
+
+#~ msgid "PPP Settings"
+#~ msgstr "PPP-instellings"
+
+#, fuzzy, c-format
+#~ msgid "Team connection %d"
+#~ msgstr ""
+#~ "\n"
+#~ "Die VPN-verbinding '%s' het misluk."
+
+#, fuzzy
+#~ msgid "New connection…"
+#~ msgstr "Geen netwerkverbinding"
+
+#, fuzzy, c-format
+#~ msgid "VLAN connection %d"
+#~ msgstr "VPN-verbinding het misluk"
+
+#, fuzzy
+#~ msgid "unknown failure"
+#~ msgstr "VPN-verbinding het misluk"
+
+#, fuzzy
+#~ msgid "Wi-Fi device"
+#~ msgstr "Enige toetstel"
+
+#, fuzzy, c-format
+#~ msgid "Wi-Fi connection %d"
+#~ msgstr "VPN-verbinding het misluk"
+
+#, fuzzy
+#~ msgid "Wi-Fi Security"
+#~ msgstr "Sekuriteit:"
+
+#, fuzzy, c-format
+#~ msgid ""
+#~ "The VPN connection “%s” could not be exported to %s.\n"
+#~ "\n"
+#~ "Error: %s."
+#~ msgstr ""
+#~ "\n"
+#~ "Die VPN-verbinding '%s' kon nie begin nie.\n"
+#~ "\n"
+#~ "%s"
+
+#, fuzzy
+#~ msgid "Export VPN connection…"
+#~ msgstr "_VPN-verbindings"
+
+#~ msgid "_Unlock"
+#~ msgstr "Ontsl_uit"
+
+#~ msgid "Connection Information"
+#~ msgstr "Verbindingsinligting"
+
+#~ msgid "Provider:"
+#~ msgstr "Verskaffer:"
+
+#~ msgid "Country or Region List:"
+#~ msgstr "Land- en streeklys:"
+
+#~ msgid "Country or region"
+#~ msgstr "Land of streek"
+
+#, fuzzy
+#~ msgid "Wi-Fi _security:"
+#~ msgstr "_Draadloos-sekuriteit:"
+
+#~ msgid "_Network name:"
+#~ msgstr "_Netwerk-naam:"
+
+#~ msgid "C_onnection:"
+#~ msgstr "Verbi_nding:"
+
+#, fuzzy
+#~ msgid "Wi-Fi _adapter:"
+#~ msgstr "Draadlosenetwerk-p_asstuk:"
+
+#~ msgid "EVDO"
+#~ msgstr "EVDO"
+
+#~ msgid "GPRS"
+#~ msgstr "GPRS"
+
+#~ msgid "EDGE"
+#~ msgstr "EDGE"
+
+#~ msgid "UMTS"
+#~ msgstr "UMTS"
+
+#~ msgid "HSDPA"
+#~ msgstr "HSDPA"
+
+#~ msgid "HSUPA"
+#~ msgstr "HSUPA"
+
+#~ msgid "HSPA"
+#~ msgstr "HSPA"
+
+#, fuzzy
+#~ msgid "HSPA+"
+#~ msgstr "HSPA"
+
+#~ msgid "not enabled"
+#~ msgstr "nie geaktiveer nie"
+
+#~ msgid "not registered"
+#~ msgstr "nie geregistreer is nie"
+
+#, c-format
+#~ msgid "Home network (%s)"
+#~ msgstr "Huisnetwerk (%s)"
+
+#~ msgid "Home network"
+#~ msgstr "Huisnetwerk"
+
+#~ msgid "searching"
+#~ msgstr "soek tans"
+
+#~ msgid "registration denied"
+#~ msgstr "registrasie geweier"
+
+#, c-format
+#~ msgid "Roaming network (%s)"
+#~ msgstr "Swerfnetwerk (%s)"
+
+#~ msgid "Roaming network"
+#~ msgstr "Swerfnetwerk"
+
+#~ msgid "PIN code required"
+#~ msgstr "PIN-kode vereis"
+
+#~ msgid "PIN code is needed for the mobile broadband device"
+#~ msgstr "PIN-kode word benodig vir die selfoon-breëbandtoestel"
+
+#, fuzzy, c-format
+#~ msgid "Mobile broadband connection “%s” active: (%d%%%s%s)"
+#~ msgstr "Selfoon-breëbandverbinding '%s' is aktief: (%d%%%s%s)"
+
+#~ msgid "roaming"
+#~ msgstr "swerwing"
+
+#, fuzzy
+#~ msgid "%s (default)"
+#~ msgstr "Verstek"
+
+#~ msgid "Ignored"
+#~ msgstr "Geïgnoreer"
+
+#~ msgid "Failed to update connection secrets due to an unknown error."
+#~ msgstr ""
+#~ "Kon nie verbindinggeheime opdateer nie, as gevolg van 'n onbekende fout."
+
+#, fuzzy
+#~ msgid "Connection _priority for auto-activation:"
+#~ msgstr "_Verbindingsinligting"
+
+#, fuzzy
+#~ msgid "unknown error"
+#~ msgstr "onbekend"
+
+#, fuzzy
+#~ msgid "NetworkManager for GNOME"
+#~ msgstr "NetworkManager-miniprogram"
+
+#~ msgid ""
+#~ "\n"
+#~ "The VPN connection '%s' disconnected because the VPN service stopped."
+#~ msgstr ""
+#~ "\n"
+#~ "Die VPN-verbinding '%s' het ontkoppel, want die VPN-diens het gestop."
+
+#~ msgid ""
+#~ "\n"
+#~ "The VPN connection '%s' disconnected."
+#~ msgstr ""
+#~ "\n"
+#~ "Die VPN-verbinding '%s' het ontkoppel."
+
+#~ msgid "_Disconnect VPN"
+#~ msgstr "_Ontkoppel VPN"
+
+#, fuzzy
+#~ msgid "New Mobile Broadband connection..."
+#~ msgstr "Nuwe selfoon-breëbandverbinding"
+
+#, fuzzy
+#~ msgid "_Connect to Hidden Wi-Fi Network..."
+#~ msgstr "_Verbind aan verskuilde draadlose netwerk..."
+
+#, fuzzy
+#~ msgid "Create _New Wi-Fi Network..."
+#~ msgstr "Skep _nuwe draadlose netwerk..."
+
+#, fuzzy
+#~ msgid "FirewallD is not running."
+#~ msgstr "NetworkManager loop nie tans nie..."
+
+#~ msgid "New..."
+#~ msgstr "Nuwe.."
+
+#~ msgid "New Mobile Broadband (CDMA) connection..."
+#~ msgstr "Nuwe selfoon-breëbandverbinding (CDMA)..."
+
+#~ msgid "You are now connected to the CDMA network."
+#~ msgstr "U is nou aan die CDMA-netwerk verbind."
+
+#~ msgid "New Mobile Broadband (GSM) connection..."
+#~ msgstr "Nuwe selfoon-breëbandverbinding (GSM)..."
+
+#~ msgid "You are now connected to the GSM network."
+#~ msgstr "U is nou aan die GSM-netwerk verbind."
+
+#~ msgid "Wireless Networks (%s)"
+#~ msgstr "Draadlose netwerke (%s)"
+
+#~ msgid "Wireless Network (%s)"
+#~ msgstr "Draadlose netwerk (%s)"
+
+#~ msgid "wireless is disabled"
+#~ msgstr "draadloos is gedeaktiveer"
+
+#~ msgid "wireless is disabled by hardware switch"
+#~ msgstr "draadloos is gedeaktiveer deur 'n hardewareskakelaar"
+
+#~ msgid "Click on this icon to connect to a wireless network"
+#~ msgstr "Kliek op hierdie ikoon om aan 'n draadlose netwerk te verbind"
+
+#~ msgid "Preparing wireless network connection '%s'..."
+#~ msgstr "Berei tans draadlosenetwerkverbinding '%s' voor..."
+
+#~ msgid "Configuring wireless network connection '%s'..."
+#~ msgstr "Konfigureer tans draadlosenetwerkverbinding '%s'..."
+
+#~ msgid "Requesting a wireless network address for '%s'..."
+#~ msgstr "Vra tans 'n draadlosenetwerkadres aan vir '%s'..."
+
+#~ msgid "Wireless network connection '%s' active"
+#~ msgstr "Draadlosenetwerkverbinding '%s' is aktief"
+
+#~ msgid "WiMAX Mobile Broadband (%s)"
+#~ msgstr "WiMAX-selfoonbreëband (%s)"
+
+#~ msgid "WiMAX Mobile Broadband"
+#~ msgstr "WiMAX-selfoonbreëband"
+
+#~ msgid "You are now connected to the WiMAX network."
+#~ msgstr "U is nou aan die WiMAX-netwerk verbind."
+
+#~ msgid "%d dB"
+#~ msgstr "%d dB"
+
+#~ msgctxt "WiMAX Base Station ID"
+#~ msgid "unknown"
+#~ msgstr "onbekend"
+
+#~ msgid "WiMAX (%s)"
+#~ msgstr "WiMAX (%s)"
+
+#, fuzzy
+#~ msgid "CINR:"
+#~ msgstr "CINR:"
+
+#, fuzzy
+#~ msgid "BSID:"
+#~ msgstr "BSID:"
+
+#~ msgid "Enable WiMA_X Mobile Broadband"
+#~ msgstr "Aktiveer WiMA_X-selfoonbreëband"
+
+#~ msgid "_Help"
+#~ msgstr "_Help"
+
+#~ msgid "Other Wireless Network..."
+#~ msgstr "Ander draadlose netwerk..."
+
+#~ msgid "WiMAX"
+#~ msgstr "WiMAX"
+
+#~ msgid "United Kingdom"
+#~ msgstr "Verenigde Koninkryk"

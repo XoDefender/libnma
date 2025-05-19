@@ -1,0 +1,32 @@
+=======================================
+libnma-1.8.30
+Overview of changes since libnma-1.8.28
+=======================================
+
+* Properly dispose wireless security objects.
+* Don't clear the key when users set a non-pkcs12 certificate in the
+  certificate chooser UI.
+* Added missing VAPI macro file.
+
+=======================================
+libnma-1.8.28
+Overview of changes since libnma-1.8.26
+=======================================
+
+* Turned the wireless-security library to a public API
+* "org.gnome.nm-applet.gschema.xml" is now part of libnma.
+  Previously, on distributions like Fedora it was packaged
+  as part of nm-connection-editor package. But the schema is
+  used by wireless-security library, gnome-control-center and
+  nm-a/nm-c-e.
+* Clear key/password input fields when selecting a different
+  certificate in NMACertChooser.
+* Generate vapi files.
+
+=======================================================
+libnma-1.8.26
+Overview of changes since network-manager-applet-1.8.24
+=======================================================
+
+* The libnma library is now distributed separatedly from
+  network-manager-applet.

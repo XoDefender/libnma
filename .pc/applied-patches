@@ -1,0 +1,9 @@
+rbt-fix-token-login-dialog-class.patch
+rbt-add-secret-not-required-support.patch
+rbt-add-cert-password-validation.patch
+rbt-add-cert-chooser-get-cert-id.patch
+rbt-fix-dialog-localization.patch
+rbt-fix-grab-focus-on-psk-entry.patch
+rbt-add-ignore-opensc-env-var.patch
+rbt-fix-cert-chooser-dialog-crash.patch
+rbt-fix-pkcs11-object-selection.patch

@@ -1,0 +1,2196 @@
+# Canadian English translation for NetworkManager
+# Copyright (C) 2004-2006 Adam Weinberger and the GNOME Foundation
+# This file is distributed under the same licence as the NetworkManager package.
+# Adam Weinberger, <adamw@gnome.org>, 2004, 2005, 2006.
+#
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: NetworkManager\n"
+"Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/libnma/\n"
+"POT-Creation-Date: 2020-06-23 09:41+0200\n"
+"PO-Revision-Date: 2005-09-06 14:52-0400\n"
+"Last-Translator: Adam Weinberger <adamw@gnome.org>\n"
+"Language-Team: Canadian English <adamw@gnome.org>\n"
+"Language: en_CA\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: org.gnome.nm-applet.gschema.xml.in:6
+msgid "Disable connected notifications"
+msgstr ""
+
+#: org.gnome.nm-applet.gschema.xml.in:7
+msgid "Set this to true to disable notifications when connecting to a network."
+msgstr ""
+
+#: org.gnome.nm-applet.gschema.xml.in:11
+msgid "Disable disconnected notifications"
+msgstr ""
+
+#: org.gnome.nm-applet.gschema.xml.in:12
+msgid ""
+"Set this to true to disable notifications when disconnecting from a network."
+msgstr ""
+
+#: org.gnome.nm-applet.gschema.xml.in:16
+msgid "Disable VPN notifications"
+msgstr ""
+
+#: org.gnome.nm-applet.gschema.xml.in:17
+msgid ""
+"Set this to true to disable notifications when connecting to or "
+"disconnecting from a VPN."
+msgstr ""
+
+#: org.gnome.nm-applet.gschema.xml.in:21
+msgid "Suppress networks available notifications"
+msgstr ""
+
+#: org.gnome.nm-applet.gschema.xml.in:22
+msgid ""
+"Set this to true to disable notifications when Wi-Fi networks are available."
+msgstr ""
+
+#: org.gnome.nm-applet.gschema.xml.in:26
+msgid "Stamp"
+msgstr ""
+
+#: org.gnome.nm-applet.gschema.xml.in:27
+msgid "Used to determine whether settings should be migrated to a new version."
+msgstr ""
+
+#: org.gnome.nm-applet.gschema.xml.in:31
+msgid "Disable WiFi Create"
+msgstr ""
+
+#: org.gnome.nm-applet.gschema.xml.in:32
+msgid ""
+"Set to true to disable creation of adhoc networks when using the applet."
+msgstr ""
+
+#: org.gnome.nm-applet.gschema.xml.in:36
+msgid "Show the applet in notification area"
+msgstr ""
+
+#: org.gnome.nm-applet.gschema.xml.in:37
+msgid "Set to FALSE to disable displaying the applet in the notification area."
+msgstr ""
+
+#: org.gnome.nm-applet.gschema.xml.in:43 org.gnome.nm-applet.gschema.xml.in:48
+#, fuzzy
+msgid "Ignore CA certificate"
+msgstr "Password:"
+
+#: org.gnome.nm-applet.gschema.xml.in:44
+msgid ""
+"Set this to true to disable warnings about CA certificates in EAP "
+"authentication."
+msgstr ""
+
+#: org.gnome.nm-applet.gschema.xml.in:49
+msgid ""
+"Set this to true to disable warnings about CA certificates in phase 2 of EAP "
+"authentication."
+msgstr ""
+
+#: shared/nm-utils/nm-shared-utils.c:793
+#, c-format
+msgid "object class '%s' has no property named '%s'"
+msgstr ""
+
+#: shared/nm-utils/nm-shared-utils.c:800
+#, c-format
+msgid "property '%s' of object class '%s' is not writable"
+msgstr ""
+
+#: shared/nm-utils/nm-shared-utils.c:807
+#, c-format
+msgid ""
+"construct property \"%s\" for object '%s' can't be set after construction"
+msgstr ""
+
+#: shared/nm-utils/nm-shared-utils.c:815
+#, c-format
+msgid "'%s::%s' is not a valid property name; '%s' is not a GObject subtype"
+msgstr ""
+
+#: shared/nm-utils/nm-shared-utils.c:824
+#, c-format
+msgid "unable to set property '%s' of type '%s' from value of type '%s'"
+msgstr ""
+
+#: shared/nm-utils/nm-shared-utils.c:835
+#, c-format
+msgid ""
+"value \"%s\" of type '%s' is invalid or out of range for property '%s' of "
+"type '%s'"
+msgstr ""
+
+#: src/nma-bar-code-widget.c:140
+#, fuzzy
+msgid "Network"
+msgstr "_Wired Network"
+
+#: src/nma-bar-code-widget.c:157
+#, fuzzy
+msgid "Password"
+msgstr "Password:"
+
+#: src/nma-bar-code-widget.ui:36
+msgid "Scan with your phone or <a href=\"nma:print\">Print</a>"
+msgstr ""
+
+#: src/nma-cert-chooser-button.c:153
+#, fuzzy
+msgid "(None)"
+msgstr "none"
+
+#: src/nma-cert-chooser-button.c:161
+#, c-format
+msgid "Key in %s"
+msgstr ""
+
+#: src/nma-cert-chooser-button.c:162
+#, c-format
+msgid "Certificate in %s"
+msgstr ""
+
+#: src/nma-cert-chooser-button.c:181 src/nma-pkcs11-cert-chooser-dialog.c:169
+msgid "(Unknown)"
+msgstr ""
+
+#: src/nma-cert-chooser-button.c:203 src/nma-cert-chooser-button.c:233
+msgid "Select"
+msgstr ""
+
+#: src/nma-cert-chooser-button.c:204 src/nma-cert-chooser-button.c:234
+msgid "Cancel"
+msgstr ""
+
+#: src/nma-cert-chooser-button.c:460
+msgid "Select from file…"
+msgstr ""
+
+#: src/nma-file-cert-chooser.c:113 src/nma-pkcs11-cert-chooser.c:139
+msgid "No certificate set"
+msgstr ""
+
+#: src/nma-file-cert-chooser.c:131 src/nma-pkcs11-cert-chooser.c:163
+msgid "No key set"
+msgstr ""
+
+#: src/nma-file-cert-chooser.c:285 src/nma-pkcs11-cert-chooser.c:369
+#, c-format
+msgid "Choose a key for %s Certificate"
+msgstr ""
+
+#: src/nma-file-cert-chooser.c:289 src/nma-pkcs11-cert-chooser.c:373
+#, c-format
+msgid "%s private _key"
+msgstr ""
+
+#: src/nma-file-cert-chooser.c:293 src/nma-pkcs11-cert-chooser.c:377
+#, fuzzy, c-format
+msgid "%s key _password"
+msgstr "Password:"
+
+#: src/nma-file-cert-chooser.c:297
+#, c-format
+msgid "Choose %s Certificate"
+msgstr ""
+
+#: src/nma-file-cert-chooser.c:301 src/nma-pkcs11-cert-chooser.c:385
+#, fuzzy, c-format
+msgid "%s _certificate"
+msgstr "Password:"
+
+#: src/nma-file-cert-chooser.c:386 src/nma-ws/nma-eap-leap.ui:54
+#: src/nma-ws/nma-eap-simple.ui:71 src/nma-ws/nma-ws-leap.ui:55
+#: src/nma-ws/nma-ws-sae.ui:56 src/nma-ws/nma-ws-wpa-psk.ui:55
+#, fuzzy
+msgid "Sho_w password"
+msgstr "Password:"
+
+#: src/nma-mobile-providers.c:787
+#, fuzzy
+msgid "Default"
+msgstr "Default Route:"
+
+#: src/nma-mobile-providers.c:976
+msgid "My country is not listed"
+msgstr ""
+
+#: src/nma-mobile-wizard.c:141
+msgid "GSM"
+msgstr ""
+
+#: src/nma-mobile-wizard.c:144
+msgid "CDMA"
+msgstr ""
+
+#: src/nma-mobile-wizard.c:249 src/nma-mobile-wizard.c:281
+msgid "Unlisted"
+msgstr ""
+
+#: src/nma-mobile-wizard.c:481
+msgid "My plan is not listed…"
+msgstr ""
+
+#: src/nma-mobile-wizard.c:653
+msgid "Provider"
+msgstr ""
+
+#: src/nma-mobile-wizard.c:1025
+msgid "Installed GSM device"
+msgstr ""
+
+#: src/nma-mobile-wizard.c:1028
+msgid "Installed CDMA device"
+msgstr ""
+
+#: src/nma-mobile-wizard.c:1233
+msgid "Any device"
+msgstr ""
+
+#: src/nma-mobile-wizard.ui:49
+msgid "New Mobile Broadband Connection"
+msgstr ""
+
+#: src/nma-mobile-wizard.ui:71
+msgid ""
+"This assistant helps you easily set up a mobile broadband connection to a "
+"cellular (3G) network."
+msgstr ""
+
+#: src/nma-mobile-wizard.ui:86
+msgid "You will need the following information:"
+msgstr ""
+
+#: src/nma-mobile-wizard.ui:101
+msgid "Your broadband provider’s name"
+msgstr ""
+
+#: src/nma-mobile-wizard.ui:115
+msgid "Your broadband billing plan name"
+msgstr ""
+
+#: src/nma-mobile-wizard.ui:129
+msgid "(in some cases) Your broadband billing plan APN (Access Point Name)"
+msgstr ""
+
+#: src/nma-mobile-wizard.ui:143
+msgid "Create a connection for _this mobile broadband device:"
+msgstr ""
+
+#: src/nma-mobile-wizard.ui:170
+msgid "Set up a Mobile Broadband Connection"
+msgstr ""
+
+#: src/nma-mobile-wizard.ui:188
+msgid "Country or region:"
+msgstr ""
+
+#: src/nma-mobile-wizard.ui:228
+msgid "Choose your Provider’s Country or Region"
+msgstr ""
+
+#: src/nma-mobile-wizard.ui:243
+msgid "Select your provider from a _list:"
+msgstr ""
+
+#: src/nma-mobile-wizard.ui:288
+msgid "I can’t find my provider and I wish to set up the connection _manually:"
+msgstr ""
+
+#: src/nma-mobile-wizard.ui:309
+msgid "My provider uses GSM technology (GPRS, EDGE, UMTS, HSPA)"
+msgstr ""
+
+#: src/nma-mobile-wizard.ui:310
+msgid "My provider uses CDMA technology (1xRTT, EVDO)"
+msgstr ""
+
+#: src/nma-mobile-wizard.ui:321
+msgid "Choose your Provider"
+msgstr ""
+
+#: src/nma-mobile-wizard.ui:338
+msgid "_Select your plan:"
+msgstr ""
+
+#: src/nma-mobile-wizard.ui:365
+msgid "Selected plan _APN (Access Point Name):"
+msgstr ""
+
+#: src/nma-mobile-wizard.ui:415
+msgid ""
+"Warning: Selecting an incorrect plan may result in billing issues for your "
+"broadband account or may prevent connectivity.\n"
+"\n"
+"If you are unsure of your plan please ask your provider for your plan’s APN."
+msgstr ""
+
+#: src/nma-mobile-wizard.ui:436
+msgid "Choose your Billing Plan"
+msgstr ""
+
+#: src/nma-mobile-wizard.ui:454
+msgid ""
+"Your mobile broadband connection is configured with the following settings:"
+msgstr ""
+
+#: src/nma-mobile-wizard.ui:468
+msgid "Your Device:"
+msgstr ""
+
+#: src/nma-mobile-wizard.ui:494
+msgid "Your Provider:"
+msgstr ""
+
+#: src/nma-mobile-wizard.ui:520
+msgid "Your Plan:"
+msgstr ""
+
+#: src/nma-mobile-wizard.ui:575
+msgid ""
+"A connection will now be made to your mobile broadband provider using the "
+"settings you selected. If the connection fails or you cannot access network "
+"resources, double-check your settings. To modify your mobile broadband "
+"connection settings, choose “Network Connections” from the System → "
+"Preferences menu."
+msgstr ""
+
+#: src/nma-mobile-wizard.ui:589
+msgid "Confirm Mobile Broadband Settings"
+msgstr ""
+
+#: src/nma-pkcs11-cert-chooser-dialog.c:241
+msgid "Error logging in: "
+msgstr ""
+
+#: src/nma-pkcs11-cert-chooser-dialog.c:263
+#, fuzzy
+msgid "Error opening a session: "
+msgstr "Error retrieving VPN connection '%s'"
+
+#: src/nma-pkcs11-cert-chooser-dialog.ui:20
+msgid "_Unlock token"
+msgstr ""
+
+#: src/nma-pkcs11-cert-chooser-dialog.ui:116
+msgid "Name"
+msgstr ""
+
+#: src/nma-pkcs11-cert-chooser-dialog.ui:126
+msgid "Issued By"
+msgstr ""
+
+#: src/nma-pkcs11-cert-chooser.c:381
+#, c-format
+msgid "Choose a %s Certificate"
+msgstr ""
+
+#: src/nma-pkcs11-cert-chooser.c:389
+#, fuzzy, c-format
+msgid "%s certificate _password"
+msgstr "Password:"
+
+#: src/nma-pkcs11-cert-chooser.c:441
+msgid "Sho_w passwords"
+msgstr ""
+
+#: src/nma-pkcs11-token-login-dialog.c:132
+#, c-format
+msgid "Enter %s PIN"
+msgstr ""
+
+#: src/nma-pkcs11-token-login-dialog.ui:19 src/nma-vpn-password-dialog.ui:23
+#: src/nma-wifi-dialog.c:1107
+msgid "_Cancel"
+msgstr ""
+
+#: src/nma-pkcs11-token-login-dialog.ui:35
+msgid "_Login"
+msgstr ""
+
+#: src/nma-pkcs11-token-login-dialog.ui:82
+msgid "_Remember PIN"
+msgstr ""
+
+#: src/nma-ui-utils.c:36
+msgid "Store the password only for this user"
+msgstr ""
+
+#: src/nma-ui-utils.c:37
+msgid "Store the password for all users"
+msgstr ""
+
+#: src/nma-ui-utils.c:38
+msgid "Ask for this password every time"
+msgstr ""
+
+#: src/nma-ui-utils.c:39
+msgid "The password is not required"
+msgstr ""
+
+#: src/nma-vpn-password-dialog.ui:39
+msgid "_OK"
+msgstr ""
+
+#: src/nma-vpn-password-dialog.ui:73
+msgid "Sh_ow passwords"
+msgstr ""
+
+#: src/nma-vpn-password-dialog.ui:130
+#, fuzzy
+msgid "_Tertiary Password:"
+msgstr "Password:"
+
+#: src/nma-vpn-password-dialog.ui:144
+#, fuzzy
+msgid "_Secondary Password:"
+msgstr "Secondary DNS:"
+
+#: src/nma-vpn-password-dialog.ui:158
+#, fuzzy
+msgid "_Password:"
+msgstr "Password:"
+
+#: src/nma-wifi-dialog.c:117
+#, fuzzy
+msgid "Click to connect"
+msgstr "Wired network connection"
+
+#: src/nma-wifi-dialog.c:448
+msgid "New…"
+msgstr ""
+
+#: src/nma-wifi-dialog.c:929
+#, fuzzy
+msgctxt "Wifi/wired security"
+msgid "None"
+msgstr "None"
+
+#: src/nma-wifi-dialog.c:945
+#, fuzzy
+msgid "WEP 40/128-bit Key (Hex or ASCII)"
+msgstr "WEP 40/128-bit ASCII"
+
+#: src/nma-wifi-dialog.c:952
+#, fuzzy
+msgid "WEP 128-bit Passphrase"
+msgstr "WEP Passphrase"
+
+#: src/nma-wifi-dialog.c:967 src/nma-ws/nma-ws-802-1x.c:370
+msgid "LEAP"
+msgstr ""
+
+#: src/nma-wifi-dialog.c:978
+msgid "Dynamic WEP (802.1x)"
+msgstr ""
+
+#: src/nma-wifi-dialog.c:990
+#, fuzzy
+msgid "WPA & WPA2 Personal"
+msgstr "WPA2 Personal"
+
+#: src/nma-wifi-dialog.c:1006
+msgid "WPA & WPA2 Enterprise"
+msgstr ""
+
+#: src/nma-wifi-dialog.c:1017
+#, fuzzy
+msgid "WPA3 Personal"
+msgstr "WPA Personal"
+
+#: src/nma-wifi-dialog.c:1111
+msgid "C_reate"
+msgstr ""
+
+#: src/nma-wifi-dialog.c:1113
+msgid "C_onnect"
+msgstr "C_onnect"
+
+#: src/nma-wifi-dialog.c:1191
+#, c-format
+msgid ""
+"Passwords or encryption keys are required to access the Wi-Fi network “%s”."
+msgstr ""
+
+#: src/nma-wifi-dialog.c:1193
+#, fuzzy
+msgid "Wi-Fi Network Authentication Required"
+msgstr "Wireless Network Key Required"
+
+#: src/nma-wifi-dialog.c:1195
+msgid "Authentication required by Wi-Fi network"
+msgstr ""
+
+#: src/nma-wifi-dialog.c:1200
+#, fuzzy
+msgid "Create New Wi-Fi Network"
+msgstr "Create New Wireless Network"
+
+#: src/nma-wifi-dialog.c:1202
+msgid "New Wi-Fi network"
+msgstr ""
+
+#: src/nma-wifi-dialog.c:1203
+#, fuzzy
+msgid "Enter a name for the Wi-Fi network you wish to create."
+msgstr "Enter the name of the wireless network to which you wish to connect."
+
+#: src/nma-wifi-dialog.c:1205
+#, fuzzy
+msgid "Connect to Hidden Wi-Fi Network"
+msgstr "Connect to Other Wireless Network"
+
+#: src/nma-wifi-dialog.c:1207
+msgid "Hidden Wi-Fi network"
+msgstr ""
+
+#: src/nma-wifi-dialog.c:1208
+#, fuzzy
+msgid ""
+"Enter the name and security details of the hidden Wi-Fi network you wish to "
+"connect to."
+msgstr ""
+"Enter the name and security settings of the wireless network you wish to "
+"create."
+
+#: src/nma-ws/nma-eap-fast.c:59
+msgid "missing EAP-FAST PAC file"
+msgstr ""
+
+#: src/nma-ws/nma-eap-fast.c:256 src/nma-ws/nma-eap-peap.c:312
+#: src/nma-ws/nma-eap-ttls.c:366
+msgid "GTC"
+msgstr ""
+
+#: src/nma-ws/nma-eap-fast.c:272 src/nma-ws/nma-eap-peap.c:280
+#: src/nma-ws/nma-eap-ttls.c:300
+msgid "MSCHAPv2"
+msgstr ""
+
+#: src/nma-ws/nma-eap-fast.c:395
+msgid "Choose a PAC file"
+msgstr ""
+
+#: src/nma-ws/nma-eap-fast.c:402
+msgid "PAC files (*.pac)"
+msgstr ""
+
+#: src/nma-ws/nma-eap-fast.c:406
+msgid "All files"
+msgstr ""
+
+#: src/nma-ws/nma-eap-fast.ui:23
+msgid "Anonymous"
+msgstr ""
+
+#: src/nma-ws/nma-eap-fast.ui:26
+#, fuzzy
+msgid "Authenticated"
+msgstr "Authentication:"
+
+#: src/nma-ws/nma-eap-fast.ui:29
+msgid "Both"
+msgstr ""
+
+#: src/nma-ws/nma-eap-fast.ui:42 src/nma-ws/nma-eap-peap.ui:42
+#: src/nma-ws/nma-eap-ttls.ui:113
+msgid "Anony_mous identity"
+msgstr ""
+
+#: src/nma-ws/nma-eap-fast.ui:68
+msgid "PAC _file"
+msgstr ""
+
+#: src/nma-ws/nma-eap-fast.ui:107 src/nma-ws/nma-eap-peap.ui:115
+#: src/nma-ws/nma-eap-ttls.ui:71
+#, fuzzy
+msgid "_Inner authentication"
+msgstr "Authentication:"
+
+#: src/nma-ws/nma-eap-fast.ui:136
+msgid "Allow automatic PAC pro_visioning"
+msgstr ""
+
+#: src/nma-ws/nma-eap-leap.c:55
+msgid "missing EAP-LEAP username"
+msgstr ""
+
+#: src/nma-ws/nma-eap-leap.c:64
+msgid "missing EAP-LEAP password"
+msgstr ""
+
+#: src/nma-ws/nma-eap-leap.ui:15 src/nma-ws/nma-eap-simple.ui:15
+#: src/nma-ws/nma-ws-leap.ui:15
+#, fuzzy
+msgid "_Username"
+msgstr "User Name:"
+
+#: src/nma-ws/nma-eap-leap.ui:29 src/nma-ws/nma-eap-simple.ui:29
+#: src/nma-ws/nma-ws-leap.ui:29 src/nma-ws/nma-ws-sae.ui:14
+#: src/nma-ws/nma-ws-wpa-psk.ui:14
+#, fuzzy
+msgid "_Password"
+msgstr "Password:"
+
+#: src/nma-ws/nma-eap-peap.c:296 src/nma-ws/nma-eap-ttls.c:350
+#: src/nma-ws/nma-ws-802-1x.c:346
+msgid "MD5"
+msgstr ""
+
+#: src/nma-ws/nma-eap-peap.ui:23
+#, fuzzy
+msgid "Automatic"
+msgstr "WPA Automatic"
+
+#: src/nma-ws/nma-eap-peap.ui:26
+msgid "Version 0"
+msgstr ""
+
+#: src/nma-ws/nma-eap-peap.ui:29
+msgid "Version 1"
+msgstr ""
+
+#: src/nma-ws/nma-eap-peap.ui:66 src/nma-ws/nma-eap-tls.ui:38
+#: src/nma-ws/nma-eap-ttls.ui:83
+msgid "No CA certificate is _required"
+msgstr ""
+
+#: src/nma-ws/nma-eap-peap.ui:83
+msgid "PEAP _version"
+msgstr ""
+
+#: src/nma-ws/nma-eap-peap.ui:162 src/nma-ws/nma-eap-tls.ui:56
+#: src/nma-ws/nma-eap-ttls.ui:127
+msgid "Suffix of the server certificate name."
+msgstr ""
+
+#: src/nma-ws/nma-eap-peap.ui:163 src/nma-ws/nma-eap-tls.ui:57
+#: src/nma-ws/nma-eap-ttls.ui:128
+msgid "_Domain"
+msgstr ""
+
+#: src/nma-ws/nma-eap-simple.c:79
+msgid "missing EAP username"
+msgstr ""
+
+#: src/nma-ws/nma-eap-simple.c:95
+msgid "missing EAP password"
+msgstr ""
+
+#: src/nma-ws/nma-eap-simple.c:109
+msgid "missing EAP client Private Key passphrase"
+msgstr ""
+
+#: src/nma-ws/nma-eap-simple.ui:97
+#, fuzzy
+msgid "P_rivate Key Passphrase"
+msgstr "WEP Passphrase"
+
+#: src/nma-ws/nma-eap-simple.ui:122
+#, fuzzy
+msgid "Sh_ow passphrase"
+msgstr "Passphrase:"
+
+#: src/nma-ws/nma-eap-tls.c:47
+msgid "missing EAP-TLS identity"
+msgstr ""
+
+#: src/nma-ws/nma-eap-tls.c:234
+msgid "no user certificate selected"
+msgstr ""
+
+#: src/nma-ws/nma-eap-tls.c:239
+msgid "selected user certificate file does not exist"
+msgstr ""
+
+#: src/nma-ws/nma-eap-tls.c:259
+msgid "no key selected"
+msgstr ""
+
+#: src/nma-ws/nma-eap-tls.c:264
+msgid "selected key file does not exist"
+msgstr ""
+
+#: src/nma-ws/nma-eap-tls.ui:14
+msgid "I_dentity"
+msgstr ""
+
+#: src/nma-ws/nma-eap-ttls.c:268
+msgid "PAP"
+msgstr ""
+
+#: src/nma-ws/nma-eap-ttls.c:284
+msgid "MSCHAP"
+msgstr ""
+
+#: src/nma-ws/nma-eap-ttls.c:317
+msgid "MSCHAPv2 (no EAP)"
+msgstr ""
+
+#: src/nma-ws/nma-eap-ttls.c:334
+msgid "CHAP"
+msgstr ""
+
+#: src/nma-ws/nma-eap.c:40
+msgid "undefined error in 802.1X security (wpa-eap)"
+msgstr ""
+
+#: src/nma-ws/nma-eap.c:348
+msgid "no CA certificate selected"
+msgstr ""
+
+#: src/nma-ws/nma-eap.c:353
+msgid "selected CA certificate file does not exist"
+msgstr ""
+
+#: src/nma-ws/nma-ws-802-1x.c:358
+msgid "TLS"
+msgstr ""
+
+#: src/nma-ws/nma-ws-802-1x.c:382
+msgid "PWD"
+msgstr ""
+
+#: src/nma-ws/nma-ws-802-1x.c:393
+msgid "FAST"
+msgstr ""
+
+#: src/nma-ws/nma-ws-802-1x.c:404
+msgid "Tunneled TLS"
+msgstr ""
+
+#: src/nma-ws/nma-ws-802-1x.c:415
+msgid "Protected EAP (PEAP)"
+msgstr ""
+
+#: src/nma-ws/nma-ws-802-1x.c:430
+msgid "Unknown"
+msgstr ""
+
+#: src/nma-ws/nma-ws-802-1x.c:444
+msgid "Externally configured"
+msgstr ""
+
+#: src/nma-ws/nma-ws-802-1x.ui:25 src/nma-ws/nma-ws-wep-key.ui:95
+#, fuzzy
+msgid "Au_thentication"
+msgstr "Authentication:"
+
+#: src/nma-ws/nma-ws-leap.c:71
+msgid "missing leap-username"
+msgstr ""
+
+#: src/nma-ws/nma-ws-leap.c:87
+msgid "missing leap-password"
+msgstr ""
+
+#: src/nma-ws/nma-ws-sae.c:73
+#, fuzzy
+msgid "missing password"
+msgstr "Password:"
+
+#: src/nma-ws/nma-ws-sae.ui:44 src/nma-ws/nma-ws-wpa-psk.ui:43
+#, fuzzy
+msgid "_Type"
+msgstr "Type:"
+
+#: src/nma-ws/nma-ws-wep-key.c:110
+msgid "missing wep-key"
+msgstr ""
+
+#: src/nma-ws/nma-ws-wep-key.c:117
+#, c-format
+msgid "invalid wep-key: key with a length of %zu must contain only hex-digits"
+msgstr ""
+
+#: src/nma-ws/nma-ws-wep-key.c:125
+#, c-format
+msgid ""
+"invalid wep-key: key with a length of %zu must contain only ascii characters"
+msgstr ""
+
+#: src/nma-ws/nma-ws-wep-key.c:131
+#, c-format
+msgid ""
+"invalid wep-key: wrong key length %zu. A key must be either of length 5/13 "
+"(ascii) or 10/26 (hex)"
+msgstr ""
+
+#: src/nma-ws/nma-ws-wep-key.c:138
+msgid "invalid wep-key: passphrase must be non-empty"
+msgstr ""
+
+#: src/nma-ws/nma-ws-wep-key.c:140
+msgid "invalid wep-key: passphrase must be shorter than 64 characters"
+msgstr ""
+
+#: src/nma-ws/nma-ws-wep-key.ui:12
+msgid "Open System"
+msgstr "Open System"
+
+#: src/nma-ws/nma-ws-wep-key.ui:15
+msgid "Shared Key"
+msgstr "Shared Key"
+
+#: src/nma-ws/nma-ws-wep-key.ui:26
+#, fuzzy
+msgid "1 (Default)"
+msgstr "Automatic (Default)"
+
+#: src/nma-ws/nma-ws-wep-key.ui:48
+#, fuzzy
+msgid "_Key"
+msgstr "Key:"
+
+#: src/nma-ws/nma-ws-wep-key.ui:77
+msgid "Sho_w key"
+msgstr ""
+
+#: src/nma-ws/nma-ws-wep-key.ui:128
+msgid "WEP inde_x"
+msgstr ""
+
+#: src/nma-ws/nma-ws-wpa-psk.c:80
+#, c-format
+msgid ""
+"invalid wpa-psk: invalid key-length %zu. Must be [8,63] bytes or 64 hex "
+"digits"
+msgstr ""
+
+#: src/nma-ws/nma-ws-wpa-psk.c:87
+msgid "invalid wpa-psk: cannot interpret key with 64 bytes as hex"
+msgstr ""
+
+#: src/nma-ws/nma-ws.c:38
+msgid "Unknown error validating 802.1X security"
+msgstr ""
+
+#. The %s is a mobile provider name, eg "T-Mobile"
+#: src/utils/utils.c:161
+#, fuzzy, c-format
+msgid "%s connection"
+msgstr "VPN Connections"
+
+#: src/utils/utils.c:535
+msgid "PEM certificates (*.pem, *.crt, *.cer)"
+msgstr ""
+
+#: src/utils/utils.c:547
+msgid "DER, PEM, or PKCS#12 private keys (*.der, *.pem, *.p12, *.key)"
+msgstr ""
+
+#: src/wifi.ui:97
+#, fuzzy
+msgid "Wi-Fi _security"
+msgstr "_Wireless Security:"
+
+#: src/wifi.ui:129
+#, fuzzy
+msgid "_Network name"
+msgstr "_Network Name:"
+
+#: src/wifi.ui:154
+#, fuzzy
+msgid "C_onnection"
+msgstr "C_onnect"
+
+#: src/wifi.ui:179
+#, fuzzy
+msgid "Wi-Fi _adapter"
+msgstr "Wireless _adapter:"
+
+#, fuzzy
+#~ msgid "Manage your network connections"
+#~ msgstr "No network connection"
+
+#, fuzzy
+#~ msgid "Advanced Network Configuration"
+#~ msgstr "VPN Configuration Error"
+
+#, fuzzy
+#~ msgid "Manage and change your network connection settings"
+#~ msgstr "Manage Virtual Private Network Connections"
+
+#, fuzzy
+#~ msgid "NetworkManager"
+#~ msgstr "NetworkManager Applet"
+
+#, fuzzy
+#~ msgid "NetworkManager connection editor"
+#~ msgstr "No network connection"
+
+#, fuzzy
+#~ msgid "The NetworkManager Developers"
+#~ msgstr "NetworkManager Applet"
+
+#, fuzzy
+#~ msgid "802.1X authentication"
+#~ msgstr "Authentication:"
+
+#, fuzzy
+#~ msgid "Failed to add/activate connection"
+#~ msgstr "No active connections!"
+
+#, fuzzy
+#~ msgid "Connection failure"
+#~ msgstr "VPN Connect Failure"
+
+#, fuzzy
+#~ msgid "Disconnect failure"
+#~ msgstr "VPN Connect Failure"
+
+#, fuzzy
+#~ msgid "Connection activation failed"
+#~ msgstr "Connection to the wired network failed."
+
+#, fuzzy
+#~ msgid "Don’t show this message again"
+#~ msgstr "_Do not remind me again"
+
+#, fuzzy, c-format
+#~ msgid ""
+#~ "\n"
+#~ "The VPN connection “%s” disconnected because the network connection was "
+#~ "interrupted."
+#~ msgstr "The VPN connection '%s' was not correctly configured."
+
+#, fuzzy, c-format
+#~ msgid ""
+#~ "\n"
+#~ "The VPN connection “%s” failed because the network connection was "
+#~ "interrupted."
+#~ msgstr "The VPN connection '%s' was not correctly configured."
+
+#, fuzzy, c-format
+#~ msgid ""
+#~ "\n"
+#~ "The VPN connection “%s” failed because the VPN service stopped "
+#~ "unexpectedly."
+#~ msgstr "The VPN connection '%s' was not correctly configured."
+
+#, fuzzy, c-format
+#~ msgid ""
+#~ "\n"
+#~ "The VPN connection “%s” failed because the VPN service returned invalid "
+#~ "configuration."
+#~ msgstr ""
+#~ "Could not start the VPN connection '%s' because the VPN server did not "
+#~ "return an adequate network configuration."
+
+#, fuzzy, c-format
+#~ msgid ""
+#~ "\n"
+#~ "The VPN connection “%s” failed because the connection attempt timed out."
+#~ msgstr "The VPN connection '%s' was not correctly configured."
+
+#, fuzzy, c-format
+#~ msgid ""
+#~ "\n"
+#~ "The VPN connection “%s” failed because the VPN service did not start in "
+#~ "time."
+#~ msgstr ""
+#~ "Could not start the VPN connection '%s' because the VPN server did not "
+#~ "return an adequate network configuration."
+
+#, fuzzy, c-format
+#~ msgid ""
+#~ "\n"
+#~ "The VPN connection “%s” failed because the VPN service failed to start."
+#~ msgstr ""
+#~ "Could not start the VPN connection '%s' because the VPN server did not "
+#~ "return an adequate network configuration."
+
+#, fuzzy, c-format
+#~ msgid ""
+#~ "\n"
+#~ "The VPN connection “%s” failed because there were no valid VPN secrets."
+#~ msgstr "The VPN connection '%s' was not correctly configured."
+
+#, fuzzy, c-format
+#~ msgid ""
+#~ "\n"
+#~ "The VPN connection “%s” failed because of invalid VPN secrets."
+#~ msgstr "The VPN connection '%s' was not correctly configured."
+
+#, fuzzy, c-format
+#~ msgid ""
+#~ "\n"
+#~ "The VPN connection “%s” failed."
+#~ msgstr "VPN connection '%s' said:"
+
+#~ msgid "VPN Login Message"
+#~ msgstr "VPN Login Message"
+
+#, fuzzy
+#~ msgid "VPN Connection Failed"
+#~ msgstr "VPN Connect Failure"
+
+#, fuzzy, c-format
+#~ msgid ""
+#~ "\n"
+#~ "The VPN connection “%s” failed because the VPN service failed to start.\n"
+#~ "\n"
+#~ "%s"
+#~ msgstr ""
+#~ "Could not start the VPN connection '%s' because the VPN server did not "
+#~ "return an adequate network configuration."
+
+#, fuzzy, c-format
+#~ msgid ""
+#~ "\n"
+#~ "The VPN connection “%s” failed to start.\n"
+#~ "\n"
+#~ "%s"
+#~ msgstr "VPN connection '%s' said:"
+
+#, fuzzy
+#~ msgid "disconnected"
+#~ msgstr "_Disconnect VPN..."
+
+#, fuzzy
+#~ msgid "Disconnect"
+#~ msgstr "_Disconnect VPN..."
+
+#, fuzzy
+#~ msgid "No network devices available"
+#~ msgstr "No network devices have been found"
+
+#~ msgid "_VPN Connections"
+#~ msgstr "_VPN Connections"
+
+#, fuzzy
+#~ msgid "_Configure VPN…"
+#~ msgstr "_Configure VPN..."
+
+#, fuzzy
+#~ msgid "_Add a VPN connection…"
+#~ msgstr "_VPN Connections"
+
+#, fuzzy
+#~ msgid "NetworkManager is not running…"
+#~ msgstr "NetworkManager is not running"
+
+#~ msgid "Networking disabled"
+#~ msgstr "Networking disabled"
+
+#~ msgid "Enable _Networking"
+#~ msgstr "Enable _Networking"
+
+#, fuzzy
+#~ msgid "Enable _Wi-Fi"
+#~ msgstr "Enable _Wireless"
+
+#~ msgid "Connection _Information"
+#~ msgstr "Connection _Information"
+
+#, fuzzy
+#~ msgid "Edit Connections…"
+#~ msgstr "Edit VPN Connection"
+
+#~ msgid "_About"
+#~ msgstr "_About"
+
+#, fuzzy, c-format
+#~ msgid "You are now connected to “%s”."
+#~ msgstr "VPN connection to '%s'"
+
+#, fuzzy
+#~ msgid "Disconnected"
+#~ msgstr "_Disconnect VPN..."
+
+#, fuzzy, c-format
+#~ msgid "Preparing network connection “%s”…"
+#~ msgstr "Wired network connection"
+
+#, fuzzy, c-format
+#~ msgid "Requesting a network address for “%s”…"
+#~ msgstr "Requesting a network address from the wireless network '%s'..."
+
+#, fuzzy, c-format
+#~ msgid "Network connection “%s” active"
+#~ msgstr "VPN connection '%s' said:"
+
+#, fuzzy, c-format
+#~ msgid "Starting VPN connection “%s”…"
+#~ msgstr "Cannot start VPN connection '%s'"
+
+#, fuzzy, c-format
+#~ msgid "Requesting a VPN address for “%s”…"
+#~ msgstr "Requesting a network address from the wireless network '%s'..."
+
+#, fuzzy
+#~ msgid "VPN connection active"
+#~ msgstr "VPN connection '%s' said:"
+
+#~ msgid "No network connection"
+#~ msgstr "No network connection"
+
+#~ msgid "NetworkManager Applet"
+#~ msgstr "NetworkManager Applet"
+
+#, fuzzy
+#~ msgid "New Mobile Broadband connection…"
+#~ msgstr "Add a new VPN connection"
+
+#, fuzzy, c-format
+#~ msgid "Preparing mobile broadband connection “%s”…"
+#~ msgstr "Wired network connection"
+
+#, fuzzy, c-format
+#~ msgid "Configuring mobile broadband connection “%s”…"
+#~ msgstr "Wired network connection"
+
+#, fuzzy, c-format
+#~ msgid "Mobile broadband connection “%s” active"
+#~ msgstr "Wireless network connection to '%s' (%d%%)"
+
+#, fuzzy, c-format
+#~ msgid "Ethernet Networks (%s)"
+#~ msgstr "Wired Network (%s)"
+
+#, fuzzy, c-format
+#~ msgid "Ethernet Network (%s)"
+#~ msgstr "Wired Network (%s)"
+
+#, fuzzy
+#~ msgid "Ethernet Networks"
+#~ msgstr "_Wired Network"
+
+#, fuzzy
+#~ msgid "Ethernet Network"
+#~ msgstr "_Wired Network"
+
+#, fuzzy
+#~ msgid "You are now connected to the ethernet network."
+#~ msgstr "Finishing connection to the wired network..."
+
+#, fuzzy, c-format
+#~ msgid "Preparing ethernet network connection “%s”…"
+#~ msgstr "Preparing device %s for the wireless network '%s'..."
+
+#, fuzzy, c-format
+#~ msgid "Configuring ethernet network connection “%s”…"
+#~ msgstr "Wireless network connection to '%s' (%d%%)"
+
+#, fuzzy, c-format
+#~ msgid "User authentication required for ethernet network connection “%s”…"
+#~ msgstr "Preparing device %s for the wireless network '%s'..."
+
+#, fuzzy, c-format
+#~ msgid "Requesting an ethernet network address for “%s”…"
+#~ msgstr "Requesting a network address from the wireless network '%s'..."
+
+#, fuzzy, c-format
+#~ msgid "Ethernet network connection “%s” active"
+#~ msgstr "Wireless network connection to '%s' (%d%%)"
+
+#, fuzzy
+#~ msgid "DSL authentication"
+#~ msgstr "Authentication:"
+
+#, fuzzy
+#~ msgid "_Connect to Hidden Wi-Fi Network…"
+#~ msgstr "Connect to Other Wireless Network"
+
+#, fuzzy
+#~ msgid "Create _New Wi-Fi Network…"
+#~ msgstr "Create New Wireless Network"
+
+#, fuzzy
+#~ msgid "(none)"
+#~ msgstr "none"
+
+#, fuzzy
+#~ msgid "Failed to add new connection"
+#~ msgstr "Add a new VPN connection"
+
+#, fuzzy, c-format
+#~ msgid "Wi-Fi Networks (%s)"
+#~ msgstr "Wired Network (%s)"
+
+#, fuzzy, c-format
+#~ msgid "Wi-Fi Network (%s)"
+#~ msgstr "Wired Network (%s)"
+
+#, fuzzy
+#~ msgid "Wi-Fi Network"
+#~ msgid_plural "Wi-Fi Networks"
+#~ msgstr[0] "_Wired Network"
+#~ msgstr[1] "_Wired Network"
+
+#, fuzzy
+#~ msgid "More networks"
+#~ msgstr "_Wired Network"
+
+#, fuzzy
+#~ msgid "Wi-Fi Networks Available"
+#~ msgstr "Networking disabled"
+
+#, fuzzy, c-format
+#~ msgid "You are now connected to the Wi-Fi network “%s”."
+#~ msgstr "Finishing connection to the wireless network '%s'..."
+
+#, fuzzy, c-format
+#~ msgid "Preparing Wi-Fi network connection “%s”…"
+#~ msgstr "Wired network connection"
+
+#, fuzzy, c-format
+#~ msgid "Configuring Wi-Fi network connection “%s”…"
+#~ msgstr "Wired network connection"
+
+#, fuzzy, c-format
+#~ msgid "Requesting a Wi-Fi network address for “%s”…"
+#~ msgstr "Requesting a network address from the wireless network '%s'..."
+
+#, fuzzy, c-format
+#~ msgid "Wi-Fi network connection “%s” active: %s (%d%%)"
+#~ msgstr "Wireless network connection to '%s' (%d%%)"
+
+#, fuzzy, c-format
+#~ msgid "Wi-Fi network connection “%s” active"
+#~ msgstr "Wired network connection"
+
+#, fuzzy
+#~ msgid "Failed to activate connection"
+#~ msgstr "No active connections!"
+
+#~ msgid "Error displaying connection information:"
+#~ msgstr "Error displaying connection information:"
+
+#, fuzzy
+#~ msgctxt "Wi-Fi/Ethernet security"
+#~ msgid "None"
+#~ msgstr "None"
+
+#~ msgid "IP Address"
+#~ msgstr "IP Address"
+
+#~ msgid "Broadcast Address"
+#~ msgstr "Broadcast Address"
+
+#~ msgid "Subnet Mask"
+#~ msgstr "Subnet Mask"
+
+#, fuzzy
+#~ msgid "Primary DNS"
+#~ msgstr "Primary DNS:"
+
+#, fuzzy
+#~ msgid "Secondary DNS"
+#~ msgstr "Secondary DNS:"
+
+#, fuzzy, c-format
+#~ msgid "Ethernet (%s)"
+#~ msgstr "Wired Ethernet (%s)"
+
+#~ msgid "Interface"
+#~ msgstr "Interface"
+
+#~ msgid "Hardware Address"
+#~ msgstr "Hardware Address"
+
+#~ msgid "Driver"
+#~ msgstr "Driver"
+
+#, fuzzy
+#~ msgid "Security"
+#~ msgstr "_Wireless Security:"
+
+#~ msgid "Default Route"
+#~ msgstr "Default Route"
+
+#, fuzzy
+#~ msgid "VPN Type"
+#~ msgstr "Type:"
+
+#, fuzzy
+#~ msgid "VPN Username"
+#~ msgstr "User Name:"
+
+#, fuzzy
+#~ msgid "Base Connection"
+#~ msgstr "VPN Connections"
+
+#, fuzzy
+#~ msgid "No valid active connections found!"
+#~ msgstr "No active connections!"
+
+#~ msgid ""
+#~ "Notification area applet for managing your network devices and "
+#~ "connections."
+#~ msgstr ""
+#~ "Notification area applet for managing your network devices and "
+#~ "connections."
+
+#, fuzzy
+#~ msgid "NetworkManager Website"
+#~ msgstr "NetworkManager Applet"
+
+#~ msgid "translator-credits"
+#~ msgstr "Adam Weinberger <adamw@gnome.org>"
+
+#, fuzzy
+#~ msgid ""
+#~ "The NetworkManager Applet could not find some required resources (the .ui "
+#~ "file was not found)."
+#~ msgstr ""
+#~ "The NetworkManager Applet could not find some required resources (the "
+#~ "glade file was not found)."
+
+#~ msgid "Password:"
+#~ msgstr "Password:"
+
+#, fuzzy
+#~ msgid "Connection had no VPN setting"
+#~ msgstr "Connection Information"
+
+#, fuzzy, c-format
+#~ msgid "Failed to write connection to VPN UI: %s (%d)"
+#~ msgstr "No active connections!"
+
+#, fuzzy
+#~ msgid "Choose a Connection Type"
+#~ msgstr "Create VPN Connection"
+
+#, fuzzy
+#~ msgid "Broadcast"
+#~ msgstr "Broadcast Address:"
+
+#, fuzzy
+#~ msgid "Bonded _connections"
+#~ msgstr "No network connection"
+
+#, fuzzy
+#~ msgid "_Interface name"
+#~ msgstr "Interface:"
+
+#, fuzzy
+#~ msgid "_Primary"
+#~ msgstr "Primary DNS:"
+
+#, fuzzy
+#~ msgid "_Priority"
+#~ msgstr "Primary DNS:"
+
+#, fuzzy
+#~ msgid "Bridged _connections"
+#~ msgstr "No active connections!"
+
+#, fuzzy
+#~ msgid "Enable I_GMP snooping"
+#~ msgstr "Enable _Networking"
+
+#, fuzzy
+#~ msgid "automatic"
+#~ msgstr "WPA Automatic"
+
+#, fuzzy
+#~ msgid "MAC address"
+#~ msgstr "IP Address:"
+
+#, fuzzy
+#~ msgid "HW address"
+#~ msgstr "IP Address:"
+
+#, fuzzy
+#~ msgid "invalid hardware address"
+#~ msgstr "Hardware Address:"
+
+#, fuzzy
+#~ msgid "PPP _interface"
+#~ msgstr "Interface"
+
+#, fuzzy
+#~ msgid "P_arent interface"
+#~ msgstr "Interface:"
+
+#, fuzzy
+#~ msgid "C_laim interface"
+#~ msgstr "Interface:"
+
+#, fuzzy
+#~ msgid "C_loned MAC address"
+#~ msgstr "IP Address:"
+
+#, fuzzy
+#~ msgid "De_fault"
+#~ msgstr "Default Route:"
+
+#, fuzzy
+#~ msgid "_Broadcast"
+#~ msgstr "Broadcast Address:"
+
+#, fuzzy
+#~ msgid "No"
+#~ msgstr "None"
+
+#, fuzzy
+#~ msgid "All _users may connect to this network"
+#~ msgstr "Error connecting to wireless network"
+
+#, fuzzy
+#~ msgid "_Metered connection"
+#~ msgstr "No active connections!"
+
+#, fuzzy
+#~ msgid "Addresses"
+#~ msgstr "IP Address:"
+
+#, fuzzy
+#~ msgid "Connected"
+#~ msgstr "C_onnect"
+
+#, fuzzy
+#~ msgid "Parent device"
+#~ msgstr "Interface:"
+
+#, fuzzy
+#~ msgid "_Device name"
+#~ msgstr "Interface:"
+
+#, fuzzy
+#~ msgid "_Parent device"
+#~ msgstr "Interface:"
+
+#, fuzzy
+#~ msgid "N_etwork ID"
+#~ msgstr "_Network Name:"
+
+#, fuzzy
+#~ msgid "Authentication"
+#~ msgstr "Authentication:"
+
+#, fuzzy
+#~ msgid "Allowed methods"
+#~ msgstr "Authentication:"
+
+#, fuzzy
+#~ msgid "None"
+#~ msgstr "None"
+
+#, fuzzy
+#~ msgid "Ethernet port state"
+#~ msgstr "_Wired Network"
+
+#, fuzzy
+#~ msgid "Send _interval"
+#~ msgstr "Interface:"
+
+#, fuzzy
+#~ msgid "Edit _JSON configuration"
+#~ msgstr "VPN Configuration Error"
+
+#, fuzzy
+#~ msgid "Raw Configuration"
+#~ msgstr "VPN Configuration Error"
+
+#, fuzzy
+#~ msgid "_Teamed connections"
+#~ msgstr "No active connections!"
+
+#, fuzzy
+#~ msgid "IP"
+#~ msgstr "TKIP"
+
+#, fuzzy
+#~ msgid "_Hardware Address"
+#~ msgstr "Hardware Address:"
+
+#, fuzzy
+#~ msgid "_Hardware address policy"
+#~ msgstr "Hardware Address:"
+
+#, fuzzy
+#~ msgid "_Parent interface"
+#~ msgstr "Interface:"
+
+#, fuzzy
+#~ msgid "VLAN inter_face name"
+#~ msgstr "Interface:"
+
+#, fuzzy
+#~ msgid "Cloned MAC _address"
+#~ msgstr "IP Address:"
+
+#, fuzzy
+#~ msgid "S_ecurity"
+#~ msgstr "_Wireless Security:"
+
+#, fuzzy
+#~ msgid "Allowed Authentication Methods"
+#~ msgstr "Authentication:"
+
+#, fuzzy
+#~ msgid "Hardware"
+#~ msgstr "Hardware Address:"
+
+#, fuzzy
+#~ msgid "Could not create new connection"
+#~ msgstr "Add a new VPN connection"
+
+#, fuzzy
+#~ msgid "Connection delete failed"
+#~ msgstr "Connection to the wired network failed."
+
+#, fuzzy
+#~ msgid "_New Connection"
+#~ msgstr "_VPN Connections"
+
+#, fuzzy
+#~ msgid "Address"
+#~ msgstr "IP Address:"
+
+#, fuzzy
+#~ msgid "Editing un-named connection"
+#~ msgstr "Edit VPN Connection"
+
+#, fuzzy
+#~ msgid "Missing connection name"
+#~ msgstr "Error displaying connection information:"
+
+#, fuzzy
+#~ msgid "Connection cannot be modified"
+#~ msgstr "Connection to the wired network failed."
+
+#, fuzzy
+#~ msgid ""
+#~ "The connection editor could not find some required resources (the .ui "
+#~ "file was not found)."
+#~ msgstr ""
+#~ "The NetworkManager Applet could not find some required resources (the "
+#~ "glade file was not found)."
+
+#, fuzzy
+#~ msgid "Could not create connection"
+#~ msgstr "Create VPN Connection"
+
+#, fuzzy
+#~ msgid "Could not edit connection"
+#~ msgstr "No network connection"
+
+#, fuzzy
+#~ msgid "Connection add failed"
+#~ msgstr "Connection Information"
+
+#, fuzzy
+#~ msgid "Connection _name"
+#~ msgstr "Connection _Information"
+
+#, fuzzy
+#~ msgid "_Export…"
+#~ msgstr "E_xport"
+
+#, fuzzy
+#~ msgid "Connection cannot be deleted"
+#~ msgstr "Connection to the wired network failed."
+
+#, fuzzy
+#~ msgid "Select a connection to edit"
+#~ msgstr "VPN connection '%s' said:"
+
+#, fuzzy
+#~ msgid "Select a connection to delete"
+#~ msgstr "VPN connection '%s' said:"
+
+#, fuzzy
+#~ msgid "Edit the selected connection"
+#~ msgstr "Edit the selected VPN connection"
+
+#, fuzzy
+#~ msgid "Authenticate to edit the selected connection"
+#~ msgstr "Delete the selected VPN connection"
+
+#, fuzzy
+#~ msgid "Delete the selected connection"
+#~ msgstr "Delete the selected VPN connection"
+
+#, fuzzy
+#~ msgid "Authenticate to delete the selected connection"
+#~ msgstr "Delete the selected VPN connection"
+
+#, fuzzy
+#~ msgid "Unrecognized connection type"
+#~ msgstr "No network connection"
+
+#, fuzzy, c-format
+#~ msgid "Don’t know how to import “%s” connections"
+#~ msgstr "Create VPN Connection"
+
+#, fuzzy
+#~ msgid "Error importing connection"
+#~ msgstr "Error retrieving VPN connection '%s'"
+
+#, fuzzy
+#~ msgid "Error creating connection"
+#~ msgstr "Error retrieving VPN connection '%s'"
+
+#, fuzzy
+#~ msgid "Connection type not specified."
+#~ msgstr "Connection to the wired network failed."
+
+#, fuzzy, c-format
+#~ msgid "Don’t know how to create “%s” connections"
+#~ msgstr "Create VPN Connection"
+
+#, fuzzy
+#~ msgid "Error editing connection"
+#~ msgstr "Error retrieving VPN connection '%s'"
+
+#, fuzzy
+#~ msgid "Network Connections"
+#~ msgstr "No network connection"
+
+#, fuzzy
+#~ msgid "Add a new connection"
+#~ msgstr "_VPN Connections"
+
+#, fuzzy, c-format
+#~ msgid "Bluetooth connection %d"
+#~ msgstr "Delete VPN connection \"%s\"?"
+
+#, fuzzy
+#~ msgid "_Personal Area Network"
+#~ msgstr "_Login to Network"
+
+#, fuzzy
+#~ msgid "_Dial-Up Network"
+#~ msgstr "_Wired Network"
+
+#, fuzzy
+#~ msgid "primary"
+#~ msgstr "Primary DNS:"
+
+#, fuzzy, c-format
+#~ msgid "Bond connection %d"
+#~ msgstr "No network connection"
+
+#, fuzzy, c-format
+#~ msgid "Bridge connection %d"
+#~ msgstr "Wired network connection"
+
+#, fuzzy
+#~ msgid "missing parent interface"
+#~ msgstr "Interface:"
+
+#, fuzzy, c-format
+#~ msgid "DSL connection %d"
+#~ msgstr "VPN connection '%s' said:"
+
+#, fuzzy, c-format
+#~ msgid "Ethernet connection %d"
+#~ msgstr "Delete VPN connection \"%s\"?"
+
+#, fuzzy, c-format
+#~ msgid "InfiniBand connection %d"
+#~ msgstr "Cannot add VPN connection"
+
+#, fuzzy, c-format
+#~ msgid "IP tunnel connection %d"
+#~ msgstr "Delete VPN connection \"%s\"?"
+
+#, fuzzy
+#~ msgid "Automatic (VPN)"
+#~ msgstr "Automatic (Default)"
+
+#, fuzzy
+#~ msgid "Automatic (PPPoE)"
+#~ msgstr "Automatic (Default)"
+
+#, fuzzy
+#~ msgid "Automatic (DHCP)"
+#~ msgstr "Automatic (Default)"
+
+#, fuzzy
+#~ msgid "Automatic, DHCP only"
+#~ msgstr "Automatic (Default)"
+
+#, fuzzy, c-format
+#~ msgid "MACSEC connection %d"
+#~ msgstr "VPN connection '%s' said:"
+
+#~ msgid "none"
+#~ msgstr "none"
+
+#, fuzzy, c-format
+#~ msgid "Team connection %d"
+#~ msgstr "VPN connection '%s' said:"
+
+#, fuzzy
+#~ msgid "New connection…"
+#~ msgstr "No network connection"
+
+#, fuzzy, c-format
+#~ msgid "VLAN connection %d"
+#~ msgstr "VPN connection to '%s'"
+
+#, fuzzy
+#~ msgid "unknown failure"
+#~ msgstr "VPN Connect Failure"
+
+#, fuzzy, c-format
+#~ msgid "VPN connection %d"
+#~ msgstr "VPN connection to '%s'"
+
+#, fuzzy
+#~ msgid "Choose a VPN Connection Type"
+#~ msgstr "Create VPN Connection"
+
+#, fuzzy, c-format
+#~ msgid "Wi-Fi connection %d"
+#~ msgstr "VPN connection '%s' said:"
+
+#, fuzzy
+#~ msgid "Wi-Fi Security"
+#~ msgstr "_Wireless Security:"
+
+#, fuzzy
+#~ msgid "Cannot export VPN connection"
+#~ msgstr "Cannot import VPN connection"
+
+#, fuzzy, c-format
+#~ msgid ""
+#~ "The VPN connection “%s” could not be exported to %s.\n"
+#~ "\n"
+#~ "Error: %s."
+#~ msgstr "The VPN connection '%s' was not correctly configured."
+
+#, fuzzy
+#~ msgid "Export VPN connection…"
+#~ msgstr "Edit VPN Connection"
+
+#~ msgid "Connection Information"
+#~ msgstr "Connection Information"
+
+#, fuzzy
+#~ msgid "Wi-Fi _security:"
+#~ msgstr "_Wireless Security:"
+
+#, fuzzy
+#~ msgid "_Network name:"
+#~ msgstr "_Network Name:"
+
+#, fuzzy
+#~ msgid "C_onnection:"
+#~ msgstr "C_onnect"
+
+#, fuzzy
+#~ msgid "Wi-Fi _adapter:"
+#~ msgstr "Wireless _adapter:"
+
+#, fuzzy, c-format
+#~ msgid "Home network (%s)"
+#~ msgstr "Wired Network (%s)"
+
+#, fuzzy
+#~ msgid "Home network"
+#~ msgstr "_Wired Network"
+
+#, fuzzy, c-format
+#~ msgid "Roaming network (%s)"
+#~ msgstr "Wired Network (%s)"
+
+#, fuzzy
+#~ msgid "Roaming network"
+#~ msgstr "_Login to Network"
+
+#, fuzzy, c-format
+#~ msgid "Mobile broadband connection “%s” active: (%d%%%s%s)"
+#~ msgstr "Wireless network connection to '%s' (%d%%)"
+
+#, fuzzy
+#~ msgid "Failed to update connection secrets due to an unknown error."
+#~ msgstr "Could not start the VPN connection '%s' due to a connection error."
+
+#, fuzzy
+#~ msgid "Connection _priority for auto-activation:"
+#~ msgstr "Connection _Information"
+
+#~ msgid "Cannot import VPN connection"
+#~ msgstr "Cannot import VPN connection"
+
+#, fuzzy
+#~ msgid "Active Network Connections"
+#~ msgstr "Wired network connection"
+
+#, fuzzy
+#~ msgid "NetworkManager for GNOME"
+#~ msgstr "NetworkManager Applet"
+
+#, fuzzy
+#~ msgid ""
+#~ "\n"
+#~ "The VPN connection '%s' disconnected."
+#~ msgstr "The VPN connection '%s' was not correctly configured."
+
+#, fuzzy
+#~ msgid "_Disconnect VPN"
+#~ msgstr "_Disconnect VPN..."
+
+#~ msgid "NetworkManager is not running..."
+#~ msgstr "NetworkManager is not running..."
+
+#, fuzzy
+#~ msgid "_Connect to Hidden Wi-Fi Network..."
+#~ msgstr "_Connect to Other Wireless Network..."
+
+#, fuzzy
+#~ msgid "Create _New Wi-Fi Network..."
+#~ msgstr "Create _New Wireless Network..."
+
+#~ msgid " "
+#~ msgstr " "
+
+#, fuzzy
+#~ msgid "FirewallD is not running."
+#~ msgstr "NetworkManager is not running..."
+
+#~ msgid "Passphrase for wireless network %s"
+#~ msgstr "Passphrase for wireless network %s"
+
+#~ msgid "Connection to the wireless network '%s' failed."
+#~ msgstr "Connection to the wireless network '%s' failed."
+
+#~ msgid "Could not find some required resources (the glade file)!"
+#~ msgstr "Could not find some required resources (the glade file)!"
+
+#~ msgid "Wireless Ethernet (%s)"
+#~ msgstr "Wireless Ethernet (%s)"
+
+#~ msgid "Copyright © 2004-2005 Red Hat, Inc."
+#~ msgstr "Copyright © 2004-2005 Red Hat, Inc."
+
+#~ msgid "VPN Error"
+#~ msgstr "VPN Error"
+
+#~ msgid "VPN Login Failure"
+#~ msgstr "VPN Login Failure"
+
+#~ msgid "Could not start the VPN connection '%s' due to a login failure."
+#~ msgstr "Could not start the VPN connection '%s' due to a login failure."
+
+#~ msgid "VPN Start Failure"
+#~ msgstr "VPN Start Failure"
+
+#~ msgid ""
+#~ "Could not start the VPN connection '%s' due to a failure launching the "
+#~ "VPN program."
+#~ msgstr ""
+#~ "Could not start the VPN connection '%s' due to a failure launching the "
+#~ "VPN program."
+
+#~ msgid "The VPN service said: \"%s\""
+#~ msgstr "The VPN service said: \"%s\""
+
+#~ msgid "The network device \"%s (%s)\" does not support wireless scanning."
+#~ msgstr "The network device \"%s (%s)\" does not support wireless scanning."
+
+#~ msgid "The network device \"%s (%s)\" does not support link detection."
+#~ msgstr "The network device \"%s (%s)\" does not support link detection."
+
+#~ msgid "Preparing device %s for the wired network..."
+#~ msgstr "Preparing device %s for the wired network..."
+
+#~ msgid "Configuring device %s for the wired network..."
+#~ msgstr "Configuring device %s for the wired network..."
+
+#~ msgid "Attempting to join the wireless network '%s'..."
+#~ msgstr "Attempting to join the wireless network '%s'..."
+
+#~ msgid "Waiting for Network Key for the wireless network '%s'..."
+#~ msgstr "Waiting for Network Key for the wireless network '%s'..."
+
+#~ msgid "Requesting a network address from the wired network..."
+#~ msgstr "Requesting a network address from the wired network..."
+
+#~ msgid "Connected to an Ad-Hoc wireless network"
+#~ msgstr "Connected to an Ad-Hoc wireless network"
+
+#~ msgid "VPN connecting to '%s'"
+#~ msgstr "VPN connecting to '%s'"
+
+#~ msgid "_Dial Up Connections"
+#~ msgstr "_Dial-Up Connections"
+
+#~ msgid "Connect to %s..."
+#~ msgstr "Connect to %s..."
+
+#~ msgid "Disconnect from %s..."
+#~ msgstr "Disconnect from %s..."
+
+#~ msgid "_Help"
+#~ msgstr "_Help"
+
+#~ msgid ""
+#~ "The NetworkManager applet could not find some required resources.  It "
+#~ "cannot continue.\n"
+#~ msgstr ""
+#~ "The NetworkManager applet could not find some required resources.  It "
+#~ "cannot continue.\n"
+
+#~ msgid "AES-CCMP"
+#~ msgstr "AES-CCMP"
+
+#~ msgid "WEP 40/128-bit hex"
+#~ msgstr "WEP 40/128-bit hex"
+
+#~ msgid "Orientation"
+#~ msgstr "Orientation"
+
+#~ msgid "The orientation of the tray."
+#~ msgstr "The orientation of the tray."
+
+#~ msgid "Wireless Network (%s)"
+#~ msgid_plural "Wireless Networks (%s)"
+#~ msgstr[0] "Wireless Network (%s)"
+#~ msgstr[1] "Wireless Networks (%s)"
+
+#~ msgid "Wireless Network"
+#~ msgid_plural "Wireless Networks"
+#~ msgstr[0] "Wireless Network"
+#~ msgstr[1] "Wireless Networks"
+
+#~ msgid " (invalid Unicode)"
+#~ msgstr " (invalid Unicode)"
+
+#~ msgid ""
+#~ "By default, the wireless network's name is set to your computer's name, "
+#~ "%s, with no encryption enabled"
+#~ msgstr ""
+#~ "By default, the wireless network's name is set to your computer's name, "
+#~ "%s, with no encryption enabled"
+
+#~ msgid "Create new wireless network"
+#~ msgstr "Create new wireless network"
+
+#~ msgid "Existing wireless network"
+#~ msgstr "Existing wireless network"
+
+#~ msgid ""
+#~ "The requested wireless network requires security capabilities unsupported "
+#~ "by your hardware."
+#~ msgstr ""
+#~ "The requested wireless network requires security capabilities unsupported "
+#~ "by your hardware."
+
+#~ msgid ""
+#~ "Could not find the authentication dialog for VPN connection type '%s'. "
+#~ "Contact your system administrator."
+#~ msgstr ""
+#~ "Could not find the authentication dialogue for VPN connection type '%s'. "
+#~ "Contact your system administrator."
+
+#~ msgid ""
+#~ "There was a problem launching the authentication dialog for VPN "
+#~ "connection type '%s'. Contact your system administrator."
+#~ msgstr ""
+#~ "There was a problem launching the authentication dialogue for VPN "
+#~ "connection type '%s'. Contact your system administrator."
+
+#~ msgid ""
+#~ "<span weight=\"bold\" size=\"larger\">Active Connection Information</span>"
+#~ msgstr ""
+#~ "<span weight=\"bold\" size=\"larger\">Active Connection Information</span>"
+
+#~ msgid ""
+#~ "<span weight=\"bold\" size=\"larger\">Passphrase Required by Wireless "
+#~ "Network</span>\n"
+#~ "\n"
+#~ "A passphrase or encryption key is required to access the wireless network "
+#~ "'%s'."
+#~ msgstr ""
+#~ "<span weight=\"bold\" size=\"larger\">Passphrase Required by Wireless "
+#~ "Network</span>\n"
+#~ "\n"
+#~ "A passphrase or encryption key is required to access the wireless network "
+#~ "'%s'."
+
+#~ msgid ""
+#~ "<span weight=\"bold\" size=\"larger\">Reduced Network Functionality</"
+#~ "span>\n"
+#~ "\n"
+#~ "%s  It will not be completely functional."
+#~ msgstr ""
+#~ "<span weight=\"bold\" size=\"larger\">Reduced Network Functionality</"
+#~ "span>\n"
+#~ "\n"
+#~ "%s  It will not be completely functional."
+
+#~ msgid ""
+#~ "<span weight=\"bold\" size=\"larger\">Wireless Network Login "
+#~ "Confirmation</span>\n"
+#~ "\n"
+#~ "You have chosen to log in to the wireless network '%s'.  If you are sure "
+#~ "that this wireless network is secure, click the checkbox below and "
+#~ "NetworkManager will not require confirmation on subsequent log ins."
+#~ msgstr ""
+#~ "<span weight=\"bold\" size=\"larger\">Wireless Network Login "
+#~ "Confirmation</span>\n"
+#~ "\n"
+#~ "You have chosen to log in to the wireless network '%s'.  If you are sure "
+#~ "that this wireless network is secure, click the checkbox below and "
+#~ "NetworkManager will not require confirmation on subsequent logins."
+
+#~ msgid "Destination Address:"
+#~ msgstr "Destination Address:"
+
+#~ msgid ""
+#~ "None\n"
+#~ "WEP Passphrase\n"
+#~ "WEP 40/128-bit hex\n"
+#~ "WEP 40/128-bit ASCII\n"
+#~ msgstr ""
+#~ "None\n"
+#~ "WEP Passphrase\n"
+#~ "WEP 40/128-bit hex\n"
+#~ "WEP 40/128-bit ASCII\n"
+
+#~ msgid ""
+#~ "Open System\n"
+#~ "Shared Key"
+#~ msgstr ""
+#~ "Open System\n"
+#~ "Shared Key"
+
+#~ msgid "Other Wireless Network..."
+#~ msgstr "Other Wireless Network..."
+
+#~ msgid "_Always Trust this Wireless Network"
+#~ msgstr "_Always Trust this Wireless Network"
+
+#~ msgid "leap_subwindow"
+#~ msgstr "leap_subwindow"
+
+#~ msgid "wep_key_subwindow"
+#~ msgstr "wep_key_subwindow"
+
+#~ msgid "wep_passphrase_subwindow"
+#~ msgstr "wep_passphrase_subwindow"
+
+#~ msgid "wpa_psk_subwindow"
+#~ msgstr "wpa_psk_subwindow"
+
+#~ msgid ""
+#~ "No suitable VPN software was found on your system. Contact your system "
+#~ "administrator."
+#~ msgstr ""
+#~ "No suitable VPN software was found on your system. Contact your system "
+#~ "administrator."
+
+#~ msgid ""
+#~ "Cannot find suitable software for VPN connection type '%s' to import the "
+#~ "file '%s'. Contact your system administrator."
+#~ msgstr ""
+#~ "Cannot find suitable software for VPN connection type '%s' to import the "
+#~ "file '%s'. Contact your system administrator."
+
+#~ msgid ""
+#~ "Could not find the UI files for VPN connection type '%s'. Contact your "
+#~ "system administrator."
+#~ msgstr ""
+#~ "Could not find the UI files for VPN connection type '%s'. Contact your "
+#~ "system administrator."
+
+#~ msgid ""
+#~ "All information about the VPN connection \"%s\" will be lost and you may "
+#~ "need your system administrator to provide information to create a new "
+#~ "connection."
+#~ msgstr ""
+#~ "All information about the VPN connection \"%s\" will be lost and you may "
+#~ "need your system administrator to provide information to create a new "
+#~ "connection."
+
+#~ msgid "Unable to load"
+#~ msgstr "Unable to load"
+
+#~ msgid "Cannot find some needed resources (the glade file)!"
+#~ msgstr "Cannot find some needed resources (the glade file)!"
+
+#~ msgid "Choose which type of VPN connection you wish to create."
+#~ msgstr "Choose the type of VPN connection you wish to create."
+
+#~ msgid "Connect to:"
+#~ msgstr "Connect to:"
+
+#~ msgid "Create VPN Connection - 1 of 2"
+#~ msgstr "Create VPN Connection - 1 of 2"
+
+#~ msgid "Create VPN Connection - 2 of 2"
+#~ msgstr "Create VPN Connection - 2 of 2"
+
+#~ msgid "Export the VPN settings to a file"
+#~ msgstr "Export the VPN settings to a file"
+
+#~ msgid "Export the selected VPN connection to a file"
+#~ msgstr "Export the selected VPN connection to a file"
+
+#~ msgid "Finish Creating VPN Connection"
+#~ msgstr "Finish Creating VPN Connection"
+
+#~ msgid ""
+#~ "This assistant will guide you through the creation of a connection to a "
+#~ "Virtual Private Network (VPN).\n"
+#~ "\n"
+#~ "It will require some information, such as IP addresses and secrets.  "
+#~ "Please see your system administrator to obtain this information."
+#~ msgstr ""
+#~ "This assistant will guide you through creating a connection to a Virtual "
+#~ "Private Network (VPN).\n"
+#~ "\n"
+#~ "It will require some information, such as IP addresses and secrets.  "
+#~ "Please see your system administrator to obtain this information."
+
+#~ msgid "40-bit WEP"
+#~ msgstr "40-bit WEP"
+
+#~ msgid "104-bit WEP"
+#~ msgstr "104-bit WEP"
+
+#~ msgid "WPA TKIP"
+#~ msgstr "WPA TKIP"
+
+#~ msgid "WPA CCMP"
+#~ msgstr "WPA CCMP"
+
+#~ msgid "WPA2 TKIP"
+#~ msgstr "WPA2 TKIP"
+
+#~ msgid "WPA2 CCMP"
+#~ msgstr "WPA2 CCMP"
+
+#~ msgid "WPA2 Automatic"
+#~ msgstr "WPA2 Automatic"
+
+#~ msgid ""
+#~ "unable to create netlink socket for monitoring wired ethernet devices - %s"
+#~ msgstr ""
+#~ "Unable to create netlink socket for monitoring wired ethernet devices - %s"
+
+#~ msgid ""
+#~ "unable to bind to netlink socket for monitoring wired ethernet devices - "
+#~ "%s"
+#~ msgstr ""
+#~ "Unable to bind to netlink socket for monitoring wired ethernet devices - "
+#~ "%s"
+
+#~ msgid "operation took too long"
+#~ msgstr "Operation took too long"
+
+#~ msgid "received data from wrong type of sender"
+#~ msgstr "Received data from wrong type of sender"
+
+#~ msgid "received data from unexpected sender"
+#~ msgstr "Received data from unexpected sender"
+
+#~ msgid "too much data was sent over socket and some of it was lost"
+#~ msgstr "Too much data was sent over socket and some of it was lost"
+
+#~ msgid "error occurred while waiting for data on socket"
+#~ msgstr "error occurred while waiting for data on socket"
