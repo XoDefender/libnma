@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface domain="libnma">
+  <requires lib="gtk" version="4.0"/>
+  <template class="NMAWsSae" parent="GtkGrid">
+    <property name="row_spacing">6</property>
+    <property name="column_spacing">6</property>
+    <child>
+      <object class="GtkLabel" id="sae_label">
+        <property name="label" translatable="1">_Password</property>
+        <property name="use_underline">1</property>
+        <property name="mnemonic_widget">psk_entry</property>
+        <property name="xalign">1</property>
+        <layout>
+          <property name="column">0</property>
+          <property name="row">0</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="GtkEntry" id="psk_entry">
+        <property name="focusable">1</property>
+        <property name="hexpand">1</property>
+        <property name="max_length">64</property>
+        <property name="visibility">0</property>
+        <property name="activates_default">1</property>
+        <property name="width_chars">28</property>
+        <signal name="changed" handler="nma_ws_changed_cb" swapped="no"/>
+        <layout>
+          <property name="column">1</property>
+          <property name="row">0</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="GtkLabel" id="sae_type_label">
+        <property name="label" translatable="1">_Type</property>
+        <property name="use_underline">1</property>
+        <property name="mnemonic_widget">sae_type_combo</property>
+        <property name="xalign">1</property>
+        <layout>
+          <property name="column">0</property>
+          <property name="row">2</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="GtkCheckButton" id="show_checkbutton_sae">
+        <property name="label" translatable="1">Sho_w password</property>
+        <property name="focusable">1</property>
+        <property name="hexpand">1</property>
+        <property name="use_underline">1</property>
+        <signal name="toggled" handler="show_toggled_cb" swapped="no"/>
+        <layout>
+          <property name="column">1</property>
+          <property name="row">1</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="GtkComboBox" id="sae_type_combo">
+        <layout>
+          <property name="column">1</property>
+          <property name="row">2</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <placeholder/>
+    </child>
+  </template>
+</interface>

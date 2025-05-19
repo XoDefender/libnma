@@ -2,13 +2,12 @@
 /*
  * Dan Williams <dcbw@redhat.com>
  *
- * Copyright 2007 - 2019 Red Hat, Inc.
+ * Copyright (C) 2007 - 2021 Red Hat, Inc.
  */
 
 #include "nm-default.h"
 #include "nma-private.h"
 
-#include <ctype.h>
 #include <string.h>
 
 #include "nma-eap.h"
@@ -29,6 +28,7 @@ struct _NMAEapTtls {
 	gboolean is_editor;
 
 	GtkWidget *ca_cert_chooser;
+	GtkWidget *eap_widget;
 };
 
 static void
@@ -72,7 +72,7 @@ ca_cert_not_required_toggled (GtkWidget *button, gpointer user_data)
 	NMAEapTtls *method = (NMAEapTtls *) user_data;
 
 	gtk_widget_set_sensitive (method->ca_cert_chooser,
-	                          !gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (button)));
+	                          !gtk_check_button_get_active (GTK_CHECK_BUTTON (button)));
 }
 
 static void
@@ -138,13 +138,13 @@ fill_connection (NMAEap *parent, NMConnection *connection)
 	widget = GTK_WIDGET (gtk_builder_get_object (parent->builder, "eap_ttls_anon_identity_entry"));
 	g_assert (widget);
 	text = gtk_editable_get_text (GTK_EDITABLE (widget));
-	if (text && strlen (text))
+	if (text && *text)
 		g_object_set (s_8021x, NM_SETTING_802_1X_ANONYMOUS_IDENTITY, text, NULL);
 
 	widget = GTK_WIDGET (gtk_builder_get_object (parent->builder, "eap_ttls_domain_entry"));
 	g_assert (widget);
 	text = gtk_editable_get_text (GTK_EDITABLE (widget));
-	if (text && strlen (text))
+	if (text && *text)
 		g_object_set (s_8021x, NM_SETTING_802_1X_DOMAIN_SUFFIX_MATCH, text, NULL);
 
 	/* Save CA certificate PIN and its flags to the connection */
@@ -188,34 +188,30 @@ inner_auth_combo_changed_cb (GtkWidget *combo, gpointer user_data)
 {
 	NMAEap *parent = (NMAEap *) user_data;
 	NMAEapTtls *method = (NMAEapTtls *) parent;
-	GtkWidget *vbox;
+	GtkBox *vbox;
 	NMAEap *eap = NULL;
-	GList *elt, *children;
 	GtkTreeModel *model;
 	GtkTreeIter iter;
-	GtkWidget *eap_widget;
 
-	vbox = GTK_WIDGET (gtk_builder_get_object (parent->builder, "eap_ttls_inner_auth_vbox"));
-	g_assert (vbox);
+	vbox = GTK_BOX (gtk_builder_get_object (parent->builder, "eap_ttls_inner_auth_vbox"));
+	g_return_if_fail (vbox);
 
 	/* Remove any previous wireless security widgets */
-	children = gtk_container_get_children (GTK_CONTAINER (vbox));
-	for (elt = children; elt; elt = g_list_next (elt))
-		gtk_container_remove (GTK_CONTAINER (vbox), GTK_WIDGET (elt->data));
-	g_list_free (children);
+	if (method->eap_widget)
+		gtk_box_remove (vbox, method->eap_widget);
 
 	model = gtk_combo_box_get_model (GTK_COMBO_BOX (combo));
 	gtk_combo_box_get_active_iter (GTK_COMBO_BOX (combo), &iter);
 	gtk_tree_model_get (model, &iter, I_METHOD_COLUMN, &eap, -1);
 	g_assert (eap);
 
-	eap_widget = nma_eap_get_widget (eap);
-	g_assert (eap_widget);
-	gtk_widget_unparent (eap_widget);
+	method->eap_widget = nma_eap_get_widget (eap);
+	g_return_if_fail (method->eap_widget);
+	gtk_widget_unparent (method->eap_widget);
 
 	if (method->size_group)
 		nma_eap_add_to_size_group (eap, method->size_group);
-	gtk_container_add (GTK_CONTAINER (vbox), eap_widget);
+	gtk_box_append (vbox, method->eap_widget);
 
 	nma_eap_unref (eap);
 
@@ -481,7 +477,7 @@ nma_eap_ttls_new (NMAWs8021x *ws_8021x,
 	g_signal_connect (G_OBJECT (widget), "toggled",
 	                  (GCallback) nma_ws_changed_cb,
 	                  ws_8021x);
-	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), ca_not_required);
+	gtk_check_button_set_active (GTK_CHECK_BUTTON (widget), ca_not_required);
 
 	widget = GTK_WIDGET (gtk_builder_get_object (parent->builder, "eap_ttls_anon_identity_entry"));
 	if (s_8021x && nm_setting_802_1x_get_anonymous_identity (s_8021x))

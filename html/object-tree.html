@@ -8,7 +8,7 @@
 <link rel="up" href="index.html" title="libnma Reference Manual">
 <link rel="prev" href="NMABarCode.html" title="NMABarCode">
 <link rel="next" href="api-index-full.html" title="API Index">
-<meta name="generator" content="GTK-Doc V1.32 (XML mode)">
+<meta name="generator" content="GTK-Doc V1.33.1 (XML mode)">
 <link rel="stylesheet" href="style.css" type="text/css">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
@@ -23,30 +23,30 @@
 <div class="titlepage"><div><div><h1 class="title">
 <a name="object-tree"></a>Object Hierarchy</h1></div></div></div>
 <pre class="screen">
-    <a href="https://developer.gnome.org/gobject/unstable/gobject-The-Base-Object-Type.html#GObject-struct">GObject</a>
+    <a href="/usr/share/gtk-doc/html/gobject/gobject-The-Base-Object-Type.html#GObject-struct">GObject</a>
     <span class="lineart">├──</span> <a class="link" href="NMABarCode.html" title="NMABarCode">NMABarCode</a>
-    <span class="lineart">├──</span> <a href="https://developer.gnome.org/gobject/unstable/gobject-The-Base-Object-Type.html#GInitiallyUnowned">GInitiallyUnowned</a>
-    <span class="lineart">│</span>   <span class="lineart">╰──</span> GtkWidget
-    <span class="lineart">│</span>       <span class="lineart">╰──</span> GtkContainer
-    <span class="lineart">│</span>           <span class="lineart">├──</span> GtkBox
+    <span class="lineart">├──</span> <a href="/usr/share/gtk-doc/html/gobject/gobject-The-Base-Object-Type.html#GInitiallyUnowned">GInitiallyUnowned</a>
+    <span class="lineart">│</span>   <span class="lineart">╰──</span> <a href="/usr/share/gtk-doc/html/gtk3/GtkWidget.html#GtkWidget-struct">GtkWidget</a>
+    <span class="lineart">│</span>       <span class="lineart">╰──</span> <a href="/usr/share/gtk-doc/html/gtk3/GtkContainer.html#GtkContainer-struct">GtkContainer</a>
+    <span class="lineart">│</span>           <span class="lineart">├──</span> <a href="/usr/share/gtk-doc/html/gtk3/GtkBox.html#GtkBox-struct">GtkBox</a>
     <span class="lineart">│</span>           <span class="lineart">│</span>   <span class="lineart">╰──</span> NMABarCodeWidget
-    <span class="lineart">│</span>           <span class="lineart">├──</span> GtkGrid
+    <span class="lineart">│</span>           <span class="lineart">├──</span> <a href="/usr/share/gtk-doc/html/gtk3/GtkGrid.html#GtkGrid-struct">GtkGrid</a>
     <span class="lineart">│</span>           <span class="lineart">│</span>   <span class="lineart">├──</span> <a class="link" href="NMACertChooser.html" title="NMACertChooser">NMACertChooser</a>
     <span class="lineart">│</span>           <span class="lineart">│</span>   <span class="lineart">├──</span> NMAWs8021x
     <span class="lineart">│</span>           <span class="lineart">│</span>   <span class="lineart">│</span>   <span class="lineart">├──</span> NMAWsDynamicWep
     <span class="lineart">│</span>           <span class="lineart">│</span>   <span class="lineart">│</span>   <span class="lineart">╰──</span> NMAWsWpaEap
     <span class="lineart">│</span>           <span class="lineart">│</span>   <span class="lineart">├──</span> NMAWsLeap
+    <span class="lineart">│</span>           <span class="lineart">│</span>   <span class="lineart">├──</span> NMAWsOwe
     <span class="lineart">│</span>           <span class="lineart">│</span>   <span class="lineart">├──</span> NMAWsSae
     <span class="lineart">│</span>           <span class="lineart">│</span>   <span class="lineart">├──</span> NMAWsWepKey
     <span class="lineart">│</span>           <span class="lineart">│</span>   <span class="lineart">╰──</span> NMAWsWpaPsk
-    <span class="lineart">│</span>           <span class="lineart">╰──</span> GtkBin
-    <span class="lineart">│</span>               <span class="lineart">╰──</span> GtkWindow
-    <span class="lineart">│</span>                   <span class="lineart">├──</span> GtkAssistant
-    <span class="lineart">│</span>                   <span class="lineart">│</span>   <span class="lineart">╰──</span> <a class="link" href="NMAMobileWizard.html" title="NMAMobileWizard">NMAMobileWizard</a>
-    <span class="lineart">│</span>                   <span class="lineart">╰──</span> GtkDialog
+    <span class="lineart">│</span>           <span class="lineart">╰──</span> <a href="/usr/share/gtk-doc/html/gtk3/GtkBin.html#GtkBin-struct">GtkBin</a>
+    <span class="lineart">│</span>               <span class="lineart">╰──</span> <a href="/usr/share/gtk-doc/html/gtk3/GtkWindow.html#GtkWindow-struct">GtkWindow</a>
+    <span class="lineart">│</span>                   <span class="lineart">╰──</span> <a href="/usr/share/gtk-doc/html/gtk3/GtkDialog.html#GtkDialog-struct">GtkDialog</a>
     <span class="lineart">│</span>                       <span class="lineart">├──</span> <a class="link" href="NMAVpnPasswordDialog.html" title="NMAVpnPasswordDialog">NMAVpnPasswordDialog</a>
     <span class="lineart">│</span>                       <span class="lineart">╰──</span> <a class="link" href="NMAWifiDialog.html" title="NMAWifiDialog">NMAWifiDialog</a>
-    <span class="lineart">╰──</span> <a class="link" href="NMAMobileProvidersDatabase.html" title="NMAMobileProvidersDatabase">NMAMobileProvidersDatabase</a>
+    <span class="lineart">├──</span> <a class="link" href="NMAMobileProvidersDatabase.html" title="NMAMobileProvidersDatabase">NMAMobileProvidersDatabase</a>
+    <span class="lineart">╰──</span> <a class="link" href="NMAMobileWizard.html" title="NMAMobileWizard">NMAMobileWizard</a>
     <a href="/usr/share/gtk-doc/html/gobject/GTypeModule.html">GInterface</a>
     <span class="lineart">╰──</span> NMAWs
     <a href="/usr/share/gtk-doc/html/gobject/gobject-Boxed-Types.html">GBoxed</a>
@@ -56,6 +56,6 @@
 </pre>
 </div>
 <div class="footer">
-<hr>Generated by GTK-Doc V1.32</div>
+<hr>Generated by GTK-Doc V1.33.1</div>
 </body>
 </html>

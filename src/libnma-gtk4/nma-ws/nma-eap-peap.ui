@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface domain="libnma">
+  <requires lib="gtk" version="4.0"/>
+  <object class="GtkListStore" id="model8">
+    <columns>
+      <column type="gchararray"/>
+    </columns>
+    <data>
+      <row>
+        <col id="0"> </col>
+      </row>
+    </data>
+  </object>
+  <object class="GtkListStore" id="model9">
+    <columns>
+      <column type="gchararray"/>
+    </columns>
+    <data>
+      <row>
+        <col id="0" translatable="yes">Automatic</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Version 0</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Version 1</col>
+      </row>
+    </data>
+  </object>
+  <object class="GtkGrid" id="eap_peap_grid">
+    <property name="row_spacing">6</property>
+    <property name="column_spacing">6</property>
+    <child>
+      <object class="GtkLabel" id="eap_peap_anon_identity_label">
+        <property name="label" translatable="1">Anony_mous identity</property>
+        <property name="use_underline">1</property>
+        <property name="mnemonic_widget">eap_peap_anon_identity_entry</property>
+        <property name="xalign">1</property>
+        <layout>
+          <property name="column">0</property>
+          <property name="row">0</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="GtkEntry" id="eap_peap_anon_identity_entry">
+        <property name="focusable">1</property>
+        <property name="hexpand">1</property>
+        <property name="activates_default">1</property>
+        <layout>
+          <property name="column">1</property>
+          <property name="row">0</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="GtkCheckButton" id="eap_peap_ca_cert_not_required_checkbox">
+        <property name="label" translatable="1">No CA certificate is _required</property>
+        <property name="focusable">1</property>
+        <property name="hexpand">1</property>
+        <property name="use_underline">1</property>
+        <layout>
+          <property name="column">1</property>
+          <property name="row">3</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="GtkLabel" id="eap_peap_version_label">
+        <property name="label" translatable="1">PEAP _version</property>
+        <property name="use_underline">1</property>
+        <property name="mnemonic_widget">eap_peap_version_combo</property>
+        <property name="xalign">1</property>
+        <layout>
+          <property name="column">0</property>
+          <property name="row">4</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="GtkComboBox" id="eap_peap_version_combo">
+        <property name="hexpand">1</property>
+        <property name="model">model9</property>
+        <child>
+          <object class="GtkCellRendererText" id="renderer9"/>
+          <attributes>
+            <attribute name="text">0</attribute>
+          </attributes>
+        </child>
+        <layout>
+          <property name="column">1</property>
+          <property name="row">4</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="GtkLabel" id="eap_peap_inner_auth_label">
+        <property name="label" translatable="1">_Inner authentication</property>
+        <property name="use_underline">1</property>
+        <property name="mnemonic_widget">eap_peap_inner_auth_combo</property>
+        <property name="xalign">1</property>
+        <layout>
+          <property name="column">0</property>
+          <property name="row">5</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="GtkComboBox" id="eap_peap_inner_auth_combo">
+        <property name="hexpand">1</property>
+        <property name="model">model8</property>
+        <child>
+          <object class="GtkCellRendererText" id="renderer8"/>
+          <attributes>
+            <attribute name="text">0</attribute>
+          </attributes>
+        </child>
+        <layout>
+          <property name="column">1</property>
+          <property name="row">5</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="GtkBox" id="eap_peap_inner_auth_vbox">
+        <property name="orientation">vertical</property>
+        <child>
+          <placeholder/>
+        </child>
+        <layout>
+          <property name="column">0</property>
+          <property name="row">6</property>
+          <property name="column-span">2</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="GtkLabel" id="eap_peap_domain_label">
+        <property name="tooltip_text" translatable="1">Suffix of the server certificate name.</property>
+        <property name="label" translatable="1">_Domain</property>
+        <property name="use_underline">1</property>
+        <property name="mnemonic_widget">eap_peap_domain_entry</property>
+        <property name="xalign">1</property>
+        <layout>
+          <property name="column">0</property>
+          <property name="row">1</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="GtkEntry" id="eap_peap_domain_entry">
+        <property name="focusable">1</property>
+        <property name="hexpand">1</property>
+        <property name="activates_default">1</property>
+        <layout>
+          <property name="column">1</property>
+          <property name="row">1</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <placeholder/>
+    </child>
+    <child>
+      <placeholder/>
+    </child>
+    <child>
+      <placeholder/>
+    </child>
+  </object>
+</interface>

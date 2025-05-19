@@ -3,16 +3,28 @@
  *
  * Lubomir Rintel <lkundrak@v3.sk>
  *
- * Copyright (C) 2016,2017 Red Hat, Inc.
+ * Copyright (C) 2016 - 2021 Red Hat, Inc.
  */
 
 #include "nm-default.h"
+#include "nma-private.h"
+
 #include "nma-pkcs11-cert-chooser-dialog.h"
 #include "nma-pkcs11-token-login-dialog.h"
 
 #include <string.h>
 #include <gck/gck.h>
+#if GCK_CHECK_VERSION(3,90,0)
 #include <gcr/gcr.h>
+#else
+#include <gcr/gcr-base.h>
+#endif
+
+#if !GCR_CHECK_VERSION(3,90,0)
+#define gck_slot_open_session_async(self, options, interaction, cancellable, callback, user_data) \
+	gck_slot_open_session_async(self, options, cancellable, callback, user_data)
+#define gck_uri_data_build gck_uri_build
+#endif
 
 /**
  * SECTION:nma-pkcs11-cert-chooser-dialog
@@ -117,7 +129,8 @@ object_details (GObject *source_object, GAsyncResult *res, gpointer user_data)
 	CK_OBJECT_CLASS cka_class;
 	const GckAttribute *attr;
 	GcrCertificate *cert;
-	gchar *label, *issuer;
+	gchar *label = NULL;
+	gchar *issuer = NULL;
 	GError *error = NULL;
 	GtkListStore *store1, *store2;
 	IdMatchData data;
@@ -161,23 +174,26 @@ object_details (GObject *source_object, GAsyncResult *res, gpointer user_data)
 	                        id_match,
 	                        &data);
 
+	attr = gck_attributes_find (attrs, CKA_LABEL);
+	if (attr && attr->value && attr->length) {
+		label = g_malloc (attr->length + 1);
+		memcpy (label, attr->value, attr->length);
+		label[attr->length] = '\0';
+	}
+
 	attr = gck_attributes_find (attrs, CKA_VALUE);
 	if (attr && attr->value && attr->length) {
 		cert = gcr_simple_certificate_new (attr->value, attr->length);
-		label = gcr_certificate_get_subject_name (cert);
+		if (!label)
+			label = gcr_certificate_get_subject_name (cert);
 		issuer = gcr_certificate_get_issuer_name (cert);
 		g_object_unref (cert);
-	} else {
-		attr = gck_attributes_find (attrs, CKA_LABEL);
-		if (attr && attr->value && attr->length) {
-			label = g_malloc (attr->length + 1);
-			memcpy (label, attr->value, attr->length);
-			label[attr->length] = '\0';
-		} else {
-			label = g_strdup (_("(Unknown)"));
-		}
-		issuer = g_memdup ("", 1);
 	}
+
+	if (!label)
+		label = g_strdup (_("(Unknown)"));
+	if (!issuer)
+		issuer = g_memdup ("", 1);
 
 	gtk_list_store_append (store1, &iter);
 	gtk_list_store_set (store1, &iter,
@@ -222,7 +238,7 @@ next_object (GObject *obj, GAsyncResult *res, gpointer user_data)
 		                      NULL, object_details, self);
 	}
 
-	gck_list_unref_free (objects);
+	g_list_free_full (objects, g_object_unref);
 }
 
 static void
@@ -343,7 +359,7 @@ login_clicked (GtkButton *button, gpointer user_data)
 		priv->pin_length = 0;
 		priv->pin_value =  g_memdup ("", 1);
 		priv->remember_pin = TRUE;
-		gck_slot_open_session_async (priv->slot, GCK_SESSION_READ_ONLY, NULL, session_opened, self);
+		gck_slot_open_session_async (priv->slot, GCK_SESSION_READ_ONLY, NULL, NULL, session_opened, self);
 		return;
 	}
 
@@ -352,15 +368,15 @@ login_clicked (GtkButton *button, gpointer user_data)
 	gtk_window_set_transient_for (GTK_WINDOW (dialog), GTK_WINDOW (self));
 	gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_ACCEPT);
 
-	if (gtk_dialog_run (GTK_DIALOG (dialog)) == GTK_RESPONSE_ACCEPT) {
+	if (nma_gtk_dialog_run (GTK_DIALOG (dialog)) == GTK_RESPONSE_ACCEPT) {
 		priv->pin_length = nma_pkcs11_token_login_dialog_get_pin_length (NMA_PKCS11_TOKEN_LOGIN_DIALOG (dialog));
 		priv->pin_value = g_memdup (nma_pkcs11_token_login_dialog_get_pin_value (NMA_PKCS11_TOKEN_LOGIN_DIALOG (dialog)),
 		                            priv->pin_length + 1);
 		priv->remember_pin = nma_pkcs11_token_login_dialog_get_remember_pin (NMA_PKCS11_TOKEN_LOGIN_DIALOG (dialog));
-		gck_slot_open_session_async (priv->slot, GCK_SESSION_READ_ONLY, NULL, session_opened, self);
+		gck_slot_open_session_async (priv->slot, GCK_SESSION_READ_ONLY, NULL, NULL, session_opened, self);
 	}
 
-	gtk_widget_destroy (dialog);
+	gtk_window_destroy (GTK_WINDOW (dialog));
 }
 
 static void
@@ -394,7 +410,7 @@ set_property (GObject *object, guint prop_id, const GValue *value, GParamSpec *p
 		if ((token_info->flags & CKF_LOGIN_REQUIRED) == 0)
 			gtk_widget_set_sensitive (priv->login_button, FALSE);
 		gck_token_info_free (token_info);
-		gck_slot_open_session_async (priv->slot, GCK_SESSION_READ_ONLY, NULL, session_opened, self);
+		gck_slot_open_session_async (priv->slot, GCK_SESSION_READ_ONLY, NULL, NULL, session_opened, self);
 		break;
 	default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -577,7 +593,7 @@ nma_pkcs11_cert_chooser_dialog_get_uri (NMAPkcs11CertChooserDialog *dialog)
 
 	uri_data.attributes = gck_builder_end (builder);
 	uri_data.token_info = gck_slot_get_token_info (priv->slot);
-	uri = gck_uri_build (&uri_data, GCK_URI_FOR_OBJECT_ON_TOKEN);
+	uri = gck_uri_data_build (&uri_data, GCK_URI_FOR_OBJECT_ON_TOKEN);
 
 	gck_attributes_unref (uri_data.attributes);
 	gck_attributes_unref (attrs);

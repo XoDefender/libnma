@@ -44,7 +44,6 @@ nma_cert_chooser_set_cert
 nma_cert_chooser_set_cert_uri
 nma_cert_chooser_get_cert
 nma_cert_chooser_get_cert_uri
-nma_cert_chooser_get_cert_id;
 nma_cert_chooser_set_cert_password
 nma_cert_chooser_get_cert_password
 nma_cert_chooser_set_key
@@ -332,6 +331,20 @@ nma_ws_leap_get_type
 </SECTION>
 
 <SECTION>
+<FILE>nma-ws-owe</FILE>
+<TITLE>NMAWsOwe</TITLE>
+nma_ws_owe_new
+NMAWsOwe
+NMAWsOweClass
+<SUBSECTION Standard>
+NMA_IS_OWE_CLASS
+NMA_TYPE_WS_OWE
+NMA_WS_OWE_CLASS
+NMA_WS_OWE_GET_CLASS
+nma_ws_owe_get_type
+</SECTION>
+
+<SECTION>
 <FILE>nma-ws-private</FILE>
 <TITLE>NMAWs</TITLE>
 NMAWsInterface
@@ -434,11 +447,8 @@ utils_ether_addr_valid
 utils_hash_ap
 utils_escape_notify_message
 utils_create_mobile_connection_id
-utils_show_error_dialog
 NMA_ERROR
 NMAError
-utils_char_is_ascii_print
-utils_char_is_ascii_digit
 utils_char_is_ascii_ip4_address
 utils_char_is_ascii_ip6_address
 utils_char_is_ascii_apn

@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface domain="libnma">
+  <requires lib="gtk" version="4.0"/>
+  <object class="GtkListStore" id="model1">
+    <columns>
+      <column type="gchararray"/>
+    </columns>
+    <data>
+      <row>
+        <col id="0"> </col>
+      </row>
+    </data>
+  </object>
+  <object class="GtkListStore" id="model2">
+    <columns>
+      <column type="gchararray"/>
+    </columns>
+    <data>
+      <row>
+        <col id="0"> </col>
+      </row>
+    </data>
+  </object>
+  <object class="GtkGrid" id="wifi_dialog">
+    <property name="margin_start">12</property>
+    <property name="margin_end">12</property>
+    <property name="margin_top">12</property>
+    <property name="margin_bottom">12</property>
+    <property name="row_spacing">12</property>
+    <property name="column_spacing">12</property>
+    <child>
+      <object class="GtkImage" id="image1">
+        <property name="valign">start</property>
+        <property name="margin_start">12</property>
+        <property name="margin_end">12</property>
+        <property name="margin_top">12</property>
+        <property name="margin_bottom">12</property>
+        <property name="icon_name">network-wireless</property>
+        <property name="icon_size">6</property>
+        <layout>
+          <property name="column">0</property>
+          <property name="row">0</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="GtkLabel" id="caption_label">
+        <property name="margin_start">12</property>
+        <property name="margin_end">12</property>
+        <property name="margin_top">12</property>
+        <property name="margin_bottom">12</property>
+        <property name="use_markup">1</property>
+        <property name="wrap">1</property>
+        <property name="max_width_chars">50</property>
+        <property name="xalign">0</property>
+        <layout>
+          <property name="column">1</property>
+          <property name="row">0</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="GtkGrid" id="table1">
+        <property name="row_spacing">6</property>
+        <property name="column_spacing">6</property>
+        <child>
+          <object class="GtkBox" id="security_vbox">
+            <property name="hexpand">1</property>
+            <property name="orientation">vertical</property>
+            <child>
+              <placeholder/>
+            </child>
+            <layout>
+              <property name="column">0</property>
+              <property name="row">4</property>
+              <property name="column-span">2</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="GtkLabel" id="security_combo_label">
+            <property name="label" translatable="1">Wi-Fi _security</property>
+            <property name="use_underline">1</property>
+            <property name="mnemonic_widget">security_combo</property>
+            <property name="xalign">1</property>
+            <layout>
+              <property name="column">0</property>
+              <property name="row">3</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="GtkComboBox" id="security_combo">
+            <property name="hexpand">1</property>
+            <property name="model">model1</property>
+            <child>
+              <object class="GtkCellRendererText" id="renderer1"/>
+              <attributes>
+                <attribute name="text">0</attribute>
+              </attributes>
+            </child>
+            <layout>
+              <property name="column">1</property>
+              <property name="row">3</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="GtkLabel" id="network_name_label">
+            <property name="label" translatable="1">_Network name</property>
+            <property name="use_underline">1</property>
+            <property name="mnemonic_widget">network_name_entry</property>
+            <property name="xalign">1</property>
+            <layout>
+              <property name="column">0</property>
+              <property name="row">2</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="GtkEntry" id="network_name_entry">
+            <property name="focusable">1</property>
+            <property name="activates_default">1</property>
+            <layout>
+              <property name="column">1</property>
+              <property name="row">2</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="GtkLabel" id="connection_label">
+            <property name="label" translatable="1">C_onnection</property>
+            <property name="use_underline">1</property>
+            <property name="mnemonic_widget">connection_combo</property>
+            <property name="xalign">1</property>
+            <layout>
+              <property name="column">0</property>
+              <property name="row">1</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="GtkComboBox" id="connection_combo">
+            <property name="hexpand">1</property>
+            <layout>
+              <property name="column">1</property>
+              <property name="row">1</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="GtkLabel" id="device_label">
+            <property name="label" translatable="1">Wi-Fi _adapter</property>
+            <property name="use_underline">1</property>
+            <property name="mnemonic_widget">device_combo</property>
+            <property name="xalign">1</property>
+            <layout>
+              <property name="column">0</property>
+              <property name="row">0</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="GtkComboBox" id="device_combo">
+            <property name="hexpand">1</property>
+            <property name="model">model2</property>
+            <child>
+              <object class="GtkCellRendererText" id="renderer2"/>
+              <attributes>
+                <attribute name="text">0</attribute>
+              </attributes>
+            </child>
+            <layout>
+              <property name="column">1</property>
+              <property name="row">0</property>
+            </layout>
+          </object>
+        </child>
+        <layout>
+          <property name="column">0</property>
+          <property name="row">1</property>
+          <property name="column-span">2</property>
+        </layout>
+      </object>
+    </child>
+  </object>
+</interface>

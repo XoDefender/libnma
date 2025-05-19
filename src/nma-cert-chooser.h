@@ -6,8 +6,8 @@
  * Copyright (C) 2015,2017 Red Hat, Inc.
  */
 
-#ifndef NMA_CERT_CHOOSER_H
-#define NMA_CERT_CHOOSER_H
+#ifndef __NMA_CERT_CHOOSER_H__
+#define __NMA_CERT_CHOOSER_H__
 
 #include <gtk/gtk.h>
 #include <NetworkManager.h>
@@ -22,6 +22,7 @@ G_BEGIN_DECLS
  * @NMA_CERT_CHOOSER_FLAG_CERT: Only pick a certificate, not a key
  * @NMA_CERT_CHOOSER_FLAG_PASSWORDS: Hide all controls but the secrets entries
  * @NMA_CERT_CHOOSER_FLAG_PEM: Ensure the chooser only selects regular PEM files
+ * @NMA_CERT_CHOOSER_FLAG_NO_PASSWORDS: Do not show password entries (Since: 1.8.34)
  *
  * Flags that controls what is the certificate chooser button able to pick.
  * Currently only local files are supported, but might be extended to use URIs,
@@ -31,10 +32,11 @@ G_BEGIN_DECLS
  */
 NMA_AVAILABLE_IN_1_8
 typedef enum {
-	NMA_CERT_CHOOSER_FLAG_NONE      = 0x0,
-	NMA_CERT_CHOOSER_FLAG_CERT      = 0x1,
-	NMA_CERT_CHOOSER_FLAG_PASSWORDS = 0x2,
-	NMA_CERT_CHOOSER_FLAG_PEM       = 0x4,
+	NMA_CERT_CHOOSER_FLAG_NONE         = 0x0,
+	NMA_CERT_CHOOSER_FLAG_CERT         = 0x1,
+	NMA_CERT_CHOOSER_FLAG_PASSWORDS    = 0x2,
+	NMA_CERT_CHOOSER_FLAG_PEM          = 0x4,
+	NMA_CERT_CHOOSER_FLAG_NO_PASSWORDS = 0x8,
 } NMACertChooserFlags;
 
 #define NMA_TYPE_CERT_CHOOSER                   (nma_cert_chooser_get_type ())
@@ -49,6 +51,10 @@ typedef struct _NMACertChooser NMACertChooser;
 
 NMA_AVAILABLE_IN_1_8
 typedef struct _NMACertChooserClass NMACertChooserClass;
+
+#if defined(G_DEFINE_AUTOPTR_CLEANUP_FUNC) && NMA_VERSION_MIN_REQUIRED >= NMA_VERSION_1_10_6
+G_DEFINE_AUTOPTR_CLEANUP_FUNC(NMACertChooser, g_object_unref)
+#endif
 
 NMA_AVAILABLE_IN_1_8
 GType                nma_cert_chooser_get_type                     (void);
@@ -146,10 +152,6 @@ void                 nma_cert_chooser_update_key_password_storage  (NMACertChoos
 NMA_AVAILABLE_IN_1_8
 NMSettingSecretFlags nma_cert_chooser_get_key_password_flags       (NMACertChooser *cert_chooser);
 
-NMA_AVAILABLE_IN_1_8
-gchar               *nma_cert_chooser_get_cert_id                  (NMACertChooser *cert_chooser,
-                                                                    const gchar *uri);
-                                                                    
 G_END_DECLS
 
-#endif /* NMA_CERT_CHOOSER_H */
+#endif /* __NMA_CERT_CHOOSER_H__ */

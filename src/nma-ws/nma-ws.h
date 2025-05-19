@@ -15,6 +15,10 @@ G_BEGIN_DECLS
 typedef struct _NMAWs NMAWs;
 typedef struct _NMAWsInterface NMAWsInterface;
 
+#if defined(G_DEFINE_AUTOPTR_CLEANUP_FUNC) && NMA_VERSION_MIN_REQUIRED >= NMA_VERSION_1_10_6
+G_DEFINE_AUTOPTR_CLEANUP_FUNC(NMAWs, g_object_unref)
+#endif
+
 #define NMA_TYPE_WS                (nma_ws_get_type ())
 #define NMA_WS(obj)                (G_TYPE_CHECK_INSTANCE_CAST ((obj), NMA_TYPE_WS, NMAWs))
 #define NMA_IS_WS(obj)             (G_TYPE_CHECK_INSTANCE_TYPE ((obj), NMA_TYPE_WS))
@@ -49,6 +53,7 @@ G_END_DECLS
 #include "nma-ws-802-1x.h"
 #include "nma-ws-dynamic-wep.h"
 #include "nma-ws-leap.h"
+#include "nma-ws-owe.h"
 #include "nma-ws-sae.h"
 #include "nma-ws-wep-key.h"
 #include "nma-ws-wpa-eap.h"

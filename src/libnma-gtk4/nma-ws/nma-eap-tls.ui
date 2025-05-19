@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface domain="libnma">
+  <requires lib="gtk" version="4.0"/>
+  <object class="GtkGrid" id="eap_tls_grid">
+    <property name="row_spacing">6</property>
+    <property name="column_spacing">6</property>
+    <child>
+      <object class="GtkLabel" id="eap_tls_identity_label">
+        <property name="label" translatable="1">I_dentity</property>
+        <property name="use_underline">1</property>
+        <property name="mnemonic_widget">eap_tls_identity_entry</property>
+        <property name="xalign">1</property>
+        <layout>
+          <property name="column">0</property>
+          <property name="row">0</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="GtkEntry" id="eap_tls_identity_entry">
+        <property name="focusable">1</property>
+        <property name="hexpand">1</property>
+        <property name="activates_default">1</property>
+        <layout>
+          <property name="column">1</property>
+          <property name="row">0</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="GtkCheckButton" id="eap_tls_ca_cert_not_required_checkbox">
+        <property name="label" translatable="1">No CA certificate is _required</property>
+        <property name="focusable">1</property>
+        <property name="halign">start</property>
+        <property name="hexpand">1</property>
+        <property name="use_underline">1</property>
+        <layout>
+          <property name="column">1</property>
+          <property name="row">3</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="GtkLabel" id="eap_tls_domain_label">
+        <property name="tooltip_text" translatable="1">Suffix of the server certificate name.</property>
+        <property name="label" translatable="1">_Domain</property>
+        <property name="use_underline">1</property>
+        <property name="mnemonic_widget">eap_tls_domain_entry</property>
+        <property name="xalign">1</property>
+        <layout>
+          <property name="column">0</property>
+          <property name="row">1</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="GtkEntry" id="eap_tls_domain_entry">
+        <property name="focusable">1</property>
+        <property name="hexpand">1</property>
+        <property name="activates_default">1</property>
+        <layout>
+          <property name="column">1</property>
+          <property name="row">1</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <placeholder/>
+    </child>
+    <child>
+      <placeholder/>
+    </child>
+    <child>
+      <placeholder/>
+    </child>
+  </object>
+</interface>

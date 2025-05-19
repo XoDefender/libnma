@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <schemalist>
-  <schema id="org.gnome.nm-applet" path="/org/gnome/nm-applet/" gettext-domain="@GETTEXT_PACKAGE@">
+  <schema id="org.gnome.nm-applet" path="/org/gnome/nm-applet/" gettext-domain="nm-applet">
     <key name="disable-connected-notifications" type="b">
       <default>false</default>
       <summary>Disable connected notifications</summary>
@@ -35,18 +35,6 @@
       <default>true</default>
       <summary>Show the applet in notification area</summary>
       <description>Set to FALSE to disable displaying the applet in the notification area.</description>
-    </key>
-  </schema>
-  <schema id="org.gnome.nm-applet.eap">
-    <key name="ignore-ca-cert" type="b">
-      <default>false</default>
-      <summary>Ignore CA certificate</summary>
-      <description>Set this to true to disable warnings about CA certificates in EAP authentication.</description>
-    </key>
-    <key name="ignore-phase2-ca-cert" type="b">
-      <default>false</default>
-      <summary>Ignore CA certificate</summary>
-      <description>Set this to true to disable warnings about CA certificates in phase 2 of EAP authentication.</description>
     </key>
   </schema>
 </schemalist>

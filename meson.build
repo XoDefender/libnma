@@ -1,6 +1,6 @@
 project(
   'libnma', 'c',
-  version: '1.8.30',
+  version: '1.10.6',
   license: 'GPL2+',
   default_options: [
     'buildtype=debugoptimized',
@@ -74,12 +74,12 @@ endif
 
 enable_libnma_gtk4 = get_option('libnma_gtk4')
 if enable_libnma_gtk4
-  gtk4_ext_dep = dependency('gtk4', version: '>= 3.96')
+  gtk4_ext_dep = dependency('gtk4', version: '>= 4.0')
   gtk4_dep = declare_dependency(
     dependencies: gtk4_ext_dep,
     compile_args: [
-      '-DGTK_VERSION_MIN_REQUIRED=GTK_VERSION_3_96',
-      '-DGTK_VERSION_MAX_ALLOWED=GTK_VERSION_3_96'
+      '-DGDK_VERSION_MIN_REQUIRED=GDK_VERSION_4_0',
+      '-DGDK_VERSION_MAX_ALLOWED=GDK_VERSION_4_0'
     ]
   )
 endif
@@ -133,9 +133,9 @@ if enable_iso_codes
   iso_3166 = iso_codes_dep.get_pkgconfig_variable('domains').contains('iso_3166')
   message('whether iso-codes has iso_3166 domain: ' + iso_3166.to_string())
 
-  config_h.set_quoted('ISO_CODES_PREFIX', iso_codes_dep.get_pkgconfig_variable('prefix'))
+  config_h.set_quoted('ISO_CODES_DATADIR', iso_codes_dep.get_pkgconfig_variable('prefix') + '/share')
 else
-  config_h.set_quoted('ISO_CODES_PREFIX', nma_prefix)
+  config_h.set_quoted('ISO_CODES_DATADIR', nma_datadir)
 endif
 
 # Check for mobile-broadband-provider-info for Mobile Broadband wizard
@@ -154,13 +154,13 @@ gmodule_export_dep = dependency('gmodule-export-2.0')
 m_dep = cc.find_library('m')
 
 # Check for gtk+
-gtk_req_version = '>= 3.10'
+gtk_req_version = '>= 3.12'
 
 gtk_dep = declare_dependency(
   dependencies: dependency('gtk+-3.0', version: gtk_req_version),
   compile_args: [
-    '-DGDK_VERSION_MIN_REQUIRED=GDK_VERSION_3_10',
-    '-DGDK_VERSION_MAX_ALLOWED=GDK_VERSION_3_10'
+    '-DGDK_VERSION_MIN_REQUIRED=GDK_VERSION_3_12',
+    '-DGDK_VERSION_MAX_ALLOWED=GDK_VERSION_3_12'
   ]
 )
 
@@ -185,79 +185,89 @@ libnm_dep = declare_dependency(
   compile_args: cflags
 )
 
-# No such thing yet, just same lame duck placeholders.
-# it may actually end up being called differently.
-config_h.set10('WITH_GCR_GTK4', false)
+# GCR API is declared subject to change, do an extensive check of the prototypes
+gcr_api_check_src = '''
+  #include <gck/gck.h>
+  #if GCK_CHECK_VERSION(3,90,0)
+  #include <gcr/gcr.h>
+  #else
+  #include <gcr/gcr-base.h>
+  #endif
+
+  const GckAttribute *gck_attributes_find (GckAttributes *attrs, gulong attr_type);
+  gboolean gck_attributes_find_string (GckAttributes *attrs, gulong attr_type, gchar **value);
+  gboolean gck_attributes_find_ulong (GckAttributes *attrs, gulong attr_type, gulong *value);
+  GckAttributes *gck_attributes_new_empty (gulong first_type, ...);
+  void gck_attributes_unref (gpointer attrs);
+  void gck_builder_add_all (GckBuilder *builder, GckAttributes *attrs);
+  void gck_builder_add_only (GckBuilder *builder, GckAttributes *attrs, gulong only_type, ...);
+  GckAttributes *gck_builder_end (GckBuilder *builder);
+  GckBuilder *gck_builder_new (GckBuilderFlags flags);
+  void gck_enumerator_next_async (GckEnumerator *self, gint max_objects, GCancellable *cancellable,
+                                  GAsyncReadyCallback callback, gpointer user_data);
+  GList *gck_enumerator_next_finish (GckEnumerator *self, GAsyncResult *result, GError **error);
+  GList *gck_modules_get_slots (GList *modules, gboolean token_present);
+  void gck_modules_initialize_registered_async (GCancellable *cancellable, GAsyncReadyCallback callback,
+                                                gpointer user_data);
+  GList *gck_modules_initialize_registered_finish (GAsyncResult *result, GError **error);
+  void gck_object_get_async (GckObject *self, const gulong *attr_types, guint n_attr_types,
+                             GCancellable *cancellable, GAsyncReadyCallback callback, gpointer user_data);
+  GckAttributes *gck_object_get_finish (GckObject *self, GAsyncResult *result, GError **error);
+  void gck_session_login_async (GckSession *self, gulong user_type, const guchar *pin,
+                                gsize n_pin, GCancellable *cancellable,
+                                GAsyncReadyCallback callback, gpointer user_data);
+  gboolean gck_session_login_finish (GckSession *self, GAsyncResult *result, GError **error);
+  GckSlotInfo *gck_slot_get_info (GckSlot *self);
+  GckTokenInfo *gck_slot_get_token_info (GckSlot *self);
+  #if GCR_CHECK_VERSION(3,90,0)
+  void gck_slot_open_session_async (GckSlot *self, GckSessionOptions options, GTlsInteraction *interaction,
+                                    GCancellable *cancellable, GAsyncReadyCallback callback,
+                                    gpointer user_data);
+  gchar *gck_uri_data_build (GckUriData *uri_data, GckUriFlags flags);
+  GckUriData *gck_uri_data_parse (const gchar *string, GckUriFlags flags, GError **error);
+  #else
+  void gck_slot_open_session_async (GckSlot *self, GckSessionOptions options, GCancellable *cancellable,
+                                    GAsyncReadyCallback callback, gpointer user_data);
+  gchar *gck_uri_build (GckUriData *uri_data, GckUriFlags flags);
+  GckUriData *gck_uri_parse (const gchar *string, GckUriFlags flags, GError **error);
+  #endif
+  GckSession *gck_slot_open_session_finish (GckSlot *self, GAsyncResult *result, GError **error);
+  void gck_token_info_free (GckTokenInfo *token_info);
+  void gck_uri_data_free (GckUriData *uri_data);
+  gchar *gcr_certificate_get_issuer_name (GcrCertificate *self);
+  gchar *gcr_certificate_get_subject_name (GcrCertificate *self);
+  GcrCertificate *gcr_simple_certificate_new (const guchar *data, gsize n_data);
+'''
 
 # GCR for PKCS#11 enabled certificate chooser
 enable_gcr = get_option('gcr')
 if enable_gcr
-  deps = [
-    dependency('gcr-3', version: '>= 3.14'),
-    dependency('gck-1', version: '>= 3.14')
+  gcr4_deps = [
+    dependency('gcr-4', version: '>= 3.92', required: false),
+    dependency('gck-2', version: '>= 3.92', required: false)
   ]
-
-  cflags = [
+  gcr3_deps = [
+    dependency('gcr-base-3', version: '>= 3.14', required: false),
+    dependency('gck-1', version: '>= 3.14', required: false)
+  ]
+  gcr_cflags = [
     '-DGCR_API_SUBJECT_TO_CHANGE',
     '-DGCK_API_SUBJECT_TO_CHANGE'
   ]
 
-  # GCR API is declared subject to change, do an extensive check of the prototypes
-  gcr_src = '''
-    #ifndef GCR_API_SUBJECT_TO_CHANGE
-    # define GCR_API_SUBJECT_TO_CHANGE
-    #endif
-    #ifndef GCK_API_SUBJECT_TO_CHANGE
-    # define GCK_API_SUBJECT_TO_CHANGE
-    #endif
-
-    #include <gcr/gcr.h>
-    #include <gck/gck.h>
-
-    const GckAttribute *gck_attributes_find (GckAttributes *attrs, gulong attr_type);
-    gboolean gck_attributes_find_string (GckAttributes *attrs, gulong attr_type, gchar **value);
-    gboolean gck_attributes_find_ulong (GckAttributes *attrs, gulong attr_type, gulong *value);
-    GckAttributes *gck_attributes_new_empty (gulong first_type, ...);
-    void gck_attributes_unref (gpointer attrs);
-    void gck_builder_add_all (GckBuilder *builder, GckAttributes *attrs);
-    void gck_builder_add_only (GckBuilder *builder, GckAttributes *attrs, gulong only_type, ...);
-    GckAttributes *gck_builder_end (GckBuilder *builder);
-    GckBuilder *gck_builder_new (GckBuilderFlags flags);
-    void gck_enumerator_next_async (GckEnumerator *self, gint max_objects, GCancellable *cancellable,
-                                    GAsyncReadyCallback callback, gpointer user_data);
-    GList *gck_enumerator_next_finish (GckEnumerator *self, GAsyncResult *result, GError **error);
-    void gck_list_unref_free (GList *reflist);
-    GList *gck_modules_get_slots (GList *modules, gboolean token_present);
-    void gck_modules_initialize_registered_async (GCancellable *cancellable, GAsyncReadyCallback callback,
-                                                  gpointer user_data);
-    GList *gck_modules_initialize_registered_finish (GAsyncResult *result, GError **error);
-    void gck_object_get_async (GckObject *self, const gulong *attr_types, guint n_attr_types,
-                               GCancellable *cancellable, GAsyncReadyCallback callback, gpointer user_data);
-    GckAttributes *gck_object_get_finish (GckObject *self, GAsyncResult *result, GError **error);
-    void gck_session_login_async (GckSession *self, gulong user_type, const guchar *pin,
-                                  gsize n_pin, GCancellable *cancellable,
-                                  GAsyncReadyCallback callback, gpointer user_data);
-    gboolean gck_session_login_finish (GckSession *self, GAsyncResult *result, GError **error);
-    GckSlotInfo *gck_slot_get_info (GckSlot *self);
-    GckTokenInfo *gck_slot_get_token_info (GckSlot *self);
-    void gck_slot_open_session_async (GckSlot *self, GckSessionOptions options, GCancellable *cancellable,
-                                      GAsyncReadyCallback callback, gpointer user_data);
-    GckSession *gck_slot_open_session_finish (GckSlot *self, GAsyncResult *result, GError **error);
-    void gck_token_info_free (GckTokenInfo *token_info);
-    gchar *gck_uri_build (GckUriData *uri_data, GckUriFlags flags);
-    void gck_uri_data_free (GckUriData *uri_data);
-    GckUriData *gck_uri_parse (const gchar *string, GckUriFlags flags, GError **error);
-    gchar *gcr_certificate_get_issuer_name (GcrCertificate *self);
-    gchar *gcr_certificate_get_subject_name (GcrCertificate *self);
-    GcrCertificate *gcr_simple_certificate_new (const guchar *data, gsize n_data);
-  '''
-
-  assert(cc.compiles(gcr_src, dependencies: deps), 'gcr support was requested, but the gcr library is not available. Use -Dgcr=false to build without it.')
-
-  gcr_dep = declare_dependency(
-    dependencies: deps,
-    compile_args: cflags
-  )
+  if cc.compiles(gcr_api_check_src, dependencies: gcr4_deps, args: gcr_cflags)
+    gcr_dep = declare_dependency(
+      dependencies: gcr4_deps,
+      compile_args: gcr_cflags
+    )
+  else
+    assert(cc.compiles(gcr_api_check_src, dependencies: gcr3_deps, args: gcr_cflags),
+      'gcr support was requested, but the gcr library is not available. Use -Dgcr=false to build without it.')
+    gcr_dep = declare_dependency(
+      dependencies: gcr3_deps,
+      compile_args: gcr_cflags
+    )
+  endif
 endif
 config_h.set10('WITH_GCR', enable_gcr)
 
@@ -306,7 +316,6 @@ if enable_gtk_doc
 
   private_headers = [
     'nma-cert-chooser-button.h',
-    'nma-cert-chooser-private.h',
     'nma-pkcs11-cert-chooser-dialog.h',
     'nma-pkcs11-token-login-dialog.h',
     'nma-resources.h',
@@ -363,14 +372,20 @@ endif
 schema_conf = configuration_data()
 schema_conf.set('GETTEXT_PACKAGE', 'libnma')
 
-schema = 'org.gnome.nm-applet.gschema.xml'
+foreach schema : [
+  'org.gnome.nm-applet.eap.gschema.xml',
 
-configure_file(
-  input: schema + '.in',
-  output: schema,
-  install_dir: join_paths(nma_datadir, 'glib-2.0', 'schemas'),
-  configuration: schema_conf,
-)
+  # This one belongs to nm-applet.
+  # Kept here for now to avoid breaking on upgrades.
+  'org.gnome.nm-applet.gschema.xml'
+]
+  configure_file(
+    input: schema + '.in',
+    output: schema,
+    install_dir: join_paths(nma_datadir, 'glib-2.0', 'schemas'),
+    configuration: schema_conf,
+  )
+endforeach
 
 config = 'config.h'
 
@@ -381,7 +396,7 @@ configure_file(
 )
 
 output = '\n'
-output += '  Build EXPERIMENTAL library libnm-gtk4 for use with GTK4: ' + enable_libnma_gtk4.to_string() + '\n'
+output += '  Build library libnm-gtk4 for use with GTK4: ' + enable_libnma_gtk4.to_string() + '\n'
 output += '  GCR: ' + enable_gcr.to_string() + '\n'
 output += '  LTO: ' + get_option('b_lto').to_string() + '\n'
 output += '  Linker garbage collection: ' + enable_ld_gc.to_string() + '\n'
