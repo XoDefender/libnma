@@ -167,6 +167,8 @@ add_to_size_group (NMAWs *ws, GtkSizeGroup *group)
 	gtk_size_group_add_widget (group, self->eap_auth_label);
 }
 
+
+// FYI:Kirill
 void
 nma_ws_802_1x_fill_connection (NMAWs *ws, NMConnection *connection)
 {

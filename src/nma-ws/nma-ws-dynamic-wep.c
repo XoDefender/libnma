@@ -31,6 +31,8 @@ fill_connection (NMAWs *ws, NMConnection *connection)
 {
 	NMSettingWirelessSecurity *s_wireless_sec;
 
+	// FYI:Kirill - takes effect on sec setting 
+	// saved in file
 	nma_ws_802_1x_fill_connection (ws, connection);
 
 	s_wireless_sec = nm_connection_get_setting_wireless_security (connection);

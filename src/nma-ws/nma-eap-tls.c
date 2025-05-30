@@ -84,6 +84,8 @@ add_to_size_group (NMAEap *parent, GtkSizeGroup *group)
 	nma_cert_chooser_add_to_size_group (NMA_CERT_CHOOSER (method->ca_cert_chooser), group);
 }
 
+// TODO:Kirill - set data from gui to nmsetting
+// nm will pass this data and connect
 static void
 fill_connection (NMAEap *parent, NMConnection *connection)
 {
@@ -96,6 +98,7 @@ fill_connection (NMAEap *parent, NMConnection *connection)
 	char *value = NULL;
 	GError *error = NULL;
 	gboolean ca_cert_error = FALSE;
+	gboolean is_active = FALSE;
 	NMSetting8021xCKScheme scheme;
 
 	s_8021x = nm_connection_get_setting_802_1x (connection);
@@ -119,6 +122,12 @@ fill_connection (NMAEap *parent, NMConnection *connection)
 		              gtk_editable_get_text (GTK_EDITABLE (widget)), NULL);
 	}
 
+	// TOOD:Kirill - save value to settings
+	// nm_setting_option_set_boolean(...);
+	widget = GTK_WIDGET (gtk_builder_get_object (parent->builder, "ask-cert-on-connect"));
+	g_assert (widget);
+	is_active = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(widget));
+
 	/* TLS private key */
 	text = nma_cert_chooser_get_key_password (NMA_CERT_CHOOSER (method->client_cert_chooser));
 	value = nma_cert_chooser_get_key (NMA_CERT_CHOOSER (method->client_cert_chooser), &scheme);
@@ -129,6 +138,7 @@ fill_connection (NMAEap *parent, NMConnection *connection)
 			g_clear_error (&error);
 		}
 	} else {
+		// FYI:Kirill - set up private key
 		if (!nm_setting_802_1x_set_private_key (s_8021x, value, text, scheme, &format, &error)) {
 			g_warning ("Couldn't read private key '%s': %s", value, error ? error->message : "(unknown)");
 			g_clear_error (&error);
@@ -371,6 +381,7 @@ nma_eap_tls_new (NMAWs8021x *ws_8021x,
 	GtkWidget *widget;
 	NMSetting8021x *s_8021x = NULL;
 	gboolean ca_not_required = FALSE;
+	gboolean ask_cert_on_connect = FALSE;
 
 	parent = nma_eap_init (sizeof (NMAEapTls),
 	                       validate,
@@ -408,6 +419,11 @@ nma_eap_tls_new (NMAWs8021x *ws_8021x,
 	g_signal_connect (G_OBJECT (widget), "toggled",
 	                  (GCallback) nma_ws_changed_cb,
 	                  ws_8021x);
+
+	// TODO:Kirill - set ask_cert_on_connect value
+	widget = GTK_WIDGET (gtk_builder_get_object (parent->builder, "ask-cert-on-connect"));
+	g_assert (widget);
+	g_signal_connect (G_OBJECT (widget), "toggled", (GCallback) nma_ws_changed_cb, ws_8021x);
 
 	widget = GTK_WIDGET (gtk_builder_get_object (parent->builder, "eap_tls_identity_entry"));
 	g_assert (widget);
@@ -517,6 +533,9 @@ nma_eap_tls_new (NMAWs8021x *ws_8021x,
 
 	widget = GTK_WIDGET (gtk_builder_get_object (parent->builder, "eap_tls_ca_cert_not_required_checkbox"));
 	gtk_check_button_set_active (GTK_CHECK_BUTTON (widget), ca_not_required);
+
+	widget = GTK_WIDGET (gtk_builder_get_object (parent->builder, "ask-cert-on-connect"));
+	gtk_check_button_set_active (GTK_CHECK_BUTTON (widget), ask_cert_on_connect);
 
 	/* Create password-storage popup menus for password entries under their secondary icon */
 	nma_cert_chooser_setup_cert_password_storage (NMA_CERT_CHOOSER (method->ca_cert_chooser),
