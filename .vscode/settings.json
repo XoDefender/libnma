@@ -1,0 +1,13 @@
+{
+    "files.associations": {
+        "nma-eap-simple.h": "c",
+        "system_error": "c",
+        "nma-version.h": "c",
+        "array": "c",
+        "functional": "c",
+        "tuple": "c",
+        "type_traits": "c",
+        "utility": "c",
+        "atomic": "c"
+    }
+}
