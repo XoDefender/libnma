@@ -1153,6 +1153,7 @@ internal_init (NMAWifiDialog *self,
 {
 	NMAWifiDialogPrivate *priv = NMA_WIFI_DIALOG_GET_PRIVATE (self);
 	GtkWidget *widget;
+	NMSetting8021x *s_8021x;
 	char *label, *icon_name = "network-wireless";
 	gboolean security_combo_focus = FALSE;
 
@@ -1214,7 +1215,7 @@ internal_init (NMAWifiDialog *self,
 		priv->network_name_focus = FALSE;
 
 		// TODO:Kirill - move to security combo init
-		NMSetting8021x *s_8021x = nm_connection_get_setting_802_1x (specific_connection);
+		s_8021x = nm_connection_get_setting_802_1x (specific_connection);
 		if(s_8021x && nm_setting_802_1x_get_num_eap_methods (s_8021x)) 
 		{
 			const char *method = nm_setting_802_1x_get_eap_method (s_8021x, 0);
@@ -1316,9 +1317,21 @@ internal_init (NMAWifiDialog *self,
 static gchar *
 nma_cert_to_priv_key_type(const gchar* cert, const gchar* new_type) 
 {
-    const char* old_type_prefix = "type=";
-    const char* old_type_value = "cert";
-    char* pos = strstr(cert, "type=cert");
+	g_assert(cert);
+	g_assert(new_type);
+
+    const char* old_type_prefix;
+    const char* old_type_value;
+    char* pos; 
+	
+	size_t new_len;
+	size_t prefix_len;
+    char* new_string;
+
+	old_type_prefix = "type=";
+    old_type_value = "cert";
+    pos = strstr(cert, "type=cert");
+
     if (pos == NULL) {
         char* copy = strdup(cert);
         if (copy == NULL) {
@@ -1327,23 +1340,18 @@ nma_cert_to_priv_key_type(const gchar* cert, const gchar* new_type)
         return copy;
     }
 
-    // New string length = original length - old value length + new value length
-    size_t new_len = strlen(cert) - strlen(old_type_value) + strlen(new_type);
-    char* new_string = malloc(new_len + 1);
+    new_len = strlen(cert) - strlen(old_type_value) + strlen(new_type);
+    new_string = malloc(new_len + 1);
     if (new_string == NULL) {
         perror("malloc");
         return NULL;
     }
 
-    // Copy everything up to 'type='
-    size_t prefix_len = pos - cert + strlen(old_type_prefix);
+    prefix_len = pos - cert + strlen(old_type_prefix);
     strncpy(new_string, cert, prefix_len);
     new_string[prefix_len] = '\0';
 
-    // Append new type value
     strcat(new_string, new_type);
-
-    // Append the rest of the original string after 'cert'
     strcat(new_string, pos + strlen("type=cert"));
 
     return new_string;
@@ -1455,9 +1463,11 @@ nma_wifi_dialog_get_connection (NMAWifiDialog *self,
 		else {
 			g_warning ("Not pkcs11 cert selected");
 		}
+		
 		g_object_set (s_8021x, NM_SETTING_802_1X_PIN, pin_value, NULL);
 
 		g_free (cert_value);
+		g_free (priv_key_value);
 	}
 
 	if (ws) {
