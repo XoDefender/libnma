@@ -51,7 +51,8 @@ validate (NMAEap *parent, GError **error)
 	    && !nma_cert_chooser_validate (NMA_CERT_CHOOSER (method->ca_cert_chooser), error))
 		return FALSE;
 
-	if (!nma_cert_chooser_validate (NMA_CERT_CHOOSER (method->client_cert_chooser), error))
+	if (   gtk_widget_get_sensitive (method->client_cert_chooser)
+		&& !nma_cert_chooser_validate (NMA_CERT_CHOOSER (method->client_cert_chooser), error))
 		return FALSE;
 
 	return TRUE;
@@ -70,13 +71,9 @@ static void
 ask_cert_on_connect_toggled (GtkWidget *button, gpointer user_data)
 {
 	NMAEapTls *method = (NMAEapTls *) user_data;
-	gboolean active = gtk_check_button_get_active (GTK_CHECK_BUTTON (button));
-	NMSettingSecretFlags secret_flags = nma_cert_chooser_get_key_password_flags (NMA_CERT_CHOOSER (method->client_cert_chooser));
 
-	secret_flags = active ? NM_SETTING_SECRET_FLAG_NOT_SAVED : secret_flags;	
-	nma_cert_chooser_update_key_password_storage (NMA_CERT_CHOOSER (method->client_cert_chooser),
-	                                              secret_flags, NULL,
-	                                              method->client_key_password_flags_name);
+	gtk_widget_set_sensitive (method->client_cert_chooser,
+	                          !gtk_check_button_get_active (GTK_CHECK_BUTTON (button)));
 }
 
 static void
@@ -228,20 +225,26 @@ fill_connection (NMAEap *parent, NMConnection *connection)
 		value = nma_cert_chooser_get_cert (NMA_CERT_CHOOSER (method->ca_cert_chooser), &scheme);
 	else
 		value = NULL;
+
 	format = NM_SETTING_802_1X_CK_FORMAT_UNKNOWN;
-	if (parent->phase2) {
+
+	if (parent->phase2) 
+	{
 		if (!nm_setting_802_1x_set_phase2_ca_cert (s_8021x, value, scheme, &format, &error)) {
 			g_warning ("Couldn't read phase2 CA certificate '%s': %s", value, error ? error->message : "(unknown)");
 			g_clear_error (&error);
 			ca_cert_error = TRUE;
 		}
-	} else {
+	} 
+	else 
+	{
 		if (!nm_setting_802_1x_set_ca_cert (s_8021x, value, scheme, &format, &error)) {
 			g_warning ("Couldn't read CA certificate '%s': %s", value, error ? error->message : "(unknown)");
 			g_clear_error (&error);
 			ca_cert_error = TRUE;
 		}
 	}
+	
 	nma_eap_ca_cert_ignore_set (parent, connection, value, ca_cert_error);
 	g_free (value);
 }
@@ -442,6 +445,7 @@ nma_eap_tls_new (NMAWs8021x *ws_8021x,
 	// TODO:Kirill - set ask_cert_on_connect value
 	widget = GTK_WIDGET (gtk_builder_get_object (parent->builder, "ask-cert-on-connect"));
 	g_assert (widget);
+	g_signal_connect (G_OBJECT (widget), "toggled", (GCallback) ask_cert_on_connect_toggled, parent);
 	g_signal_connect (G_OBJECT (widget), "toggled", (GCallback) nma_ws_changed_cb, ws_8021x);
 
 	widget = GTK_WIDGET (gtk_builder_get_object (parent->builder, "eap_tls_identity_entry"));
