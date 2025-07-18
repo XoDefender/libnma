@@ -1213,19 +1213,6 @@ internal_init (NMAWifiDialog *self,
 		gtk_widget_hide (widget);
 		security_combo_focus = TRUE;
 		priv->network_name_focus = FALSE;
-
-		// TODO:Kirill - move to security combo init
-		s_8021x = nm_connection_get_setting_802_1x (specific_connection);
-		if(s_8021x && nm_setting_802_1x_get_num_eap_methods (s_8021x)) 
-		{
-			const char *method = nm_setting_802_1x_get_eap_method (s_8021x, 0);
-			if(method && (!strcmp(method, "tls") || !strcmp(method, "ttls"))) {
-				priv->cert_auth_data = nma_cert_auth_data_new(priv->connection);
-			}
-
-			add_cert_auth_data_to_dialog(GTK_DIALOG (self), priv->cert_auth_data, s_8021x);
-			_set_ok_sensitive (self, TRUE, NULL);
-		}
 	} 
 	else 
 	{
