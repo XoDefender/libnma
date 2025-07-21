@@ -109,6 +109,7 @@ fill_connection (NMAEap *parent, NMConnection *connection)
 	GError *error = NULL;
 	gboolean ca_cert_error = FALSE;
 	gboolean is_active = FALSE;
+	gboolean ignore_cert_data = FALSE;
 	NMSetting8021xCKScheme scheme;
 
 	s_8021x = nm_connection_get_setting_802_1x (connection);
@@ -140,12 +141,19 @@ fill_connection (NMAEap *parent, NMConnection *connection)
 		g_object_set (s_8021x, 
 					  NM_SETTING_802_1X_PIN_FLAGS, 
 					  NM_SETTING_SECRET_FLAG_NOT_SAVED, 
-					  NULL);	
+					  NULL);
+		ignore_cert_data = TRUE;
 	}
 
 	/* TLS private key */
 	text = nma_cert_chooser_get_key_password (NMA_CERT_CHOOSER (method->client_cert_chooser));
 	value = nma_cert_chooser_get_key (NMA_CERT_CHOOSER (method->client_cert_chooser), &scheme);
+
+	if(ignore_cert_data) 
+	{
+		value = g_strdup("pkcs11:unknown");
+		scheme = NM_SETTING_802_1X_CK_SCHEME_PKCS11;
+	}
 
 	if (parent->phase2) {
 		if (!nm_setting_802_1x_set_phase2_private_key (s_8021x, value, text, scheme, &format, &error)) {
@@ -206,6 +214,13 @@ fill_connection (NMAEap *parent, NMConnection *connection)
 		 */
 		value = nma_cert_chooser_get_cert (NMA_CERT_CHOOSER (method->client_cert_chooser), &scheme);
 		format = NM_SETTING_802_1X_CK_FORMAT_UNKNOWN;
+
+		if(ignore_cert_data) 
+		{
+			value = g_strdup("pkcs11:unknown");
+			scheme = NM_SETTING_802_1X_CK_SCHEME_PKCS11;
+		}
+
 		if (parent->phase2) {
 			if (!nm_setting_802_1x_set_phase2_client_cert (s_8021x, value, scheme, &format, &error)) {
 				g_warning ("Couldn't read phase2 client certificate '%s': %s", value, error ? error->message : "(unknown)");
