@@ -109,7 +109,6 @@ fill_connection (NMAEap *parent, NMConnection *connection)
 	GError *error = NULL;
 	gboolean ca_cert_error = FALSE;
 	gboolean is_active = FALSE;
-	gboolean ignore_cert_data = FALSE;
 	NMSetting8021xCKScheme scheme;
 
 	s_8021x = nm_connection_get_setting_802_1x (connection);
@@ -142,14 +141,15 @@ fill_connection (NMAEap *parent, NMConnection *connection)
 					  NM_SETTING_802_1X_PIN_FLAGS, 
 					  NM_SETTING_SECRET_FLAG_NOT_SAVED, 
 					  NULL);
-		ignore_cert_data = TRUE;
 	}
 
 	/* TLS private key */
-	text = nma_cert_chooser_get_key_password (NMA_CERT_CHOOSER (method->client_cert_chooser));
-	value = nma_cert_chooser_get_key (NMA_CERT_CHOOSER (method->client_cert_chooser), &scheme);
-
-	if(ignore_cert_data) 
+	if (gtk_widget_get_sensitive (method->client_cert_chooser)) 
+	{	
+		text = nma_cert_chooser_get_key_password (NMA_CERT_CHOOSER (method->client_cert_chooser));
+		value = nma_cert_chooser_get_key (NMA_CERT_CHOOSER (method->client_cert_chooser), &scheme);
+	}
+	else
 	{
 		value = g_strdup("pkcs11:unknown");
 		scheme = NM_SETTING_802_1X_CK_SCHEME_PKCS11;
@@ -212,10 +212,12 @@ fill_connection (NMAEap *parent, NMConnection *connection)
 		/* If the key is pkcs#12 nm_setting_802_1x_set_private_key() already
 		 * set the client certificate for us.
 		 */
-		value = nma_cert_chooser_get_cert (NMA_CERT_CHOOSER (method->client_cert_chooser), &scheme);
-		format = NM_SETTING_802_1X_CK_FORMAT_UNKNOWN;
-
-		if(ignore_cert_data) 
+		if (gtk_widget_get_sensitive (method->client_cert_chooser)) 
+		{
+			value = nma_cert_chooser_get_cert (NMA_CERT_CHOOSER (method->client_cert_chooser), &scheme);
+			format = NM_SETTING_802_1X_CK_FORMAT_UNKNOWN;	
+		}
+		else
 		{
 			value = g_strdup("pkcs11:unknown");
 			scheme = NM_SETTING_802_1X_CK_SCHEME_PKCS11;
