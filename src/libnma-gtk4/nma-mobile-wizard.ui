@@ -1,0 +1,372 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface domain="libnma">
+  <requires lib="gtk" version="4.0"/>
+  <object class="GtkTreeStore" id="country_store">
+    <columns>
+      <column type="gchararray"/>
+      <column type="NMACountryInfo"/>
+    </columns>
+  </object>
+  <object class="GtkTreeModelSort" id="country_sort">
+    <property name="model">country_store</property>
+  </object>
+  <object class="GtkTreeStore" id="dev_store">
+    <columns>
+      <column type="gchararray"/>
+      <column type="NMDevice"/>
+      <column type="gboolean"/>
+    </columns>
+  </object>
+  <object class="GtkTreeStore" id="plan_store">
+    <columns>
+      <column type="gchararray"/>
+      <column type="NMAMobileAccessMethod"/>
+      <column type="gboolean"/>
+    </columns>
+  </object>
+  <object class="GtkTreeStore" id="providers_store">
+    <columns>
+      <column type="gchararray"/>
+      <column type="NMAMobileProvider"/>
+    </columns>
+  </object>
+  <object class="GtkTreeModelSort" id="providers_sort">
+    <property name="model">providers_store</property>
+  </object>
+  <object class="GtkAssistant" id="assistant">
+    <property name="title" translatable="1">New Mobile Broadband Connection</property>
+    <property name="modal">1</property>
+    <property name="use_header_bar">1</property>
+    <child>
+      <object class="GtkAssistantPage">
+        <property name="page_type">intro</property>
+        <property name="title" translatable="1">Set up a Mobile Broadband Connection</property>
+        <property name="complete">True</property>
+        <property name="child">
+          <object class="GtkBox" id="intro_page">
+            <property name="margin_start">12</property>
+            <property name="margin_end">12</property>
+            <property name="margin_top">12</property>
+            <property name="margin_bottom">12</property>
+            <property name="orientation">vertical</property>
+            <property name="spacing">6</property>
+            <child>
+              <object class="GtkLabel">
+                <property name="label" translatable="1">This assistant helps you easily set up a mobile broadband connection to a cellular (3G) network.</property>
+                <property name="wrap">1</property>
+                <property name="max_width_chars">60</property>
+                <property name="xalign">0</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkLabel">
+                <property name="label" translatable="1">You will need the following information:</property>
+                <property name="wrap">1</property>
+                <property name="xalign">0</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkLabel" id="provider_name_label">
+                <property name="margin_start">25</property>
+                <property name="label" translatable="1">Your broadband provider’s name</property>
+                <property name="xalign">0</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkLabel" id="plan_name_label">
+                <property name="margin_start">25</property>
+                <property name="label" translatable="1">Your broadband billing plan name</property>
+                <property name="xalign">0</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkLabel" id="apn_label">
+                <property name="margin_start">25</property>
+                <property name="label" translatable="1">(in some cases) Your broadband billing plan APN (Access Point Name)</property>
+                <property name="xalign">0</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkLabel" id="dev_combo_label">
+                <property name="visible">0</property>
+                <property name="valign">end</property>
+                <property name="vexpand">1</property>
+                <property name="label" translatable="1">Create a connection for _this mobile broadband device:</property>
+                <property name="use_underline">1</property>
+                <property name="xalign">0</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkComboBox" id="dev_combo">
+                <property name="visible">0</property>
+                <property name="sensitive">0</property>
+                <property name="model">dev_store</property>
+                <property name="active">0</property>
+              </object>
+            </child>
+          </object>
+        </property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkAssistantPage">
+        <property name="title" translatable="1">Choose your Provider’s Country or Region</property>
+        <property name="child">
+          <object class="GtkBox" id="country_page">
+            <property name="margin_start">12</property>
+            <property name="margin_end">12</property>
+            <property name="margin_top">12</property>
+            <property name="margin_bottom">12</property>
+            <property name="orientation">vertical</property>
+            <property name="spacing">6</property>
+            <child>
+              <object class="GtkLabel">
+                <property name="label" translatable="1">Country or region:</property>
+                <property name="xalign">0</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkScrolledWindow">
+                <property name="focusable">1</property>
+                <property name="vexpand">1</property>
+                <property name="hscrollbar_policy">never</property>
+                <property name="child">
+                  <object class="GtkTreeView" id="country_view">
+                    <property name="focusable">1</property>
+                    <property name="hexpand">1</property>
+                    <property name="vexpand">1</property>
+                    <property name="model">country_sort</property>
+                    <property name="headers_visible">0</property>
+                    <property name="search_column">0</property>
+                    <child internal-child="selection">
+                      <object class="GtkTreeSelection"/>
+                    </child>
+                  </object>
+                </property>
+              </object>
+            </child>
+          </object>
+        </property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkAssistantPage">
+        <property name="title" translatable="1">Choose your Provider</property>
+        <property name="child">
+          <object class="GtkBox" id="providers_page">
+            <property name="margin_start">12</property>
+            <property name="margin_end">12</property>
+            <property name="margin_top">12</property>
+            <property name="margin_bottom">12</property>
+            <property name="orientation">vertical</property>
+            <property name="spacing">6</property>
+            <child>
+              <object class="GtkCheckButton" id="providers_view_radio">
+                <property name="label" translatable="1">Select your provider from a _list:</property>
+                <property name="use_underline">1</property>
+                <property name="active">1</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkScrolledWindow">
+                <property name="height_request">140</property>
+                <property name="focusable">1</property>
+                <property name="margin_start">25</property>
+                <property name="vexpand">1</property>
+                <property name="hscrollbar_policy">never</property>
+                <property name="child">
+                  <object class="GtkTreeView" id="providers_view">
+                    <property name="focusable">1</property>
+                    <property name="model">providers_sort</property>
+                    <property name="search_column">0</property>
+                    <child internal-child="selection">
+                      <object class="GtkTreeSelection"/>
+                    </child>
+                  </object>
+                </property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkCheckButton" id="provider_unlisted_radio">
+                <property name="label" translatable="1">I can’t find my provider and I wish to set up the connection _manually:</property>
+                <property name="use_underline">1</property>
+                <property name="group">providers_view_radio</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkComboBoxText" id="provider_unlisted_type_combo">
+                <property name="margin_start">25</property>
+                <property name="active">0</property>
+                <items>
+                  <item id="0" translatable="yes">My provider uses GSM technology (GPRS, EDGE, UMTS, HSPA)</item>
+                  <item id="1" translatable="yes">My provider uses CDMA technology (1xRTT, EVDO)</item>
+                </items>
+              </object>
+            </child>
+          </object>
+        </property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkAssistantPage">
+        <property name="title" translatable="1">Choose your Billing Plan</property>
+        <property name="child">
+          <object class="GtkBox" id="plan_page">
+            <property name="margin_start">12</property>
+            <property name="margin_end">12</property>
+            <property name="margin_top">12</property>
+            <property name="margin_bottom">12</property>
+            <property name="orientation">vertical</property>
+            <property name="spacing">6</property>
+            <child>
+              <object class="GtkLabel">
+                <property name="label" translatable="1">_Select your plan:</property>
+                <property name="use_underline">1</property>
+                <property name="xalign">0</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkComboBox" id="plan_combo">
+                <property name="model">plan_store</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkLabel">
+                <property name="label" translatable="1">Selected plan _APN (Access Point Name):</property>
+                <property name="use_underline">1</property>
+                <property name="xalign">0</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkEntry" id="plan_apn_entry">
+                <property name="focusable">1</property>
+                <property name="max_length">64</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkBox">
+                <property name="valign">end</property>
+                <property name="vexpand">1</property>
+                <property name="spacing">6</property>
+                <child>
+                  <object class="GtkImage">
+                    <property name="valign">start</property>
+                    <property name="icon_name">dialog-warning</property>
+                    <property name="icon_size">6</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkLabel">
+                    <property name="width_request">500</property>
+                    <property name="label" translatable="1">Warning: Selecting an incorrect plan may result in billing issues for your broadband account or may prevent connectivity.
+
+If you are unsure of your plan please ask your provider for your plan’s APN.</property>
+                    <property name="wrap">1</property>
+                    <property name="max_width_chars">60</property>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+        </property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkAssistantPage">
+        <property name="page_type">confirm</property>
+        <property name="title" translatable="1">Confirm Mobile Broadband Settings</property>
+        <property name="complete">True</property>
+        <property name="child">
+          <object class="GtkBox" id="confirm_page">
+            <property name="margin_start">12</property>
+            <property name="margin_end">12</property>
+            <property name="margin_top">12</property>
+            <property name="margin_bottom">12</property>
+            <property name="orientation">vertical</property>
+            <property name="spacing">6</property>
+            <child>
+              <object class="GtkLabel">
+                <property name="width_request">500</property>
+                <property name="label" translatable="1">Your mobile broadband connection is configured with the following settings:</property>
+                <property name="wrap">1</property>
+                <property name="xalign">0</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkLabel" id="confirm_device_label">
+                <property name="label" translatable="1">Your Device:</property>
+                <property name="xalign">0</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkLabel" id="confirm_device">
+                <property name="margin_start">25</property>
+                <property name="xalign">0</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkLabel">
+                <property name="label" translatable="1">Your Provider:</property>
+                <property name="xalign">0</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkLabel" id="confirm_provider">
+                <property name="margin_start">25</property>
+                <property name="xalign">0</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkLabel" id="confirm_plan_label">
+                <property name="label" translatable="1">Your Plan:</property>
+                <property name="xalign">0</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkBox">
+                <property name="orientation">vertical</property>
+                <property name="spacing">6</property>
+                <child>
+                  <object class="GtkLabel" id="confirm_plan">
+                    <property name="margin_start">25</property>
+                    <property name="xalign">0</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="confirm_apn">
+                    <property name="margin_start">25</property>
+                    <property name="xalign">0</property>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="GtkLabel" id="confirm_connect_after_label">
+                <property name="visible">0</property>
+                <property name="width_request">500</property>
+                <property name="valign">end</property>
+                <property name="vexpand">1</property>
+                <property name="label" translatable="1">A connection will now be made to your mobile broadband provider using the settings you selected. If the connection fails or you cannot access network resources, double-check your settings. To modify your mobile broadband connection settings, choose “Network Connections” from the System → Preferences menu.</property>
+                <property name="wrap">1</property>
+                <property name="max_width_chars">60</property>
+                <property name="xalign">0</property>
+              </object>
+            </child>
+          </object>
+        </property>
+      </object>
+    </child>
+    <child>
+      <placeholder/>
+    </child>
+    <child internal-child="action_area">
+      <object class="GtkAssistantPage">
+        <property name="child">
+          <object class="GtkBox">
+            <property name="visible">0</property>
+          </object>
+        </property>
+      </object>
+    </child>
+  </object>
+</interface>

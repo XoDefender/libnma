@@ -2,13 +2,12 @@
 /*
  * Dan Williams <dcbw@redhat.com>
  *
- * Copyright 2007 - 2019 Red Hat, Inc.
+ * Copyright (C) 2007 - 2021 Red Hat, Inc.
  */
 
 #include "nm-default.h"
 #include "nma-private.h"
 
-#include <ctype.h>
 #include <string.h>
 
 #include "nma-eap.h"
@@ -34,27 +33,27 @@ struct _NMAEapSimple {
 	gboolean pkey_passphrase_requested;
 	GtkEntry *username_entry;
 	GtkEntry *password_entry;
-	GtkToggleButton *show_password;
+	GtkCheckButton *show_password;
 	GtkEntry *pkey_passphrase_entry;
-	GtkToggleButton *show_pkey_passphrase;
+	GtkCheckButton *show_pkey_passphrase;
 	guint idle_func_id;
 };
 
 static void
-show_password_toggled_cb (GtkToggleButton *button, NMAEapSimple *method)
+show_password_toggled_cb (GtkCheckButton *button, NMAEapSimple *method)
 {
 	gboolean visible;
 
-	visible = gtk_toggle_button_get_active (button);
+	visible = gtk_check_button_get_active (button);
 	gtk_entry_set_visibility (method->password_entry, visible);
 }
 
 static void
-show_pkey_passphrase_toggled_cb (GtkToggleButton *button, NMAEapSimple *method)
+show_pkey_passphrase_toggled_cb (GtkCheckButton *button, NMAEapSimple *method)
 {
 	gboolean visible;
 
-	visible = gtk_toggle_button_get_active (button);
+	visible = gtk_check_button_get_active (button);
 	gtk_entry_set_visibility (method->pkey_passphrase_entry, visible);
 }
 
@@ -81,7 +80,7 @@ validate (NMAEap *parent, GError **error)
 
 	if (method->username_requested) {
 		text = gtk_editable_get_text (GTK_EDITABLE (method->username_entry));
-		if (!text || !strlen (text)) {
+		if (!text || !*text) {
 			widget_set_error (GTK_WIDGET (method->username_entry));
 			g_set_error_literal (error, NMA_ERROR, NMA_ERROR_GENERIC, _("missing EAP username"));
 			ret = FALSE;
@@ -97,7 +96,7 @@ validate (NMAEap *parent, GError **error)
 			widget_unset_error (GTK_WIDGET (method->password_entry));
 		else {
 			text = gtk_editable_get_text (GTK_EDITABLE (method->password_entry));
-			if (!text || !strlen (text)) {
+			if (!text || !*text) {
 				widget_set_error (GTK_WIDGET (method->password_entry));
 				if (ret) {
 					g_set_error_literal (error, NMA_ERROR, NMA_ERROR_GENERIC,
@@ -111,7 +110,7 @@ validate (NMAEap *parent, GError **error)
 
 	if (method->pkey_passphrase_requested) {
 		text = gtk_editable_get_text (GTK_EDITABLE (method->pkey_passphrase_entry));
-		if (!text || !strlen (text)) {
+		if (!text || !*text) {
 			widget_set_error (GTK_WIDGET (method->pkey_passphrase_entry));
 			if (ret) {
 				g_set_error_literal (error, NMA_ERROR, NMA_ERROR_GENERIC,
@@ -282,11 +281,11 @@ password_storage_changed (GObject *entry,
 	if ((always_ask || not_required) && !secrets_only) {
 		/* we always clear this button and do not restore it
 		 * (because we want to hide the password). */
-		gtk_toggle_button_set_active (method->show_password, FALSE);
+		gtk_check_button_set_active (method->show_password, FALSE);
 	}
 
 	gtk_widget_set_sensitive (GTK_WIDGET (method->show_password),
-	                         (!always_ask && !not_required) || secrets_only);
+	                          (!always_ask && !not_required) || secrets_only);
 
 	if (!method->idle_func_id)
 		method->idle_func_id = g_idle_add ((GSourceFunc) stuff_changed, method);
@@ -311,7 +310,7 @@ set_userpass_ui (NMAEapSimple *method)
 		gtk_editable_set_text (GTK_EDITABLE (method->password_entry), "");
 	}
 
-	gtk_toggle_button_set_active (method->show_password, method->ws_8021x->show_password);
+	gtk_check_button_set_active (method->show_password, method->ws_8021x->show_password);
 
 	password_storage_changed (NULL, NULL, method);
 }
@@ -329,7 +328,7 @@ widgets_unrealized (GtkWidget *widget, NMAEapSimple *method)
 	                     gtk_editable_get_text (GTK_EDITABLE (method->username_entry)),
 	                     gtk_editable_get_text (GTK_EDITABLE (method->password_entry)),
 	                     always_ask_selected (method->password_entry),
-	                     gtk_toggle_button_get_active (method->show_password));
+	                     gtk_check_button_get_active (method->show_password));
 }
 
 static void
@@ -448,7 +447,7 @@ nma_eap_simple_new (NMAWs8021x *ws_8021x,
 
 	widget = GTK_WIDGET (gtk_builder_get_object (parent->builder, "show_checkbutton_eapsimple"));
 	g_assert (widget);
-	method->show_password = GTK_TOGGLE_BUTTON (widget);
+	method->show_password = GTK_CHECK_BUTTON (widget);
 	g_signal_connect (G_OBJECT (widget), "toggled",
 	                  (GCallback) show_password_toggled_cb,
 	                  method);
@@ -462,7 +461,7 @@ nma_eap_simple_new (NMAWs8021x *ws_8021x,
 
 	widget = GTK_WIDGET (gtk_builder_get_object (parent->builder, "eap_simple_show_pkey_passphrase_checkbutton"));
 	g_assert (widget);
-	method->show_pkey_passphrase = GTK_TOGGLE_BUTTON (widget);
+	method->show_pkey_passphrase = GTK_CHECK_BUTTON (widget);
 	g_signal_connect (G_OBJECT (widget), "toggled",
 	                  (GCallback) show_pkey_passphrase_toggled_cb,
 	                  method);

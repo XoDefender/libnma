@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface domain="libnma">
+  <requires lib="gtk" version="4.0"/>
+  <template class="NMAPkcs11TokenLoginDialog" parent="GtkDialog">
+    <child internal-child="content_area">
+      <object class="GtkBox">
+        <property name="orientation">vertical</property>
+        <property name="spacing">2</property>
+        <child>
+          <object class="GtkBox">
+            <property name="margin_start">12</property>
+            <property name="margin_end">12</property>
+            <property name="margin_top">12</property>
+            <property name="margin_bottom">12</property>
+            <property name="orientation">vertical</property>
+            <child>
+              <object class="GtkEntry" id="pin_entry">
+                <property name="focusable">1</property>
+                <property name="visibility">0</property>
+                <property name="input_purpose">password</property>
+                <signal name="activate" handler="pin_activate" swapped="no"/>
+                <signal name="changed" handler="pin_changed" swapped="no"/>
+              </object>
+            </child>
+            <child>
+              <object class="GtkCheckButton" id="remember">
+                <property name="label" translatable="1">_Remember PIN</property>
+                <property name="focusable">1</property>
+                <property name="halign">start</property>
+                <property name="use_underline">1</property>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+    <action-widgets>
+      <action-widget response="-6">cancel</action-widget>
+      <action-widget response="-3">login</action-widget>
+    </action-widgets>
+    <child internal-child="action_area">
+      <object class="GtkBox">
+        <property name="valign">center</property>
+        <child>
+          <object class="GtkButton" id="cancel">
+            <property name="hexpand">1</property>
+            <property name="label" translatable="1">_Cancel</property>
+            <property name="use_underline">1</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkButton" id="login">
+            <property name="hexpand">1</property>
+            <property name="label" translatable="1">_Login</property>
+            <property name="use_underline">1</property>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>

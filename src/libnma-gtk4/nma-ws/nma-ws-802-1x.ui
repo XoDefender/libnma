@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface domain="libnma">
+  <requires lib="gtk" version="4.0"/>
+  <object class="GtkListStore" id="model5">
+    <columns>
+      <column type="gchararray"/>
+    </columns>
+    <data>
+      <row>
+        <col id="0"> </col>
+      </row>
+    </data>
+  </object>
+  <template class="NMAWs8021x" parent="GtkGrid">
+    <property name="row_spacing">6</property>
+    <property name="column_spacing">6</property>
+    <child>
+      <object class="GtkLabel" id="eap_auth_label">
+        <property name="label" translatable="1">Au_thentication</property>
+        <property name="use_underline">1</property>
+        <property name="mnemonic_widget">eap_auth_combo</property>
+        <property name="xalign">1</property>
+        <layout>
+          <property name="column">0</property>
+          <property name="row">0</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="GtkComboBox" id="eap_auth_combo">
+        <property name="hexpand">1</property>
+        <property name="model">model5</property>
+        <child>
+          <object class="GtkCellRendererText" id="renderer5"/>
+          <attributes>
+            <attribute name="text">0</attribute>
+          </attributes>
+        </child>
+        <signal name="changed" handler="auth_combo_changed_cb" swapped="no"/>
+        <layout>
+          <property name="column">1</property>
+          <property name="row">0</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="GtkBox" id="eap_vbox">
+        <property name="hexpand">1</property>
+        <property name="orientation">vertical</property>
+        <property name="spacing">6</property>
+        <child>
+          <placeholder/>
+        </child>
+        <layout>
+          <property name="column">0</property>
+          <property name="row">1</property>
+          <property name="column-span">2</property>
+        </layout>
+      </object>
+    </child>
+  </template>
+</interface>

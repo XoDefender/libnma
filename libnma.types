@@ -12,6 +12,7 @@ nma_ws_802_1x_get_type
 nma_ws_dynamic_wep_get_type
 nma_ws_get_type
 nma_ws_leap_get_type
+nma_ws_owe_get_type
 nma_ws_sae_get_type
 nma_ws_wep_key_get_type
 nma_ws_wpa_eap_get_type

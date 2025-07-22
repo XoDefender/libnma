@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface domain="libnma">
+  <requires lib="gtk" version="4.0"/>
+  <object class="GtkGrid" id="eap_leap_grid">
+    <property name="valign">start</property>
+    <property name="row_spacing">6</property>
+    <property name="column_spacing">6</property>
+    <child>
+      <object class="GtkLabel" id="eap_leap_username_label">
+        <property name="label" translatable="1">_Username</property>
+        <property name="use_underline">1</property>
+        <property name="mnemonic_widget">eap_leap_username_entry</property>
+        <property name="xalign">1</property>
+        <layout>
+          <property name="column">0</property>
+          <property name="row">0</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="GtkLabel" id="eap_leap_password_label">
+        <property name="label" translatable="1">_Password</property>
+        <property name="use_underline">1</property>
+        <property name="mnemonic_widget">eap_leap_password_entry</property>
+        <property name="xalign">1</property>
+        <layout>
+          <property name="column">0</property>
+          <property name="row">1</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="GtkEntry" id="eap_leap_password_entry">
+        <property name="focusable">1</property>
+        <property name="hexpand">1</property>
+        <property name="visibility">0</property>
+        <property name="activates_default">1</property>
+        <layout>
+          <property name="column">1</property>
+          <property name="row">1</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="GtkCheckButton" id="show_checkbutton_eapleap">
+        <property name="label" translatable="1">Sho_w password</property>
+        <property name="focusable">1</property>
+        <property name="hexpand">1</property>
+        <property name="use_underline">1</property>
+        <layout>
+          <property name="column">1</property>
+          <property name="row">2</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="GtkEntry" id="eap_leap_username_entry">
+        <property name="focusable">1</property>
+        <property name="hexpand">1</property>
+        <layout>
+          <property name="column">1</property>
+          <property name="row">0</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <placeholder/>
+    </child>
+  </object>
+</interface>

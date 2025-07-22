@@ -136,12 +136,34 @@ src/nma-resources.c: src/nma.gresource.xml $(shell $(GLIB_COMPILE_RESOURCES) --s
 
 src/libnma-gtk4/nma-resources.c: src/nma.gresource.xml $(shell $(GLIB_COMPILE_RESOURCES) --generate-dependencies $(srcdir)/src/nma.gresource.xml |sed "s,^,$(builddir)/src/libnma-gtk4/,")
 	@mkdir -p $(builddir)/src/libnma-gtk4 $(builddir)/src/libnma-gtk4/nma-ws
-	$(AM_V_GEN) $(GLIB_COMPILE_RESOURCES) $< --target=$@ --sourcedir=$(builddir)/src/libnma-gtk4 --generate-source --internal
-
+	$(AM_V_GEN) $(GLIB_COMPILE_RESOURCES) $< --target=$@ --sourcedir=$(srcdir)/src/libnma-gtk4 --sourcedir=$(builddir)/src/libnma-gtk4 --generate-source --internal
 
 src/libnma-gtk4/%.ui: src/%.ui
 	@mkdir -p $(builddir)/src/libnma-gtk4 $(builddir)/src/libnma-gtk4/nma-ws
-	gtk4-builder-tool simplify --3to4 $< |awk '/^</ {xml=1} {if (xml) print; else print >"/dev/stderr"}' >$@
+	gtk4-builder-tool simplify --3to4 $< |grep -v can.default >$@
+
+# Include Gtk4 GtkBuilder files in release tarball.
+# This way we can ship files that have been tested to be known good.
+# Running gtk4-builder-tool at build time is not recommended:
+# https://gitlab.gnome.org/GNOME/gtk/-/merge_requests/4415
+EXTRA_DIST += \
+	src/libnma-gtk4/nma-mobile-wizard.ui \
+	src/libnma-gtk4/nma-bar-code-widget.ui \
+	src/libnma-gtk4/nma-ws/nma-ws-leap.ui \
+	src/libnma-gtk4/nma-ws/nma-eap-leap.ui \
+	src/libnma-gtk4/nma-ws/nma-ws-wpa-psk.ui \
+	src/libnma-gtk4/nma-ws/nma-eap-simple.ui \
+	src/libnma-gtk4/nma-ws/nma-ws-wep-key.ui \
+	src/libnma-gtk4/nma-ws/nma-eap-tls.ui \
+	src/libnma-gtk4/nma-ws/nma-ws-802-1x.ui \
+	src/libnma-gtk4/nma-ws/nma-eap-fast.ui \
+	src/libnma-gtk4/nma-ws/nma-eap-peap.ui \
+	src/libnma-gtk4/nma-ws/nma-eap-ttls.ui \
+	src/libnma-gtk4/nma-ws/nma-ws-sae.ui \
+	src/libnma-gtk4/nma-pkcs11-token-login-dialog.ui \
+	src/libnma-gtk4/nma-vpn-password-dialog.ui \
+	src/libnma-gtk4/nma-pkcs11-cert-chooser-dialog.ui \
+	src/libnma-gtk4/wifi.ui
 
 CLEANFILES += \
 	$(libnma_h_priv_gen) \
@@ -172,6 +194,7 @@ libnma_h_pub = \
 	src/nma-ws/nma-ws-dynamic-wep.h \
 	src/nma-ws/nma-ws.h \
 	src/nma-ws/nma-ws-leap.h \
+	src/nma-ws/nma-ws-owe.h \
 	src/nma-ws/nma-ws-sae.h \
 	src/nma-ws/nma-ws-wep-key.h \
 	src/nma-ws/nma-ws-wpa-eap.h \
@@ -185,7 +208,7 @@ libnma_c_real = \
 	src/nma-ui-utils.c \
 	src/init.c \
 	src/nma-cert-chooser.c \
-	src/nma-file-cert-chooser.c \
+	src/nma-cert-chooser-button.c \
 	src/nma-bar-code-widget.c \
 	src/nma-bar-code.c \
 	\
@@ -200,6 +223,7 @@ libnma_c_real = \
 	src/nma-ws/nma-ws-dynamic-wep.c \
 	src/nma-ws/nma-ws-helpers.c \
 	src/nma-ws/nma-ws-leap.c \
+	src/nma-ws/nma-ws-owe.c \
 	src/nma-ws/nma-ws-sae.c \
 	src/nma-ws/nma-ws-wep-key.c \
 	src/nma-ws/nma-ws-wpa-eap.c \
@@ -212,7 +236,6 @@ EXTRA_DIST += \
 	src/qrcodegen.h
 
 libnma_h_priv_real = \
-	src/nma-cert-chooser-private.h \
 	src/nma-private.h \
 	src/nma-ws/nma-eap-fast.h \
 	src/nma-ws/nma-eap-leap.h \
@@ -221,6 +244,7 @@ libnma_h_priv_real = \
 	src/nma-ws/nma-eap-tls.h \
 	src/nma-ws/nma-eap-ttls.h \
 	src/nma-ws/nma-eap.h \
+	src/nma-cert-chooser-button.h \
 	src/nma-ws/nma-ws-802-1x-private.h \
 	src/nma-ws/nma-ws-helpers.h \
 	src/nma-ws/nma-ws-private.h \
@@ -228,14 +252,11 @@ libnma_h_priv_real = \
 
 libnma_h_priv_gcr = \
 	src/nma-pkcs11-token-login-dialog.h \
-	src/nma-pkcs11-cert-chooser-dialog.h \
-	src/nma-cert-chooser-button.h
+	src/nma-pkcs11-cert-chooser-dialog.h
 
 libnma_c_gcr = \
 	src/nma-pkcs11-token-login-dialog.c \
-	src/nma-pkcs11-cert-chooser-dialog.c \
-	src/nma-cert-chooser-button.c \
-	src/nma-pkcs11-cert-chooser.c
+	src/nma-pkcs11-cert-chooser-dialog.c
 
 src_libnmadir = $(includedir)/libnma
 
@@ -323,6 +344,7 @@ src_tests_mobile_wizard_CPPFLAGS = \
 	$(GLIB_CFLAGS) \
 	$(GTK3_CFLAGS) \
 	$(LIBNM_CFLAGS) \
+	-DNMALOCALEDIR=\"$(datadir)/locale\" \
 	"-I$(srcdir)/shared/" \
 	"-I$(srcdir)/src" \
 	-Isrc
@@ -461,7 +483,7 @@ src_libnma_gtk4_la_SOURCES = \
 	$(libnma_h_priv_real) \
 	$(libnma_c_real)
 
-if WITH_GCR_GTK4
+if WITH_GCR
 src_libnma_gtk4_la_SOURCES += \
 	$(libnma_h_priv_gcr) \
 	$(libnma_c_gcr)
@@ -487,13 +509,13 @@ src_libnma_gtk4_la_CFLAGS = \
 	-Isrc \
 	$(GTK4_CFLAGS) \
 	$(LIBNM_CFLAGS) \
-	$(GCR_GCR4_CFLAGS)
+	$(GCR_CFLAGS)
 
 src_libnma_gtk4_la_LIBADD = \
 	src/utils/libutils-libnm-gtk4.la \
 	$(GTK4_LIBS) \
 	$(LIBNM_LIBS) \
-	$(GCR_GCR4_LIBS)
+	$(GCR_LIBS)
 
 EXTRA_src_libnma_gtk4_la_DEPENDENCIES = src/libnma.ver
 
@@ -513,7 +535,7 @@ src_NMA4_1_0_gir_LIBS = src/libnma-gtk4.la
 src_NMA4_1_0_gir_FILES = \
 	$(libnma_h_pub) \
 	$(libnma_c_real)
-if WITH_GCR_GTK4
+if WITH_GCR
 src_NMA4_1_0_gir_FILES += \
 	$(libnma_c_gcr)
 endif
@@ -538,6 +560,7 @@ src_tests_mobile_wizard_gtk4_CPPFLAGS = \
 	$(GLIB_CFLAGS) \
 	$(GTK4_CFLAGS) \
 	$(LIBNM_CFLAGS) \
+	-DNMALOCALEDIR=\"$(datadir)/locale\" \
 	"-I$(srcdir)/shared/" \
 	"-I$(srcdir)/src" \
 	-Isrc
@@ -760,7 +783,6 @@ CFILE_GLOB = $(top_srcdir)/src/*.c
 IGNORE_HFILES = \
 	nma-resources.h \
 	nma-version.h \
-	nma-cert-chooser-private.h \
 	nma-private.h \
 	nma-pkcs11-token-login-dialog.h \
 	nma-pkcs11-cert-chooser-dialog.h \
@@ -769,17 +791,19 @@ IGNORE_HFILES = \
 
 mkdb_ignore_c_files = \
 	nma-resources.c \
-	nma-file-cert-chooser.c \
 	nma-pkcs11-token-login-dialog.c \
 	nma-pkcs11-cert-chooser-dialog.c \
-	nma-cert-chooser-button.c \
-	nma-pkcs11-cert-chooser.c
+	nma-cert-chooser-button.c
 
 MKDB_OPTIONS = --ignore-files "$(IGNORE_HFILES) $(mkdb_ignore_c_files)"
 
 ###############################################################################
 
-gsettings_SCHEMAS = org.gnome.nm-applet.gschema.xml
+# org.gnome.nm-applet.gschema.xml belongs to nm-applet.
+# Kept here for now to avoid breaking on upgrades.
+gsettings_SCHEMAS = \
+	org.gnome.nm-applet.gschema.xml \
+	org.gnome.nm-applet.eap.gschema.xml
 @GSETTINGS_RULES@
 
 check_PROGRAMS += $(check_programs)

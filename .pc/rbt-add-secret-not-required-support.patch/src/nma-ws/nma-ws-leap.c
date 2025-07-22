@@ -2,13 +2,12 @@
 /*
  * Dan Williams <dcbw@redhat.com>
  *
- * Copyright 2007 - 2019 Red Hat, Inc.
+ * Copyright (C) 2007 - 2021 Red Hat, Inc.
  */
 
 #include "nm-default.h"
 #include "nma-private.h"
 
-#include <ctype.h>
 #include <string.h>
 
 #include "nma-ws.h"
@@ -53,7 +52,7 @@ show_toggled_cb (GtkCheckButton *button, gpointer user_data)
 	NMAWsLeap *self = NMA_WS_LEAP (user_data);
 	gboolean visible;
 
-	visible = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (button));
+	visible = gtk_check_button_get_active (GTK_CHECK_BUTTON (button));
 	gtk_entry_set_visibility (GTK_ENTRY (self->leap_password_entry), visible);
 }
 
@@ -66,7 +65,7 @@ validate (NMAWs *ws, GError **error)
 	gboolean ret = TRUE;
 
 	text = gtk_editable_get_text (GTK_EDITABLE (self->leap_username_entry));
-	if (!text || !strlen (text)) {
+	if (!text || !*text) {
 		widget_set_error (self->leap_username_entry);
 		g_set_error_literal (error, NMA_ERROR, NMA_ERROR_GENERIC, _("missing leap-username"));
 		ret = FALSE;
@@ -79,7 +78,7 @@ validate (NMAWs *ws, GError **error)
 
 	if (   secret_flags & NM_SETTING_SECRET_FLAG_NOT_SAVED
 	    || secret_flags & NM_SETTING_SECRET_FLAG_NOT_REQUIRED
-	    || (text && strlen (text))) {
+	    || (text && *text)) {
 		widget_unset_error (self->leap_password_entry);
 	} else {
 		widget_set_error (self->leap_password_entry);

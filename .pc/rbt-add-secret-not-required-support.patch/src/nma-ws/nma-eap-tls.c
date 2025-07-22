@@ -3,14 +3,11 @@
  * Dan Williams <dcbw@redhat.com>
  * Lubomir Rintel <lkundrak@v3.sk>
  *
- * Copyright 2007 - 2019 Red Hat, Inc.
+ * Copyright (C) 2007 - 2021 Red Hat, Inc.
  */
 
 #include "nm-default.h"
 #include "nma-private.h"
-
-#include <ctype.h>
-#include <string.h>
 
 #include "nma-eap.h"
 #include "nma-ws.h"
@@ -42,7 +39,7 @@ validate (NMAEap *parent, GError **error)
 	widget = GTK_WIDGET (gtk_builder_get_object (parent->builder, "eap_tls_identity_entry"));
 	g_assert (widget);
 	identity = gtk_editable_get_text (GTK_EDITABLE (widget));
-	if (!identity || !strlen (identity)) {
+	if (!identity || !*identity) {
 		widget_set_error (widget);
 		g_set_error_literal (error, NMA_ERROR, NMA_ERROR_GENERIC, _("missing EAP-TLS identity"));
 		return FALSE;
@@ -66,7 +63,7 @@ ca_cert_not_required_toggled (GtkWidget *button, gpointer user_data)
 	NMAEapTls *method = (NMAEapTls *) user_data;
 
 	gtk_widget_set_sensitive (method->ca_cert_chooser,
-	                          !gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (button)));
+	                          !gtk_check_button_get_active (GTK_CHECK_BUTTON (button)));
 }
 
 static void
@@ -95,8 +92,8 @@ fill_connection (NMAEap *parent, NMConnection *connection)
 	NMSetting8021x *s_8021x;
 	NMSettingSecretFlags secret_flags;
 	GtkWidget *widget;
+	const char *text = NULL;
 	char *value = NULL;
-	const char *password = NULL;
 	GError *error = NULL;
 	gboolean ca_cert_error = FALSE;
 	NMSetting8021xCKScheme scheme;
@@ -115,21 +112,24 @@ fill_connection (NMAEap *parent, NMConnection *connection)
 
 	widget = GTK_WIDGET (gtk_builder_get_object (parent->builder, "eap_tls_domain_entry"));
 	g_assert (widget);
-	g_object_set (s_8021x,
-	              parent->phase2 ? NM_SETTING_802_1X_PHASE2_DOMAIN_SUFFIX_MATCH : NM_SETTING_802_1X_DOMAIN_SUFFIX_MATCH,
-	              gtk_editable_get_text (GTK_EDITABLE (widget)), NULL);
+	text = gtk_editable_get_text (GTK_EDITABLE (widget));
+	if (text && *text) {
+		g_object_set (s_8021x,
+		              parent->phase2 ? NM_SETTING_802_1X_PHASE2_DOMAIN_SUFFIX_MATCH : NM_SETTING_802_1X_DOMAIN_SUFFIX_MATCH,
+		              gtk_editable_get_text (GTK_EDITABLE (widget)), NULL);
+	}
 
 	/* TLS private key */
-	password = nma_cert_chooser_get_key_password (NMA_CERT_CHOOSER (method->client_cert_chooser));
+	text = nma_cert_chooser_get_key_password (NMA_CERT_CHOOSER (method->client_cert_chooser));
 	value = nma_cert_chooser_get_key (NMA_CERT_CHOOSER (method->client_cert_chooser), &scheme);
 
 	if (parent->phase2) {
-		if (!nm_setting_802_1x_set_phase2_private_key (s_8021x, value, password, scheme, &format, &error)) {
+		if (!nm_setting_802_1x_set_phase2_private_key (s_8021x, value, text, scheme, &format, &error)) {
 			g_warning ("Couldn't read phase2 private key '%s': %s", value, error ? error->message : "(unknown)");
 			g_clear_error (&error);
 		}
 	} else {
-		if (!nm_setting_802_1x_set_private_key (s_8021x, value, password, scheme, &format, &error)) {
+		if (!nm_setting_802_1x_set_private_key (s_8021x, value, text, scheme, &format, &error)) {
 			g_warning ("Couldn't read private key '%s': %s", value, error ? error->message : "(unknown)");
 			g_clear_error (&error);
 		}
@@ -480,7 +480,7 @@ nma_eap_tls_new (NMAWs8021x *ws_8021x,
 	                            phase2 ? nm_setting_802_1x_get_phase2_private_key_password : nm_setting_802_1x_get_private_key_password);
 
 	widget = GTK_WIDGET (gtk_builder_get_object (parent->builder, "eap_tls_ca_cert_not_required_checkbox"));
-	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), ca_not_required);
+	gtk_check_button_set_active (GTK_CHECK_BUTTON (widget), ca_not_required);
 
 	/* Create password-storage popup menus for password entries under their secondary icon */
 	nma_cert_chooser_setup_cert_password_storage (NMA_CERT_CHOOSER (method->ca_cert_chooser),

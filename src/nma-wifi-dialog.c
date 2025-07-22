@@ -3,23 +3,18 @@
  *
  * Dan Williams <dcbw@redhat.com>
  *
- * Copyright 2007 - 2017 Red Hat, Inc.
+ * Copyright (C) 2007 - 2021 Red Hat, Inc.
  */
 
 #include "nm-default.h"
 #include "nma-private.h"
 
 #include <string.h>
-#include <netinet/ether.h>
-
 #include <NetworkManager.h>
 
 #include "nma-wifi-dialog.h"
 #include "nma-ws.h"
 #include "nma-eap.h"
-
-/* For compatibility with NetworkManager-1.20 and earlier. */
-#define NMU_SEC_SAE 9
 
 G_DEFINE_TYPE (NMAWifiDialog, nma_wifi_dialog, GTK_TYPE_DIALOG)
 
@@ -32,6 +27,12 @@ typedef struct {
 	NMConnection *connection;
 	gboolean canceled;
 } GetSecretsInfo;
+
+typedef struct {
+	GtkWidget *client_cert_chooser;
+	GtkWidget *ca_cert_chooser;
+	GtkEntry *pin_entry;
+} NMACertAuthData;
 
 typedef struct {
 	NMClient *client;
@@ -57,6 +58,9 @@ typedef struct {
 	guint revalidate_id;
 
 	GetSecretsInfo *secrets_info;
+
+	NMAWs *ws;
+	NMACertAuthData *cert_auth_data;
 } NMAWifiDialogPrivate;
 
 enum {
@@ -104,6 +108,34 @@ size_group_clear (GtkSizeGroup *group)
 		gtk_size_group_remove_widget (group, GTK_WIDGET (iter->data));
 		iter = gtk_size_group_get_widgets (group);
 	}
+}
+
+static const guchar *
+nma_cert_auth_data_get_pin_value (NMACertAuthData *data)
+{
+	GtkEntryBuffer *buffer = gtk_entry_get_buffer (data->pin_entry);
+	return (guchar *) gtk_entry_buffer_get_text (buffer);
+}
+
+static NMACertAuthData *nma_cert_auth_data_new (NMConnection *connection)
+{
+	NMACertAuthData *method;
+	method = g_slice_alloc0 (sizeof (NMACertAuthData));
+	if (!method) {
+		return NULL;
+	}
+
+	method->ca_cert_chooser = nma_cert_chooser_new ("CA", NMA_CERT_CHOOSER_FLAG_CERT);
+	method->client_cert_chooser = nma_cert_chooser_new ("User", 9);
+	method->pin_entry = GTK_ENTRY(gtk_entry_new());
+
+	gtk_entry_set_visibility(method->pin_entry, FALSE);
+
+	//gtk_widget_show(method->ca_cert_chooser);
+	gtk_widget_show(method->client_cert_chooser);
+	gtk_widget_show(GTK_WIDGET(method->pin_entry));
+
+	return method;
 }
 
 static void
@@ -212,21 +244,17 @@ security_combo_changed (GtkWidget *combo,
 	NMAWifiDialog *self = NMA_WIFI_DIALOG (user_data);
 	NMAWifiDialogPrivate *priv = NMA_WIFI_DIALOG_GET_PRIVATE (self);
 	GtkWidget *vbox; // *def_widget;
-	GList *elt, *children;
 	GtkTreeIter iter;
 	GtkTreeModel *model;
-	NMAWs *ws = NULL;
 
 	vbox = GTK_WIDGET (gtk_builder_get_object (priv->builder, "security_vbox"));
 	g_assert (vbox);
 
 	size_group_clear (priv->group);
 
-	/* Remove any previous wireless security widgets */
-	children = gtk_container_get_children (GTK_CONTAINER (vbox));
-	for (elt = children; elt; elt = g_list_next (elt))
-		gtk_container_remove (GTK_CONTAINER (vbox), GTK_WIDGET (elt->data));
-	g_list_free (children);
+	/* Remove the previous wireless security widget */
+	if (priv->ws)
+		gtk_box_remove (GTK_BOX (vbox), GTK_WIDGET (priv->ws));
 
 	model = gtk_combo_box_get_model (GTK_COMBO_BOX (combo));
 	if (!gtk_combo_box_get_active_iter (GTK_COMBO_BOX (combo), &iter)) {
@@ -234,24 +262,24 @@ security_combo_changed (GtkWidget *combo,
 		return;
 	}
 
-	gtk_tree_model_get (model, &iter, S_SEC_COLUMN, &ws, -1);
-	if (!ws) {
+	gtk_tree_model_get (model, &iter, S_SEC_COLUMN, &priv->ws, -1);
+	if (!priv->ws) {
 		/* Revalidate dialog if the user picked "None" so the OK button
 		 * gets enabled if there's already a valid SSID.
 		 */
-		ssid_entry_changed (NULL, self);
+		ssid_entry_changed (NULL, self);		
 		return;
 	}
 
-	gtk_widget_unparent (GTK_WIDGET (ws));
+	gtk_widget_unparent (GTK_WIDGET (priv->ws));
 
 	size_group_add_permanent (priv->group, priv->builder);
-	nma_ws_add_to_size_group (ws, priv->group);
+	nma_ws_add_to_size_group (priv->ws, priv->group);
 
-	gtk_container_add (GTK_CONTAINER (vbox), GTK_WIDGET (ws));
+	gtk_box_append (GTK_BOX (vbox), GTK_WIDGET (priv->ws));
 
 	/* Re-validate */
-	stuff_changed_cb (ws, self);
+	stuff_changed_cb (priv->ws, self);
 
 #if 0
 	/* Set focus to the security method's default widget, but only if the
@@ -264,7 +292,7 @@ security_combo_changed (GtkWidget *combo,
 	}
 #endif
 
-	g_object_unref (ws);
+	g_object_unref (priv->ws);
 }
 
 static void
@@ -522,7 +550,7 @@ connection_combo_init (NMAWifiDialog *self)
 	gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (widget), renderer, TRUE);
 	gtk_cell_layout_add_attribute (GTK_CELL_LAYOUT (widget), renderer,
 	                               "text", C_NAME_COLUMN);
-#if !GTK_CHECK_VERSION(3,96,0)
+#if !GTK_CHECK_VERSION(4,0,0)
 	gtk_combo_box_set_wrap_width (GTK_COMBO_BOX (widget), 1);
 #endif
 
@@ -688,6 +716,9 @@ get_default_type_for_security (NMSettingWirelessSecurity *sec,
 	if (!strcmp (key_mgmt, "none"))
 		return NMU_SEC_STATIC_WEP;
 
+	if (!strcmp (key_mgmt, "owe"))
+		return NMU_SEC_OWE;
+
 	if (   !strcmp (key_mgmt, "ieee8021x")
 	    && (!have_ap || (ap_flags & NM_802_11_AP_FLAGS_PRIVACY))) {
 		if (auth_alg && !strcmp (auth_alg, "leap"))
@@ -828,6 +859,13 @@ out:
 }
 
 static gboolean
+allow_wep (void)
+{
+	/* Note to whoever uses this: this might go away! */
+	return !!getenv ("NM_ALLOW_INSECURE_WEP");
+}
+
+static gboolean
 security_valid (NMUtilsSecurityType sectype,
                 NM80211Mode mode,
                 NMDeviceWifiCapabilities wifi_caps,
@@ -836,6 +874,11 @@ security_valid (NMUtilsSecurityType sectype,
                 NM80211ApSecurityFlags ap_wpa,
                 NM80211ApSecurityFlags ap_rsn)
 {
+	if (   !have_ap && !allow_wep()
+	    && (sectype == NMU_SEC_STATIC_WEP || sectype == NMU_SEC_DYNAMIC_WEP)) {
+		return FALSE;
+	}
+
 	switch (mode) {
 	case NM_802_11_MODE_AP:
 		if (sectype == NMU_SEC_SAE)
@@ -851,6 +894,26 @@ security_valid (NMUtilsSecurityType sectype,
 		                                ap_flags, ap_wpa, ap_rsn);
 	}
 	g_assert_not_reached ();
+}
+
+static void
+add_cert_auth_data_to_dialog (GtkDialog *dialog, NMACertAuthData *eap_tls, NMSetting8021x *s_8021x)
+{
+	g_assert(eap_tls);
+	g_assert(dialog);
+
+    GtkWidget *content_area = gtk_dialog_get_content_area(GTK_DIALOG(dialog));
+	GtkWidget *label = gtk_label_new("PIN:");
+	GtkWidget *hbox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 10);
+
+ 	gtk_box_pack_start(GTK_BOX(hbox), label, FALSE, FALSE, 0);
+	gtk_box_pack_start(GTK_BOX(hbox), GTK_WIDGET(eap_tls->pin_entry), TRUE, TRUE, 0);
+
+    //gtk_box_pack_start(GTK_BOX(content_area), eap_tls->ca_cert_chooser, TRUE, TRUE, 0);
+	gtk_box_pack_start(GTK_BOX(content_area), eap_tls->client_cert_chooser, TRUE, TRUE, 0);
+	gtk_box_pack_start(GTK_BOX(content_area), hbox, TRUE, TRUE, 0);
+
+	gtk_widget_show_all(hbox);
 }
 
 static gboolean
@@ -917,7 +980,7 @@ security_combo_init (NMAWifiDialog *self, gboolean secrets_only,
 				wep_type = NM_WEP_KEY_TYPE_KEY;
 		}
 	} else if (mode == NM_802_11_MODE_ADHOC) {
-		default_type = NMU_SEC_STATIC_WEP;
+		default_type = NMU_SEC_WPA2_PSK;
 		wep_type = NM_WEP_KEY_TYPE_PASSPHRASE;
 	}
 
@@ -1020,6 +1083,17 @@ security_combo_init (NMAWifiDialog *self, gboolean secrets_only,
 		item++;
 	}
 
+	if (security_valid (NMU_SEC_OWE, mode, dev_caps, !!priv->ap, ap_flags, ap_wpa, ap_rsn)) {
+		NMAWsOwe *ws_owe;
+
+		ws_owe = nma_ws_owe_new (priv->connection);
+		add_security_item (self, NMA_WS (ws_owe), sec_model,
+		                   &iter, _("Enhanced Open"));
+		if (active < 0 && default_type == NMU_SEC_OWE)
+			active = item;
+		item++;
+	}
+
 	gtk_combo_box_set_model (GTK_COMBO_BOX (priv->sec_combo), GTK_TREE_MODEL (sec_model));
 	gtk_combo_box_set_active (GTK_COMBO_BOX (priv->sec_combo), active < 0 ? 0 : (guint32) active);
 	g_object_unref (G_OBJECT (sec_model));
@@ -1068,6 +1142,7 @@ revalidate (gpointer user_data)
 	return FALSE;
 }
 
+// FYI:Kirill - create get secret dialog here
 static gboolean
 internal_init (NMAWifiDialog *self,
                NMConnection *specific_connection,
@@ -1078,10 +1153,10 @@ internal_init (NMAWifiDialog *self,
 {
 	NMAWifiDialogPrivate *priv = NMA_WIFI_DIALOG_GET_PRIVATE (self);
 	GtkWidget *widget;
+	NMSetting8021x *s_8021x;
 	char *label, *icon_name = "network-wireless";
 	gboolean security_combo_focus = FALSE;
 
-	gtk_window_set_position (GTK_WINDOW (self), GTK_WIN_POS_CENTER_ALWAYS);
 	gtk_window_set_default_size (GTK_WINDOW (self), 488, -1);
 	gtk_window_set_resizable (GTK_WINDOW (self), FALSE);
 
@@ -1096,7 +1171,7 @@ internal_init (NMAWifiDialog *self,
 
 	gtk_window_set_icon_name (GTK_WINDOW (self), icon_name);
 	widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "image1"));
-#if GTK_CHECK_VERSION(3,90,0)
+#if GTK_CHECK_VERSION(4,0,0)
 	gtk_image_set_from_icon_name (GTK_IMAGE (widget), icon_name);
 #else
 	gtk_image_set_from_icon_name (GTK_IMAGE (widget), icon_name, GTK_ICON_SIZE_DIALOG);
@@ -1114,7 +1189,7 @@ internal_init (NMAWifiDialog *self,
 		priv->ok_response_button = widget;
 	}
 
-#if !GTK_CHECK_VERSION(3,96,0)
+#if !GTK_CHECK_VERSION(4,0,0)
 	g_object_set (G_OBJECT (widget), "can-default", TRUE, NULL);
 	gtk_widget_grab_default (widget);
 #endif
@@ -1125,25 +1200,26 @@ internal_init (NMAWifiDialog *self,
 		return FALSE;
 	}
 
-	gtk_container_add (GTK_CONTAINER (gtk_dialog_get_content_area (GTK_DIALOG (self))), widget);
+	gtk_box_append (GTK_BOX (gtk_dialog_get_content_area (GTK_DIALOG (self))), widget);
+
+	_set_ok_sensitive (self, FALSE, NULL);
 
 	/* If given a valid connection, hide the SSID bits and connection combo */
-	if (specific_connection) {
+	if (specific_connection) 
+	{
 		widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "network_name_label"));
 		gtk_widget_hide (widget);
-
 		widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "network_name_entry"));
 		gtk_widget_hide (widget);
-
 		security_combo_focus = TRUE;
 		priv->network_name_focus = FALSE;
-	} else {
+	} 
+	else 
+	{
 		widget = GTK_WIDGET (gtk_builder_get_object (priv->builder, "network_name_entry"));
 		g_signal_connect (G_OBJECT (widget), "changed", (GCallback) ssid_entry_changed, self);
 		priv->network_name_focus = TRUE;
 	}
-
-	_set_ok_sensitive (self, FALSE, NULL);
 
 	if (!device_combo_init (self, specific_device)) {
 		g_warning ("No Wi-Fi devices available.");
@@ -1155,14 +1231,18 @@ internal_init (NMAWifiDialog *self,
 		return FALSE;
 	}
 
-	if (!security_combo_init (self, priv->secrets_only, secrets_setting_name, secrets_hints)) {
-		g_warning ("Couldn't set up Wi-Fi security combo box.");
-		return FALSE;
+	// TODO:Kirill - bad check, remove later
+	if(!priv->cert_auth_data)
+	{
+		if (!security_combo_init (self, priv->secrets_only, secrets_setting_name, secrets_hints)) {
+			g_warning ("Couldn't set up Wi-Fi security combo box.");
+			return FALSE;
+		}
+	
+		security_combo_changed (priv->sec_combo, self);
+		g_signal_connect (G_OBJECT (priv->sec_combo), "changed",
+						  G_CALLBACK (security_combo_changed_manually), self);
 	}
-
-	security_combo_changed (priv->sec_combo, self);
-	g_signal_connect (G_OBJECT (priv->sec_combo), "changed",
-	                  G_CALLBACK (security_combo_changed_manually), self);
 
 	if (secrets_only) {
 		gtk_widget_hide (priv->sec_combo);
@@ -1221,7 +1301,52 @@ internal_init (NMAWifiDialog *self,
 	return TRUE;
 }
 
+static gchar *
+nma_cert_to_priv_key_type(const gchar* cert, const gchar* new_type) 
+{
+	g_assert(cert);
+	g_assert(new_type);
+
+    const char* old_type_prefix;
+    const char* old_type_value;
+    char* pos; 
+	
+	size_t new_len;
+	size_t prefix_len;
+    char* new_string;
+
+	old_type_prefix = "type=";
+    old_type_value = "cert";
+    pos = strstr(cert, "type=cert");
+
+    if (pos == NULL) {
+        char* copy = strdup(cert);
+        if (copy == NULL) {
+            perror("strdup");
+        }
+        return copy;
+    }
+
+    new_len = strlen(cert) - strlen(old_type_value) + strlen(new_type);
+    new_string = malloc(new_len + 1);
+    if (new_string == NULL) {
+        perror("malloc");
+        return NULL;
+    }
+
+    prefix_len = pos - cert + strlen(old_type_prefix);
+    strncpy(new_string, cert, prefix_len);
+    new_string[prefix_len] = '\0';
+
+    strcat(new_string, new_type);
+    strcat(new_string, pos + strlen("type=cert"));
+
+    return new_string;
+}
+
 /**
+ * FYI:Kirill - read dialog data and fills connection with it here
+ * 
  * nma_wifi_dialog_get_connection:
  * @self: an #NMAWifiDialog
  * @device: (out):
@@ -1290,7 +1415,48 @@ nma_wifi_dialog_get_connection (NMAWifiDialog *self,
 	/* Fill security */
 	model = gtk_combo_box_get_model (GTK_COMBO_BOX (priv->sec_combo));
 	if (gtk_combo_box_get_active_iter (GTK_COMBO_BOX (priv->sec_combo), &iter))
-		gtk_tree_model_get (model, &iter, S_SEC_COLUMN, &ws, -1);
+		gtk_tree_model_get (model, &iter, S_SEC_COLUMN, &ws, -1); // FYI:Kirill - here reads psk
+	
+	// TODO:Kirill
+	if(priv->cert_auth_data) 
+	{
+		gchar *cert_value = NULL;
+		gchar *priv_key_value = NULL;
+		const guchar *pin_value = NULL;
+
+		GError *error = NULL;
+		NMSetting8021xCKScheme scheme;
+		NMSetting8021xCKFormat format = NM_SETTING_802_1X_CK_FORMAT_UNKNOWN;
+		NMSetting8021x *s_8021x = nm_connection_get_setting_802_1x (connection);
+
+		format = NM_SETTING_802_1X_CK_FORMAT_UNKNOWN;
+		cert_value = nma_cert_chooser_get_cert (NMA_CERT_CHOOSER (priv->cert_auth_data->client_cert_chooser), &scheme);
+		pin_value = nma_cert_auth_data_get_pin_value(priv->cert_auth_data);
+
+		if(scheme == NM_SETTING_802_1X_CK_SCHEME_PKCS11)
+		{
+			if (!nm_setting_802_1x_set_client_cert (s_8021x, cert_value, scheme, &format, &error)) {
+				g_warning ("Couldn't read client certificate '%s': %s", cert_value, error ? error->message : "(unknown)");
+				g_clear_error (&error);
+			}
+
+			priv_key_value = nma_cert_to_priv_key_type(cert_value, "private");
+
+			if (!nm_setting_802_1x_set_private_key(s_8021x, priv_key_value, NULL, scheme, &format, &error)) {
+				g_warning ("Couldn't read private key '%s': %s", priv_key_value, error ? error->message : "(unknown)");
+				g_clear_error (&error);
+			}
+		}
+		else {
+			g_warning ("Not pkcs11 cert selected");
+		}
+		
+		g_object_set (s_8021x, NM_SETTING_802_1X_PIN, pin_value, NULL);
+
+		g_free (cert_value);
+		g_free (priv_key_value);
+	}
+
 	if (ws) {
 		nma_ws_fill_connection (ws, connection);
 		g_object_unref (ws);
@@ -1313,6 +1479,7 @@ nma_wifi_dialog_get_connection (NMAWifiDialog *self,
 	return connection;
 }
 
+// FYI:Kirill
 static GtkWidget *
 internal_new_dialog (NMClient *client,
                      NMConnection *connection,
@@ -1344,7 +1511,7 @@ internal_new_dialog (NMClient *client,
 
 		if (!internal_init (self, connection, device, secrets_only, secrets_setting_name, secrets_hints)) {
 			g_warning ("Couldn't create Wi-Fi security dialog.");
-			gtk_widget_destroy (GTK_WIDGET (self));
+			gtk_window_destroy (GTK_WINDOW (self));
 			self = NULL;
 		}
 	}
@@ -1454,7 +1621,7 @@ internal_new_operation (NMClient *client,
 
 	if (!internal_init (self, NULL, NULL, FALSE, NULL, NULL)) {
 		g_warning ("Couldn't create Wi-Fi security dialog.");
-		gtk_widget_destroy (GTK_WIDGET (self));
+		gtk_window_destroy (GTK_WINDOW (self));
 		return NULL;
 	}
 

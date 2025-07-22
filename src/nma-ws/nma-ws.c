@@ -7,8 +7,6 @@
 
 #include "nm-default.h"
 
-#include <string.h>
-
 #include "nma-ws.h"
 #include "nma-ws-private.h"
 #include "nma-eap.h"
@@ -32,7 +30,11 @@ nma_ws_validate (NMAWs *self, GError **error)
 	g_return_val_if_fail (!error || !*error, FALSE);
 
 	iface = NMA_WS_GET_INTERFACE (self);
-	g_return_val_if_fail (iface->validate, FALSE);
+	if (!iface->validate) {
+		/* OWE case */
+		return TRUE;
+	}
+
 	result = (*(iface->validate)) (self, error);
 	if (!result && error && !*error)
 		g_set_error_literal (error, NMA_ERROR, NMA_ERROR_GENERIC, _("Unknown error validating 802.1X security"));
@@ -48,8 +50,8 @@ nma_ws_add_to_size_group (NMAWs *self, GtkSizeGroup *group)
 	g_return_if_fail (group != NULL);
 
 	iface = NMA_WS_GET_INTERFACE (self);
-	g_return_if_fail (iface->add_to_size_group);
-	return (*(iface->add_to_size_group)) (self, group);
+	if (iface->add_to_size_group)
+		return (*(iface->add_to_size_group)) (self, group);
 }
 
 void
