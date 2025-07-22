@@ -71,9 +71,18 @@ static void
 ask_cert_on_connect_toggled (GtkWidget *button, gpointer user_data)
 {
 	NMAEapTls *method = (NMAEapTls *) user_data;
+	gboolean is_active = gtk_check_button_get_active (GTK_CHECK_BUTTON (button));
 
-	gtk_widget_set_sensitive (method->client_cert_chooser,
-	                          !gtk_check_button_get_active (GTK_CHECK_BUTTON (button)));
+	gtk_widget_set_sensitive (method->client_cert_chooser, !is_active);
+
+	if(is_active)
+	{
+		NMSettingSecretFlags secret_flags = nma_cert_chooser_get_key_password_flags (NMA_CERT_CHOOSER (method->client_cert_chooser));
+		secret_flags = NM_SETTING_SECRET_FLAG_NOT_REQUIRED;	
+		nma_cert_chooser_update_key_password_storage (NMA_CERT_CHOOSER (method->client_cert_chooser),
+	                                                 secret_flags, NULL,
+	                                                 method->client_key_password_flags_name);
+	}
 }
 
 static void
