@@ -430,6 +430,7 @@ nma_eap_tls_new (NMAWs8021x *ws_8021x,
 	NMSetting8021x *s_8021x = NULL;
 	gboolean ca_not_required = FALSE;
 	gboolean ask_cert_on_connect = FALSE;
+	NMSettingSecretFlags secret_flags = NM_SETTING_SECRET_FLAG_NONE;
 
 	parent = nma_eap_init (sizeof (NMAEapTls),
 	                       validate,
@@ -594,14 +595,15 @@ nma_eap_tls_new (NMAWs8021x *ws_8021x,
 	                                             0, (NMSetting *) s_8021x, method->client_key_password_flags_name,
 	                                             TRUE, secrets_only);
 
-	NMSettingSecretFlags secret_flags;
 	widget = GTK_WIDGET (gtk_builder_get_object (parent->builder, "ask-cert-on-connect"));
-	g_object_get (s_8021x, 
-				  NM_SETTING_802_1X_PIN_FLAGS, 
-				  &secret_flags, 
-				  NULL);	
-				  
-	ask_cert_on_connect = secret_flags == NM_SETTING_SECRET_FLAG_NOT_SAVED ? TRUE : FALSE;
+	if (s_8021x) {
+		g_object_get(s_8021x, 
+				   	 NM_SETTING_802_1X_PIN_FLAGS, 
+				   	 &secret_flags, 
+				   	 NULL);
+	}
+
+	ask_cert_on_connect = (secret_flags == NM_SETTING_SECRET_FLAG_NOT_SAVED);
 	gtk_check_button_set_active (GTK_CHECK_BUTTON (widget), ask_cert_on_connect);
 
 	return method;
