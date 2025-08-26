@@ -260,7 +260,7 @@ nma_cert_chooser_get_cert_id (NMACertChooser *cert_chooser, const gchar *uri)
 	g_return_val_if_fail (NMA_IS_CERT_CHOOSER (cert_chooser), NULL);
 	priv = NMA_CERT_CHOOSER_GET_PRIVATE (cert_chooser);
 
-	return g_strdup (nma_cert_chooser_button_get_id (NMA_CERT_CHOOSER_BUTTON (priv->cert_button), uri));
+	return nma_cert_chooser_button_get_id (NMA_CERT_CHOOSER_BUTTON (priv->cert_button), uri);
 }
 
 /**

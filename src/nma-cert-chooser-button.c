@@ -635,7 +635,7 @@ nma_cert_chooser_button_set_uri (NMACertChooserButton *button, const gchar *uri)
  * Returns: NULL or the certificate id memory chunk [length + value]
  * The size of the length part is sizeof(GckAttribute::length)
  */
-const gchar *
+gchar *
 nma_cert_chooser_button_get_id (NMACertChooserButton *button, const gchar *uri)
 {
 	GckUriData *data;
