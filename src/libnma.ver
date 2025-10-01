@@ -77,6 +77,7 @@ global:
 	nma_cert_chooser_get_cert_password;
 	nma_cert_chooser_get_cert_password_flags;
 	nma_cert_chooser_get_cert_uri;
+	nma_cert_chooser_get_cert_id;
 	nma_cert_chooser_get_key;
 	nma_cert_chooser_get_key_password;
 	nma_cert_chooser_get_key_password_flags;

@@ -152,6 +152,10 @@ void                 nma_cert_chooser_update_key_password_storage  (NMACertChoos
 NMA_AVAILABLE_IN_1_8
 NMSettingSecretFlags nma_cert_chooser_get_key_password_flags       (NMACertChooser *cert_chooser);
 
+NMA_AVAILABLE_IN_1_8
+gchar               *nma_cert_chooser_get_cert_id                  (NMACertChooser *cert_chooser,
+                                                                    const gchar *uri);
+                                                                    
 G_END_DECLS
 
 #endif /* __NMA_CERT_CHOOSER_H__ */

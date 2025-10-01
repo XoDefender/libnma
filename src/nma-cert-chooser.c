@@ -241,6 +241,29 @@ nma_cert_chooser_get_cert_uri (NMACertChooser *cert_chooser)
 }
 
 /**
+ * nma_cert_chooser_get_cert_id:
+ * @cert_chooser: certificate chooser button instance
+ * @uri: the path or URI of a certificate
+ *
+ * Gets the certificate id (length and value) by the passed uri.
+ *
+ * Returns: NULL or the certificate id memory chunk [length + value]
+ * The size of the length part is sizeof(GckAttribute::length)
+ *
+ * Since: 1.8.0
+ */
+gchar *
+nma_cert_chooser_get_cert_id (NMACertChooser *cert_chooser, const gchar *uri)
+{
+	NMACertChooserPrivate *priv;
+
+	g_return_val_if_fail (NMA_IS_CERT_CHOOSER (cert_chooser), NULL);
+	priv = NMA_CERT_CHOOSER_GET_PRIVATE (cert_chooser);
+
+	return nma_cert_chooser_button_get_id (NMA_CERT_CHOOSER_BUTTON (priv->cert_button), uri);
+}
+
+/**
  * nma_cert_chooser_get_cert:
  * @cert_chooser: certificate chooser button instance
  * @scheme: (out): the scheme of the returned certificate path

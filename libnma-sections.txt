@@ -44,6 +44,7 @@ nma_cert_chooser_set_cert
 nma_cert_chooser_set_cert_uri
 nma_cert_chooser_get_cert
 nma_cert_chooser_get_cert_uri
+nma_cert_chooser_get_cert_id
 nma_cert_chooser_set_cert_password
 nma_cert_chooser_get_cert_password
 nma_cert_chooser_set_key

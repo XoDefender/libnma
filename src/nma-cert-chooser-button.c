@@ -627,6 +627,48 @@ nma_cert_chooser_button_set_uri (NMACertChooserButton *button, const gchar *uri)
 }
 
 /**
+ * nma_cert_chooser_button_get_id:
+ * @button: the #NMACertChooserButton instance
+ *
+ * Gets the certificate id (length and value) by the passed uri.
+ *
+ * Returns: NULL or the certificate id memory chunk [length + value]
+ * The size of the length part is sizeof(GckAttribute::length)
+ */
+gchar *
+nma_cert_chooser_button_get_id (NMACertChooserButton *button, const gchar *uri)
+{
+	GckUriData *data;
+	gchar* id_chunk;
+	const GckAttribute *id = NULL;
+	GError *error = NULL;
+
+	data = gck_uri_parse (uri, GCK_URI_FOR_OBJECT_ON_TOKEN, &error);
+	if (!data)
+	{	
+		g_warning ("Bad URI '%s': %s\n", uri, error->message);
+		g_error_free (error);
+		return NULL;
+	}
+
+	id = gck_attributes_find (data->attributes, CKA_ID);
+	if (!id || !id->value || !id->length) 
+	{
+		gck_uri_data_free (data);
+		return NULL;
+	}
+
+	id_chunk = (gchar *)g_malloc(sizeof(id->length) + id->length);
+	memcpy(id_chunk, &id->length, sizeof(id->length));
+	memcpy(id_chunk + sizeof(id->length), id->value, id->length);
+
+	gck_uri_data_free (data);
+
+	return id_chunk;
+}
+
+
+/**
  * nma_cert_chooser_button_get_pin:
  * @button: the #NMACertChooserButton instance
  *
