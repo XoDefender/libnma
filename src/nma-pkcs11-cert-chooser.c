@@ -457,6 +457,14 @@ set_flags (NMACertChooser *cert_chooser, NMACertChooserFlags flags)
 			gtk_widget_hide (priv->show_password);
 		}
 	}
+
+	if (flags & NMA_CERT_CHOOSER_FLAG_NO_PASSWORDS) {
+		gtk_widget_hide (priv->cert_password);
+		gtk_widget_hide (priv->cert_password_label);
+		gtk_widget_hide (priv->key_password);
+		gtk_widget_hide (priv->key_password_label);
+		gtk_widget_hide (priv->show_password);
+	}
 }
 
 static void

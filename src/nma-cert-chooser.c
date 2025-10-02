@@ -725,7 +725,8 @@ nma_cert_chooser_class_init (NMACertChooserClass *klass)
 	                                            NMA_CERT_CHOOSER_FLAG_NONE,
 	                                              NMA_CERT_CHOOSER_FLAG_CERT
 	                                            | NMA_CERT_CHOOSER_FLAG_PASSWORDS
-	                                            | NMA_CERT_CHOOSER_FLAG_PEM,
+	                                            | NMA_CERT_CHOOSER_FLAG_PEM
+												| NMA_CERT_CHOOSER_FLAG_NO_PASSWORDS,
 	                                            NMA_CERT_CHOOSER_FLAG_NONE,
 	                                              G_PARAM_WRITABLE
 	                                            | G_PARAM_CONSTRUCT_ONLY
