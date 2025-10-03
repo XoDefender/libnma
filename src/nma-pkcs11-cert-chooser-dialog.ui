@@ -112,6 +112,16 @@
                       <object class="GtkTreeSelection" id="objects_view_selection"/>
                     </child>
                     <child>
+                      <object class="GtkTreeViewColumn" id="list_rfc822_column">
+                        <property name="title" translatable="yes">Email</property>
+                        <child>
+                          <object class="GtkCellRendererText" id="list_rfc822_renderer">
+                            <property name="xpad">6</property>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                    <child>
                       <object class="GtkTreeViewColumn" id="list_name_column">
                         <property name="title" translatable="yes">Name</property>
                         <child>
