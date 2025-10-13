@@ -13,11 +13,11 @@
 #include "nma-pkcs11-token-login-dialog.h"
 
 #include <string.h>
-#include </usr/local/include/gck-1/gck/gck.h>
+#include <gck/gck.h>
 #if GCK_CHECK_VERSION(3,90,0)
-#include </usr/local/include/gcr/gcr.h>
+#include <gcr/gcr.h>
 #else
-#include </usr/local/include/gcr-3/gcr/gcr-base.h>
+#include <gcr/gcr-base.h>
 #endif
 
 #if !GCR_CHECK_VERSION(3,90,0)
