@@ -151,6 +151,7 @@ fill_connection (NMAWs *ws, NMConnection *connection)
 		nm_setting_wireless_security_add_group (s_wireless_sec, "ccmp");
 	} else {
 		g_object_set (s_wireless_sec, NM_SETTING_WIRELESS_SECURITY_KEY_MGMT, "wpa-psk", NULL);
+		nm_setting_wireless_security_add_pairwise (s_wireless_sec, "ccmp");
 
 		/* Just leave ciphers and protocol empty, the supplicant will
 		 * figure that out magically based on the AP IEs and card capabilities.
