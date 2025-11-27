@@ -103,8 +103,6 @@ add_to_size_group (NMAEap *parent, GtkSizeGroup *group)
 	nma_cert_chooser_add_to_size_group (NMA_CERT_CHOOSER (method->ca_cert_chooser), group);
 }
 
-// TODO:Kirill - set data from gui to nmsetting
-// nm will pass this data and connect
 static void
 fill_connection (NMAEap *parent, NMConnection *connection)
 {
@@ -469,7 +467,6 @@ nma_eap_tls_new (NMAWs8021x *ws_8021x,
 	                  (GCallback) nma_ws_changed_cb,
 	                  ws_8021x);
 
-	// TODO:Kirill - set ask_cert_on_connect value
 	widget = GTK_WIDGET (gtk_builder_get_object (parent->builder, "ask-cert-on-connect"));
 	g_assert (widget);
 	g_signal_connect (G_OBJECT (widget), "toggled", (GCallback) ask_cert_on_connect_toggled, parent);
