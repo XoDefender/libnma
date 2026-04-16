@@ -36,6 +36,7 @@
  */
 
 enum {
+	COLUMN_RFC822,
 	COLUMN_LABEL,
 	COLUMN_ISSUER,
 	COLUMN_HAS_KEY,
@@ -60,6 +61,8 @@ struct _NMAPkcs11CertChooserDialogPrivate {
 	GtkCellRenderer *list_name_renderer;
 	GtkTreeViewColumn *list_issued_by_column;
 	GtkCellRenderer *list_issued_by_renderer;
+	GtkTreeViewColumn *list_rfc822_column;
+	GtkCellRenderer *list_rfc822_renderer;
 
 	gboolean object_selected;
 };
@@ -131,6 +134,7 @@ object_details (GObject *source_object, GAsyncResult *res, gpointer user_data)
 	GcrCertificate *cert;
 	gchar *label = NULL;
 	gchar *issuer = NULL;
+	gchar *rfc822 = NULL;
 	GError *error = NULL;
 	GtkListStore *store1, *store2;
 	IdMatchData data;
@@ -186,10 +190,13 @@ object_details (GObject *source_object, GAsyncResult *res, gpointer user_data)
 		cert = gcr_simple_certificate_new (attr->value, attr->length);
 		if (!label)
 			label = gcr_certificate_get_subject_name (cert);
-		issuer = gcr_certificate_get_issuer_name (cert);
+		issuer = gcr_certificate_get_issuer_name (cert); 
+		rfc822 = gcr_certificate_get_alt_name (cert);
 		g_object_unref (cert);
 	}
 
+	if(!rfc822)
+		rfc822 = g_memdup ("", 1);
 	if (!label)
 		label = g_strdup (_("(Unknown)"));
 	if (!issuer)
@@ -197,6 +204,7 @@ object_details (GObject *source_object, GAsyncResult *res, gpointer user_data)
 
 	gtk_list_store_append (store1, &iter);
 	gtk_list_store_set (store1, &iter,
+						COLUMN_RFC822, rfc822,
 	                    COLUMN_LABEL, label,
 	                    COLUMN_ISSUER, issuer,
 	                    COLUMN_HAS_KEY, data.has_key,
@@ -205,6 +213,7 @@ object_details (GObject *source_object, GAsyncResult *res, gpointer user_data)
 
 	g_free (label);
 	g_free (issuer);
+	g_free (rfc822);
 
 out:
 	if (attrs)
@@ -457,6 +466,8 @@ nma_pkcs11_cert_chooser_dialog_class_init (NMAPkcs11CertChooserDialogClass *klas
 	gtk_widget_class_bind_template_child_private (widget_class, NMAPkcs11CertChooserDialog, list_name_renderer);
 	gtk_widget_class_bind_template_child_private (widget_class, NMAPkcs11CertChooserDialog, list_issued_by_column);
 	gtk_widget_class_bind_template_child_private (widget_class, NMAPkcs11CertChooserDialog, list_issued_by_renderer);
+	gtk_widget_class_bind_template_child_private (widget_class, NMAPkcs11CertChooserDialog, list_rfc822_column);
+	gtk_widget_class_bind_template_child_private (widget_class, NMAPkcs11CertChooserDialog, list_rfc822_renderer);
 	gtk_widget_class_bind_template_child_private (widget_class, NMAPkcs11CertChooserDialog, error_revealer);
 	gtk_widget_class_bind_template_child_private (widget_class, NMAPkcs11CertChooserDialog, error_label);
 	gtk_widget_class_bind_template_child_private (widget_class, NMAPkcs11CertChooserDialog, login_button);
@@ -477,23 +488,29 @@ nma_pkcs11_cert_chooser_dialog_init (NMAPkcs11CertChooserDialog *self)
 
 	gtk_widget_init_template (GTK_WIDGET (self));
 
+	gtk_tree_view_column_set_title (priv->list_rfc822_column, _("Email"));
 	gtk_tree_view_column_set_title (priv->list_name_column, _("Name"));
 	gtk_tree_view_column_set_title (priv->list_issued_by_column, _("Issued By"));
 	gtk_button_set_label(GTK_BUTTON(priv->login_button), _("_Unlock token"));
 
+	gtk_tree_view_column_set_attributes (priv->list_rfc822_column,
+	                                     priv->list_rfc822_renderer,
+	                                     "text", 0, NULL);
 	gtk_tree_view_column_set_attributes (priv->list_name_column,
 	                                     priv->list_name_renderer,
-	                                     "text", 0, NULL);
+	                                     "text", 1, NULL);
 	gtk_tree_view_column_set_attributes (priv->list_issued_by_column,
 	                                     priv->list_issued_by_renderer,
-	                                     "text", 1, NULL);
+	                                     "text", 2, NULL);
 
 	priv->cert_store = gtk_list_store_new (N_COLUMNS,
+										   G_TYPE_STRING,
 	                                       G_TYPE_STRING,
 	                                       G_TYPE_STRING,
 	                                       G_TYPE_BOOLEAN,
 	                                       GCK_TYPE_ATTRIBUTES);
 	priv->key_store = gtk_list_store_new (N_COLUMNS,
+										  G_TYPE_STRING,
 	                                      G_TYPE_STRING,
 	                                      G_TYPE_STRING,
 	                                      G_TYPE_BOOLEAN,
