@@ -121,6 +121,7 @@ out:
 	return data->has_key;
 }
 
+// FYI:Kirill - process object on token
 static void
 object_details (GObject *source_object, GAsyncResult *res, gpointer user_data)
 {
@@ -259,9 +260,12 @@ reload_slot (NMAPkcs11CertChooserDialog *self, GckSession *session)
 	gtk_list_store_clear (priv->key_store);
 	gtk_list_store_clear (priv->cert_store);
 	enm = gck_session_enumerate_objects (session, gck_attributes_new_empty (GCK_INVALID));
+
+	// FYI:Kirill - enumerate objects on token
 	gck_enumerator_next_async (enm, -1, NULL, next_object, self);
 }
 
+// FYI:Kirill - token unlocked
 static void
 logged_in (GObject *obj, GAsyncResult *res, gpointer user_data)
 {
@@ -343,6 +347,7 @@ error_close (GtkInfoBar *bar, gint response_id, gpointer user_data)
 	gtk_revealer_set_reveal_child (priv->error_revealer, FALSE);
 }
 
+// FYI:Kirill - try unlock token
 static void
 login_clicked (GtkButton *button, gpointer user_data)
 {
