@@ -17,6 +17,7 @@
 #include <gck/gck.h>
 #if !GCK_CHECK_VERSION(3,90,0)
 #define gck_uri_data_parse gck_uri_parse
+#define gck_uri_data_build gck_uri_build
 #endif
 #endif
 
@@ -665,6 +666,62 @@ nma_cert_chooser_button_get_id (NMACertChooserButton *button, const gchar *uri)
 	gck_uri_data_free (data);
 
 	return id_chunk;
+}
+
+/**
+ * nma_cert_chooser_button_derive_key_uri:
+ * @button: the #NMACertChooserButton instance
+ * @cert_uri: a PKCS\#11 URI of a certificate on a token
+ *
+ * Derives a private key URI from a certificate URI by keeping the token
+ * identification and the object id (CKA_ID), assuming the private key and
+ * the certificate share the same id.
+ *
+ * Returns: the derived key URI, or %NULL if @cert_uri is not a PKCS\#11
+ *   URI or carries no id.
+ */
+gchar *
+nma_cert_chooser_button_derive_key_uri (NMACertChooserButton *button, const gchar *cert_uri)
+{
+#if WITH_GCR
+	GckUriData *data;
+	GckBuilder *builder;
+	GckUriData key_uri_data = { 0, };
+	const GckAttribute *id;
+	gchar *key_uri = NULL;
+	GError *error = NULL;
+
+	if (!cert_uri)
+		return NULL;
+
+	data = gck_uri_parse (cert_uri, GCK_URI_FOR_OBJECT_ON_TOKEN, &error);
+	if (!data) {
+		g_warning ("Bad URI '%s': %s\n", cert_uri, error ? error->message : "(unknown)");
+		g_clear_error (&error);
+		return NULL;
+	}
+
+	id = gck_attributes_find (data->attributes, CKA_ID);
+	if (!id || !id->value || !id->length) {
+		gck_uri_data_free (data);
+		return NULL;
+	}
+
+	/* Keep only the id; combined with the token info this yields a URI
+	 * that matches the private key with the same id on the token. */
+	builder = gck_builder_new (GCK_BUILDER_NONE);
+	gck_builder_add_only (builder, data->attributes, CKA_ID, GCK_INVALID);
+	key_uri_data.attributes = gck_builder_end (builder);
+	key_uri_data.token_info = data->token_info;
+	key_uri = gck_uri_data_build (&key_uri_data, GCK_URI_FOR_OBJECT_ON_TOKEN);
+
+	gck_attributes_unref (key_uri_data.attributes);
+	gck_uri_data_free (data);
+
+	return key_uri;
+#else
+	return NULL;
+#endif
 }
 
 

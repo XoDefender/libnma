@@ -53,8 +53,12 @@ void nma_cert_chooser_button_set_uri (NMACertChooserButton *button,
                                       const gchar *uri);
 
 gchar *
-nma_cert_chooser_button_get_id (NMACertChooserButton *button, 
+nma_cert_chooser_button_get_id (NMACertChooserButton *button,
 								const gchar *uri);
+
+gchar *
+nma_cert_chooser_button_derive_key_uri (NMACertChooserButton *button,
+                                        const gchar *cert_uri);
 
 gchar *nma_cert_chooser_button_get_pin (NMACertChooserButton *button);
 

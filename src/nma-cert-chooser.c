@@ -31,16 +31,9 @@ typedef struct {
 } GckUriData;
 
 #define GCK_URI_FOR_OBJECT 0
-#define CKA_CLASS 0
 
 static GckUriData *
 gck_uri_parse (const gchar *string, GckUriFlags flags, GError **error)
-{
-	return NULL;
-}
-
-static const GckAttribute *
-gck_attributes_find (GckAttributes *attrs, gulong attr_type)
 {
 	return NULL;
 }
@@ -64,6 +57,7 @@ typedef struct {
 
 	NMACertChooserFlags flags;
 	char *title;
+	gboolean key_user_modified;
 } NMACertChooserPrivate;
 
 struct _NMACertChooser {
@@ -350,6 +344,8 @@ nma_cert_chooser_set_key_uri (NMACertChooser *cert_chooser,
 
 	g_return_if_fail (NMA_IS_CERT_CHOOSER (cert_chooser));
 	priv = NMA_CERT_CHOOSER_GET_PRIVATE (cert_chooser);
+
+	priv->key_user_modified = (uri != NULL);
 
 	if (uri) {
 		gtk_widget_set_sensitive (priv->key_button, TRUE);
@@ -785,16 +781,20 @@ cert_changed_cb (NMACertChooserButton *button, gpointer user_data)
 	if (!gtk_widget_get_sensitive (priv->key_button)) {
 		gtk_widget_set_sensitive (priv->key_button, TRUE);
 		gtk_widget_set_sensitive (priv->key_button_label, TRUE);
+	}
 
-		if (uri_data) {
-			/* URI that is good both for a certificate and for a key. */
-			if (!gck_attributes_find (uri_data->attributes, CKA_CLASS)) {
-				nma_cert_chooser_button_set_uri (NMA_CERT_CHOOSER_BUTTON (priv->key_button), uri);
-				gtk_widget_set_sensitive (priv->key_password, TRUE);
-				gtk_widget_set_sensitive (priv->key_password_label, TRUE);
-				if (pin)
-					gtk_editable_set_text (GTK_EDITABLE (priv->key_password), pin);
-			}
+	/* Auto-derive the private key from the certificate's PKCS#11 id
+	 * and pre-fill the key chooser. */
+	if (!priv->key_user_modified && g_str_has_prefix (uri, "pkcs11:")) {
+		gchar *key_uri = nma_cert_chooser_button_derive_key_uri (NMA_CERT_CHOOSER_BUTTON (priv->cert_button), uri);
+
+		if (key_uri) {
+			nma_cert_chooser_button_set_uri (NMA_CERT_CHOOSER_BUTTON (priv->key_button), key_uri);
+			gtk_widget_set_sensitive (priv->key_password, TRUE);
+			gtk_widget_set_sensitive (priv->key_password_label, TRUE);
+			if (pin)
+				gtk_editable_set_text (GTK_EDITABLE (priv->key_password), pin);
+			g_free (key_uri);
 		}
 	}
 
@@ -845,6 +845,7 @@ key_changed_cb (NMACertChooserButton *button, gpointer user_data)
 
 	gtk_widget_set_sensitive (priv->key_password, TRUE);
 	gtk_widget_set_sensitive (priv->key_password_label, TRUE);
+	priv->key_user_modified = TRUE;
 	g_signal_emit_by_name (user_data, "changed");
 }
 
