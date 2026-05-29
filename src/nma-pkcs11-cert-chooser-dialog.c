@@ -48,6 +48,7 @@ struct _NMAPkcs11CertChooserDialogPrivate {
 	GckSlot *slot;
 	GtkListStore *cert_store;
 	GtkListStore *key_store;
+	GHashTable *pub_key_ids;
 	GtkWidget *login_button;
 
 	guchar *pin_value;
@@ -158,6 +159,24 @@ object_details (GObject *source_object, GAsyncResult *res, gpointer user_data)
 
 	priv = NMA_PKCS11_CERT_CHOOSER_DIALOG_GET_PRIVATE (self);
 
+	/* CKO_PUBLIC_KEY objects are not shown in the chooser; we only track
+	 * their CKA_IDs so that certificates with a matching public key can
+	 * be marked as having a key on the token. Private keys are not
+	 * visible without a token login, so the public key is what tells us
+	 * a keypair is present. */
+	if (cka_class == CKO_PUBLIC_KEY) {
+		attr = gck_attributes_find (attrs, CKA_ID);
+		if (attr && attr->value && attr->length) {
+			g_hash_table_add (priv->pub_key_ids,
+			                  g_bytes_new (attr->value, attr->length));
+			data.attrs = attrs;
+			data.has_key = FALSE;
+			gtk_tree_model_foreach (GTK_TREE_MODEL (priv->cert_store),
+			                        id_match, &data);
+		}
+		goto out;
+	}
+
 	switch (cka_class) {
 	case CKO_CERTIFICATE:
 		store1 = priv->cert_store;
@@ -177,6 +196,21 @@ object_details (GObject *source_object, GAsyncResult *res, gpointer user_data)
 	gtk_tree_model_foreach (GTK_TREE_MODEL (store2),
 	                        id_match,
 	                        &data);
+
+	/* For certificates, also consider already-enumerated public keys:
+	 * private keys require a token login to be visible, so the public
+	 * key is often the only signal that a keypair lives on the token. */
+	if (!data.has_key && cka_class == CKO_CERTIFICATE) {
+		const GckAttribute *id_attr = gck_attributes_find (attrs, CKA_ID);
+
+		if (id_attr && id_attr->value && id_attr->length) {
+			GBytes *id_bytes = g_bytes_new_static (id_attr->value, id_attr->length);
+
+			if (g_hash_table_contains (priv->pub_key_ids, id_bytes))
+				data.has_key = TRUE;
+			g_bytes_unref (id_bytes);
+		}
+	}
 
 	attr = gck_attributes_find (attrs, CKA_LABEL);
 	if (attr && attr->value && attr->length) {
@@ -258,6 +292,7 @@ reload_slot (NMAPkcs11CertChooserDialog *self, GckSession *session)
 
 	gtk_list_store_clear (priv->key_store);
 	gtk_list_store_clear (priv->cert_store);
+	g_hash_table_remove_all (priv->pub_key_ids);
 	enm = gck_session_enumerate_objects (session, gck_attributes_new_empty (GCK_INVALID));
 	gck_enumerator_next_async (enm, -1, NULL, next_object, self);
 }
@@ -434,6 +469,7 @@ finalize (GObject *object)
 
 	g_clear_object (&priv->cert_store);
 	g_clear_object (&priv->key_store);
+	g_clear_pointer (&priv->pub_key_ids, g_hash_table_unref);
 	g_clear_object (&priv->slot);
 
 	if (priv->pin_value) {
@@ -515,6 +551,8 @@ nma_pkcs11_cert_chooser_dialog_init (NMAPkcs11CertChooserDialog *self)
 	                                      G_TYPE_STRING,
 	                                      G_TYPE_BOOLEAN,
 	                                      GCK_TYPE_ATTRIBUTES);
+	priv->pub_key_ids = g_hash_table_new_full (g_bytes_hash, g_bytes_equal,
+	                                           (GDestroyNotify) g_bytes_unref, NULL);
 }
 
 static GtkWidget *
@@ -650,6 +688,41 @@ nma_pkcs11_cert_chooser_dialog_get_remember_pin (NMAPkcs11CertChooserDialog *dia
 	NMAPkcs11CertChooserDialogPrivate *priv = NMA_PKCS11_CERT_CHOOSER_DIALOG_GET_PRIVATE (dialog);
 
 	return priv->remember_pin;
+}
+
+/**
+ * nma_pkcs11_cert_chooser_dialog_get_has_matching_key:
+ * @dialog: the #NMAPkcs11CertChooserDialog instance
+ *
+ * For a certificate selection, returns whether the token also carries a
+ * key object whose CKA_ID matches the selected certificate's CKA_ID.
+ *
+ * Returns: TRUE if a matching key was found on the token, FALSE
+ *   otherwise.
+ */
+gboolean
+nma_pkcs11_cert_chooser_dialog_get_has_matching_key (NMAPkcs11CertChooserDialog *dialog)
+{
+	NMAPkcs11CertChooserDialogPrivate *priv = NMA_PKCS11_CERT_CHOOSER_DIALOG_GET_PRIVATE (dialog);
+	GtkTreeModel *model;
+	GtkTreePath *path;
+	GtkTreeIter iter;
+	gboolean has_key = FALSE;
+
+	gtk_tree_view_get_cursor (priv->objects_view, &path, NULL);
+	if (path == NULL)
+		return FALSE;
+
+	model = gtk_tree_view_get_model (GTK_TREE_VIEW (priv->objects_view));
+	if (!gtk_tree_model_get_iter (model, &iter, path)) {
+		gtk_tree_path_free (path);
+		g_return_val_if_reached (FALSE);
+	}
+
+	gtk_tree_model_get (model, &iter, COLUMN_HAS_KEY, &has_key, -1);
+	gtk_tree_path_free (path);
+
+	return has_key;
 }
 
 /**

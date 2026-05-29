@@ -47,6 +47,7 @@ typedef struct {
 	gchar *uri;
 	gchar *pin;
 	gboolean remember_pin;
+	gboolean has_matching_key;
 	NMACertChooserButtonFlags flags;
 
 	GtkWidget *button;
@@ -235,6 +236,7 @@ select_from_token (NMACertChooserButton *button, GckSlot *slot)
 			g_free (priv->pin);
 		priv->pin = nma_pkcs11_cert_chooser_dialog_get_pin (NMA_PKCS11_CERT_CHOOSER_DIALOG (dialog));
 		priv->remember_pin = nma_pkcs11_cert_chooser_dialog_get_remember_pin (NMA_PKCS11_CERT_CHOOSER_DIALOG (dialog));
+		priv->has_matching_key = nma_pkcs11_cert_chooser_dialog_get_has_matching_key (NMA_PKCS11_CERT_CHOOSER_DIALOG (dialog));
 		update_title (button);
 		g_signal_emit_by_name (button, "changed");
 	}
@@ -363,6 +365,7 @@ select_from_file (NMACertChooserButton *button)
 			priv->pin = NULL;
 		}
 		priv->remember_pin = FALSE;
+		priv->has_matching_key = FALSE;
 		update_title (button);
 		g_signal_emit_by_name (button, "changed");
 	}
@@ -624,6 +627,7 @@ nma_cert_chooser_button_set_uri (NMACertChooserButton *button, const gchar *uri)
 	if (priv->uri)
 		g_free (priv->uri);
 	priv->uri = g_strdup (uri);
+	priv->has_matching_key = FALSE;
 	update_title (button);
 }
 
@@ -757,6 +761,24 @@ nma_cert_chooser_button_get_remember_pin (NMACertChooserButton *button)
 	NMACertChooserButtonPrivate *priv = NMA_CERT_CHOOSER_BUTTON_GET_PRIVATE (button);
 
 	return priv->remember_pin;
+}
+
+/**
+ * nma_cert_chooser_button_get_has_matching_key:
+ * @button: the #NMACertChooserButton instance
+ *
+ * Returns whether the most recent selection was made from a PKCS\#11 token
+ * and that token carries a key object (private or public) whose CKA_ID
+ * matches the selected certificate.
+ *
+ * Returns: TRUE if a matching key was observed on the token;
+ */
+gboolean
+nma_cert_chooser_button_get_has_matching_key (NMACertChooserButton *button)
+{
+	NMACertChooserButtonPrivate *priv = NMA_CERT_CHOOSER_BUTTON_GET_PRIVATE (button);
+
+	return priv->has_matching_key;
 }
 
 /**

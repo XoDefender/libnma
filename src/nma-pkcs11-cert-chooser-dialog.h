@@ -46,4 +46,6 @@ gchar *nma_pkcs11_cert_chooser_dialog_get_pin (NMAPkcs11CertChooserDialog *dialo
 
 gboolean nma_pkcs11_cert_chooser_dialog_get_remember_pin (NMAPkcs11CertChooserDialog *dialog);
 
+gboolean nma_pkcs11_cert_chooser_dialog_get_has_matching_key (NMAPkcs11CertChooserDialog *dialog);
+
 #endif /* __NMA_PKCS11_CERT_CHOOSER_DIALOG_H__ */

@@ -784,8 +784,10 @@ cert_changed_cb (NMACertChooserButton *button, gpointer user_data)
 	}
 
 	/* Auto-derive the private key from the certificate's PKCS#11 id
-	 * and pre-fill the key chooser. */
-	if (!priv->key_user_modified && g_str_has_prefix (uri, "pkcs11:")) {
+	 * and pre-fill the key chooser */
+	if (   !priv->key_user_modified
+	    && g_str_has_prefix (uri, "pkcs11:")
+	    && nma_cert_chooser_button_get_has_matching_key (button)) {
 		gchar *key_uri = nma_cert_chooser_button_derive_key_uri (NMA_CERT_CHOOSER_BUTTON (priv->cert_button), uri);
 
 		if (key_uri) {
