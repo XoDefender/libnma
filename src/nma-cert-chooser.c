@@ -787,6 +787,7 @@ cert_changed_cb (NMACertChooserButton *button, gpointer user_data)
 	 * and pre-fill the key chooser */
 	if (   !priv->key_user_modified
 	    && g_str_has_prefix (uri, "pkcs11:")
+	    && (priv->flags & NMA_CERT_CHOOSER_FLAG_AUTODETECT_KEY)
 	    && nma_cert_chooser_button_get_has_matching_key (button)) {
 		gchar *key_uri = nma_cert_chooser_button_derive_key_uri (NMA_CERT_CHOOSER_BUTTON (priv->cert_button), uri);
 
@@ -1043,7 +1044,8 @@ nma_cert_chooser_class_init (NMACertChooserClass *klass)
 	                                              NMA_CERT_CHOOSER_FLAG_CERT
 	                                            | NMA_CERT_CHOOSER_FLAG_PASSWORDS
 	                                            | NMA_CERT_CHOOSER_FLAG_PEM
-	                                            | NMA_CERT_CHOOSER_FLAG_NO_PASSWORDS,
+	                                            | NMA_CERT_CHOOSER_FLAG_NO_PASSWORDS
+	                                            | NMA_CERT_CHOOSER_FLAG_AUTODETECT_KEY,
 	                                            NMA_CERT_CHOOSER_FLAG_NONE,
 	                                              G_PARAM_WRITABLE
 	                                            | G_PARAM_CONSTRUCT_ONLY

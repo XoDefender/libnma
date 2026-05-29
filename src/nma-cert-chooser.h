@@ -23,6 +23,7 @@ G_BEGIN_DECLS
  * @NMA_CERT_CHOOSER_FLAG_PASSWORDS: Hide all controls but the secrets entries
  * @NMA_CERT_CHOOSER_FLAG_PEM: Ensure the chooser only selects regular PEM files
  * @NMA_CERT_CHOOSER_FLAG_NO_PASSWORDS: Do not show password entries (Since: 1.8.34)
+ * @NMA_CERT_CHOOSER_FLAG_AUTODETECT_KEY: Auto-fill the private key from the selected certificate's PKCS\#11 id
  *
  * Flags that controls what is the certificate chooser button able to pick.
  * Currently only local files are supported, but might be extended to use URIs,
@@ -37,6 +38,7 @@ typedef enum {
 	NMA_CERT_CHOOSER_FLAG_PASSWORDS    = 0x2,
 	NMA_CERT_CHOOSER_FLAG_PEM          = 0x4,
 	NMA_CERT_CHOOSER_FLAG_NO_PASSWORDS = 0x8,
+	NMA_CERT_CHOOSER_FLAG_AUTODETECT_KEY = 0x10,
 } NMACertChooserFlags;
 
 #define NMA_TYPE_CERT_CHOOSER                   (nma_cert_chooser_get_type ())
