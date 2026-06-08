@@ -63,6 +63,14 @@ nma_cert_chooser_button_derive_key_uri (NMACertChooserButton *button,
 gboolean
 nma_cert_chooser_button_get_has_matching_key (NMACertChooserButton *button);
 
+void
+nma_cert_chooser_button_set_uri_autoselected (NMACertChooserButton *button,
+                                              const gchar *uri,
+                                              gboolean has_matching_key);
+
+void
+nma_cert_chooser_button_autoselect_single_cert (NMACertChooserButton *button);
+
 gchar *nma_cert_chooser_button_get_pin (NMACertChooserButton *button);
 
 gboolean nma_cert_chooser_button_get_remember_pin (NMACertChooserButton *button);

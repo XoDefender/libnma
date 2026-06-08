@@ -757,6 +757,36 @@ nma_cert_chooser_get_key_password_flags (NMACertChooser *cert_chooser)
 	return nma_utils_menu_to_secret_flags (priv->key_password);
 }
 
+/**
+ * nma_cert_chooser_autoselect_single_cert:
+ * @cert_chooser: certificate chooser instance
+ *
+ * If exactly one PKCS\#11 token is active in the system and it carries exactly
+ * one certificate, selects that certificate automatically, which in turn
+ * triggers the private key autodetection (see %NMA_CERT_CHOOSER_FLAG_AUTODETECT_KEY).
+ *
+ * Does nothing if the user has already modified the key, if there are zero or
+ * multiple active tokens, or zero or multiple certificates on the token. The
+ * token enumeration is asynchronous and reads public objects only (no PIN), so
+ * the widget is populated shortly after this call returns.
+ *
+ * Since: 1.8.0
+ */
+void
+nma_cert_chooser_autoselect_single_cert (NMACertChooser *cert_chooser)
+{
+	NMACertChooserPrivate *priv;
+
+	g_return_if_fail (NMA_IS_CERT_CHOOSER (cert_chooser));
+	priv = NMA_CERT_CHOOSER_GET_PRIVATE (cert_chooser);
+
+	/* Пользователь уже выбрал ключ вручную — не вмешиваемся. */
+	if (priv->key_user_modified)
+		return;
+
+	nma_cert_chooser_button_autoselect_single_cert (NMA_CERT_CHOOSER_BUTTON (priv->cert_button));
+}
+
 static void
 cert_changed_cb (NMACertChooserButton *button, gpointer user_data)
 {

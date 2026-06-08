@@ -18,6 +18,8 @@
 #if !GCK_CHECK_VERSION(3,90,0)
 #define gck_uri_data_parse gck_uri_parse
 #define gck_uri_data_build gck_uri_build
+#define gck_slot_open_session_async(self, options, interaction, cancellable, callback, user_data) \
+	gck_slot_open_session_async(self, options, cancellable, callback, user_data)
 #endif
 #endif
 
@@ -254,6 +256,284 @@ use_simple_button (NMACertChooserButtonFlags flags)
 {
 	return flags & NMA_CERT_CHOOSER_BUTTON_FLAG_PEM;
 }
+
+/* ---- S7: автоподстановка единственного сертификата с единственного токена ----
+ *
+ * Перечисляет активные токены и, если в системе ровно один токен и на нём
+ * ровно один сертификат, программно выбирает этот сертификат (как если бы
+ * пользователь сделал это через диалог) и эмитит "changed", после чего
+ * срабатывает уже существующая автоподстановка приватного ключа.
+ * Перечисление идёт по публичным объектам без логина (PIN вводится отдельно).
+ */
+
+typedef struct {
+	NMACertChooserButton *button;   /* g_object_ref на время операции */
+	GckSlot *slot;                  /* единственный найденный токен */
+	GckSession *session;            /* read-only сессия без логина */
+	GHashTable *key_ids;            /* GBytes(CKA_ID) ключей (pub/priv) */
+	GPtrArray *certs;               /* GckAttributes* объектов CKO_CERTIFICATE */
+	guint pending;                  /* незавершённые gck_object_get_async */
+	gboolean enum_done;             /* перечисление вернуло все объекты */
+} AutoselectCtx;
+
+static void
+autoselect_ctx_free (AutoselectCtx *actx)
+{
+	if (!actx)
+		return;
+	if (actx->certs)
+		g_ptr_array_unref (actx->certs);
+	if (actx->key_ids)
+		g_hash_table_unref (actx->key_ids);
+	g_clear_object (&actx->session);
+	g_clear_object (&actx->slot);
+	g_clear_object (&actx->button);
+	g_slice_free (AutoselectCtx, actx);
+}
+
+/* Строит URI сертификата: только id (если на токене есть парный ключ) либо все
+ * атрибуты. Зеркало nma_pkcs11_cert_chooser_dialog_get_uri(). */
+static gchar *
+autoselect_build_cert_uri (GckSlot *slot, GckAttributes *attrs, gboolean has_key)
+{
+	GckBuilder *builder;
+	GckUriData uri_data = { 0, };
+	gchar *uri;
+
+	builder = gck_builder_new (GCK_BUILDER_NONE);
+	if (has_key)
+		gck_builder_add_only (builder, attrs, CKA_ID, GCK_INVALID);
+	else
+		gck_builder_add_all (builder, attrs);
+
+	uri_data.attributes = gck_builder_end (builder);
+	uri_data.token_info = gck_slot_get_token_info (slot);
+	uri = gck_uri_data_build (&uri_data, GCK_URI_FOR_OBJECT_ON_TOKEN);
+
+	gck_attributes_unref (uri_data.attributes);
+	if (uri_data.token_info)
+		gck_token_info_free (uri_data.token_info);
+
+	return uri;
+}
+
+static void
+autoselect_finish (AutoselectCtx *actx)
+{
+	GckAttributes *attrs;
+	const GckAttribute *id;
+	gboolean has_key = FALSE;
+	gchar *uri;
+
+	/* По S7 считаем ВСЕ сертификаты на токене. */
+	if (actx->certs->len != 1) {
+		autoselect_ctx_free (actx);
+		return;
+	}
+
+	attrs = actx->certs->pdata[0];
+
+	id = gck_attributes_find (attrs, CKA_ID);
+	if (id && id->value && id->length) {
+		GBytes *id_bytes = g_bytes_new_static (id->value, id->length);
+
+		has_key = g_hash_table_contains (actx->key_ids, id_bytes);
+		g_bytes_unref (id_bytes);
+	}
+
+	uri = autoselect_build_cert_uri (actx->slot, attrs, has_key);
+	if (uri && NMA_IS_CERT_CHOOSER_BUTTON (actx->button))
+		nma_cert_chooser_button_set_uri_autoselected (actx->button, uri, has_key);
+	g_free (uri);
+
+	autoselect_ctx_free (actx);
+}
+
+static void
+autoselect_object_details (GObject *source_object, GAsyncResult *res, gpointer user_data)
+{
+	GckObject *object = GCK_OBJECT (source_object);
+	AutoselectCtx *actx = user_data;
+	GckAttributes *attrs;
+	gulong cka_class;
+	const GckAttribute *attr;
+	GError *error = NULL;
+
+	attrs = gck_object_get_finish (object, res, &error);
+	if (!attrs) {
+		g_warning ("Error getting attributes: %s", error->message);
+		g_clear_error (&error);
+	} else {
+		if (gck_attributes_find_ulong (attrs, CKA_CLASS, &cka_class)) {
+			switch (cka_class) {
+			case CKO_PUBLIC_KEY:
+			case CKO_PRIVATE_KEY:
+				attr = gck_attributes_find (attrs, CKA_ID);
+				if (attr && attr->value && attr->length)
+					g_hash_table_add (actx->key_ids,
+					                  g_bytes_new (attr->value, attr->length));
+				break;
+			case CKO_CERTIFICATE:
+				g_ptr_array_add (actx->certs, gck_attributes_ref (attrs));
+				break;
+			default:
+				break;
+			}
+		}
+		gck_attributes_unref (attrs);
+	}
+
+	if (actx->pending > 0)
+		actx->pending--;
+	if (actx->enum_done && actx->pending == 0)
+		autoselect_finish (actx);
+}
+
+static void
+autoselect_next_object (GObject *obj, GAsyncResult *res, gpointer user_data)
+{
+	AutoselectCtx *actx = user_data;
+	GckEnumerator *enm = GCK_ENUMERATOR (obj);
+	GList *objects;
+	GList *iter;
+	GError *error = NULL;
+
+	objects = gck_enumerator_next_finish (enm, res, &error);
+	g_object_unref (enm);
+	if (error) {
+		g_warning ("Error getting object: %s", error->message);
+		g_clear_error (&error);
+		autoselect_ctx_free (actx);
+		return;
+	}
+
+	for (iter = objects; iter; iter = iter->next) {
+		GckObject *object = GCK_OBJECT (iter->data);
+		const gulong attr_types[] = { CKA_ID, CKA_LABEL, CKA_CLASS };
+
+		actx->pending++;
+		gck_object_get_async (object, attr_types, G_N_ELEMENTS (attr_types),
+		                      NULL, autoselect_object_details, actx);
+	}
+
+	actx->enum_done = TRUE;
+	g_list_free_full (objects, g_object_unref);
+
+	if (actx->pending == 0)
+		autoselect_finish (actx);
+}
+
+static void
+autoselect_session_opened (GObject *obj, GAsyncResult *res, gpointer user_data)
+{
+	AutoselectCtx *actx = user_data;
+	GckSession *session;
+	GckEnumerator *enm;
+	GError *error = NULL;
+
+	session = gck_slot_open_session_finish (actx->slot, res, &error);
+	if (!session) {
+		g_clear_error (&error);
+		autoselect_ctx_free (actx);
+		return;
+	}
+	actx->session = session;
+
+	enm = gck_session_enumerate_objects (session, gck_attributes_new_empty (GCK_INVALID));
+	gck_enumerator_next_async (enm, -1, NULL, autoselect_next_object, actx);
+}
+
+static void
+autoselect_modules_initialized (GObject *object, GAsyncResult *res, gpointer user_data)
+{
+	AutoselectCtx *actx = user_data;
+	GList *modules;
+	GList *slots;
+	GList *iter;
+	GckSlot *the_slot = NULL;
+	guint token_count = 0;
+	GError *error = NULL;
+	const char *ignore_opensc = getenv ("NMA_IGNORE_OPENSC");
+
+	modules = gck_modules_initialize_registered_finish (res, &error);
+	if (error) {
+		g_warning ("Error getting registered modules: %s", error->message);
+		g_clear_error (&error);
+		autoselect_ctx_free (actx);
+		return;
+	}
+
+	if (ignore_opensc && strstr (ignore_opensc, "1")) {
+		for (GList *module = modules; module != NULL; module = module->next) {
+			char *manufacturer_id = gck_module_get_info (module->data)->manufacturer_id;
+			if (manufacturer_id && strstr (manufacturer_id, "OpenSC")) {
+				modules = g_list_remove_link (modules, module);
+				break;
+			}
+		}
+	}
+
+	slots = gck_modules_get_slots (modules, FALSE);
+	for (iter = slots; iter; iter = iter->next) {
+		GckSlot *slot = GCK_SLOT (iter->data);
+		GckTokenInfo *info;
+
+		if (is_this_a_slot_nobody_loves (slot))
+			continue;
+
+		info = gck_slot_get_token_info (slot);
+		if (!info)
+			continue;
+		if ((info->flags & CKF_TOKEN_INITIALIZED) == 0) {
+			gck_token_info_free (info);
+			continue;
+		}
+		gck_token_info_free (info);
+
+		token_count++;
+		if (token_count == 1)
+			the_slot = g_object_ref (slot);
+	}
+
+	g_list_free_full (slots, g_object_unref);
+	g_list_free_full (modules, g_object_unref);
+
+	/* Ровно один активный токен — иначе пользователь выбирает вручную. */
+	if (token_count != 1) {
+		g_clear_object (&the_slot);
+		autoselect_ctx_free (actx);
+		return;
+	}
+
+	actx->slot = the_slot;
+	gck_slot_open_session_async (actx->slot, GCK_SESSION_READ_ONLY,
+	                             NULL, NULL, autoselect_session_opened, actx);
+}
+
+void
+nma_cert_chooser_button_autoselect_single_cert (NMACertChooserButton *button)
+{
+	NMACertChooserButtonPrivate *priv;
+	AutoselectCtx *actx;
+
+	g_return_if_fail (NMA_IS_CERT_CHOOSER_BUTTON (button));
+	priv = NMA_CERT_CHOOSER_BUTTON_GET_PRIVATE (button);
+
+	/* Только для комбобокса (PKCS#11); у простой файловой кнопки токенов нет. */
+	if (use_simple_button (priv->flags))
+		return;
+	/* Уже что-то выбрано — не перетираем (защита от гонок/повторов). */
+	if (priv->uri)
+		return;
+
+	actx = g_slice_new0 (AutoselectCtx);
+	actx->button = g_object_ref (button);
+	actx->key_ids = g_hash_table_new_full (g_bytes_hash, g_bytes_equal,
+	                                       (GDestroyNotify) g_bytes_unref, NULL);
+	actx->certs = g_ptr_array_new_with_free_func ((GDestroyNotify) gck_attributes_unref);
+
+	gck_modules_initialize_registered_async (NULL, autoselect_modules_initialized, actx);
+}
 #else
 typedef void GckSlot;
 #define GCK_TYPE_SLOT G_TYPE_POINTER
@@ -282,6 +562,11 @@ static int
 use_simple_button (NMACertChooserButtonFlags flags)
 {
 	return TRUE;
+}
+
+void
+nma_cert_chooser_button_autoselect_single_cert (NMACertChooserButton *button)
+{
 }
 #endif
 
@@ -629,6 +914,40 @@ nma_cert_chooser_button_set_uri (NMACertChooserButton *button, const gchar *uri)
 	priv->uri = g_strdup (uri);
 	priv->has_matching_key = FALSE;
 	update_title (button);
+}
+
+/**
+ * nma_cert_chooser_button_set_uri_autoselected:
+ * @button: the #NMACertChooserButton instance
+ * @uri: the PKCS\#11 URI of the certificate to select
+ * @has_matching_key: whether the token carries a key with a matching CKA_ID
+ *
+ * Sets the chosen URI as if it had been picked by the user from a token and
+ * emits "changed", so that the consumer (NMACertChooser) runs its private key
+ * autodetection. Unlike nma_cert_chooser_button_set_uri(), this preserves the
+ * @has_matching_key flag and notifies listeners.
+ */
+void
+nma_cert_chooser_button_set_uri_autoselected (NMACertChooserButton *button,
+                                              const gchar *uri,
+                                              gboolean has_matching_key)
+{
+	NMACertChooserButtonPrivate *priv = NMA_CERT_CHOOSER_BUTTON_GET_PRIVATE (button);
+
+	if (priv->uri)
+		g_free (priv->uri);
+	priv->uri = g_strdup (uri);
+	priv->has_matching_key = has_matching_key;
+
+	/* PIN вводится отдельно в модалке апплета, не запоминаем его здесь. */
+	nm_clear_g_free (&priv->pin);
+	priv->remember_pin = FALSE;
+
+	update_title (button);
+
+	/* Эмитим "changed" — это запускает cert_changed_cb в NMACertChooser,
+	 * который выполняет автоподстановку приватного ключа. */
+	g_signal_emit_by_name (button, "changed");
 }
 
 /**

@@ -137,6 +137,7 @@ libnma_1_8_28 {
 } libnma_1_8_22;
 
 libnma_1_8_36 {
+	nma_cert_chooser_autoselect_single_cert;
 	nma_ws_owe_get_type;
 	nma_ws_owe_new;
 } libnma_1_8_28;
