@@ -51,6 +51,8 @@ typedef struct {
 	gboolean remember_pin;
 	gboolean has_matching_key;
 	NMACertChooserButtonFlags flags;
+	gboolean modules_ready;        /* modules_initialized отработал */
+	gboolean autoselect_requested; /* автовыбор ждёт завершения перечисления */
 
 	GtkWidget *button;
 	GtkWidget *button_label;
@@ -72,6 +74,8 @@ static void
 update_title (NMACertChooserButton *button);
 
 #if WITH_GCR
+static void autoselect_from_combo_model (NMACertChooserButton *button);
+
 static gboolean
 is_this_a_slot_nobody_loves (GckSlot *slot)
 {
@@ -179,6 +183,12 @@ modules_initialized (GObject *object, GAsyncResult *res, gpointer user_data)
 
 	g_list_free_full (slots, g_object_unref);
 	g_list_free_full (modules, g_object_unref);
+
+	priv->modules_ready = TRUE;
+	if (priv->autoselect_requested) {
+		priv->autoselect_requested = FALSE;
+		autoselect_from_combo_model (self);
+	}
 }
 
 static char *
@@ -291,32 +301,6 @@ autoselect_ctx_free (AutoselectCtx *actx)
 	g_slice_free (AutoselectCtx, actx);
 }
 
-/* Строит URI сертификата: только id (если на токене есть парный ключ) либо все
- * атрибуты. Зеркало nma_pkcs11_cert_chooser_dialog_get_uri(). */
-static gchar *
-autoselect_build_cert_uri (GckSlot *slot, GckAttributes *attrs, gboolean has_key)
-{
-	GckBuilder *builder;
-	GckUriData uri_data = { 0, };
-	gchar *uri;
-
-	builder = gck_builder_new (GCK_BUILDER_NONE);
-	if (has_key)
-		gck_builder_add_only (builder, attrs, CKA_ID, GCK_INVALID);
-	else
-		gck_builder_add_all (builder, attrs);
-
-	uri_data.attributes = gck_builder_end (builder);
-	uri_data.token_info = gck_slot_get_token_info (slot);
-	uri = gck_uri_data_build (&uri_data, GCK_URI_FOR_OBJECT_ON_TOKEN);
-
-	gck_attributes_unref (uri_data.attributes);
-	if (uri_data.token_info)
-		gck_token_info_free (uri_data.token_info);
-
-	return uri;
-}
-
 static void
 autoselect_finish (AutoselectCtx *actx)
 {
@@ -341,7 +325,7 @@ autoselect_finish (AutoselectCtx *actx)
 		g_bytes_unref (id_bytes);
 	}
 
-	uri = autoselect_build_cert_uri (actx->slot, attrs, has_key);
+	uri = nma_pkcs11_cert_chooser_build_object_uri (actx->slot, attrs, has_key);
 	if (uri && NMA_IS_CERT_CHOOSER_BUTTON (actx->button))
 		nma_cert_chooser_button_set_uri_autoselected (actx->button, uri, has_key);
 	g_free (uri);
@@ -444,68 +428,52 @@ autoselect_session_opened (GObject *obj, GAsyncResult *res, gpointer user_data)
 }
 
 static void
-autoselect_modules_initialized (GObject *object, GAsyncResult *res, gpointer user_data)
+autoselect_from_combo_model (NMACertChooserButton *button)
 {
-	AutoselectCtx *actx = user_data;
-	GList *modules;
-	GList *slots;
-	GList *iter;
+	NMACertChooserButtonPrivate *priv = NMA_CERT_CHOOSER_BUTTON_GET_PRIVATE (button);
+	GtkTreeModel *model;
+	GtkTreeIter iter;
 	GckSlot *the_slot = NULL;
 	guint token_count = 0;
-	GError *error = NULL;
-	const char *ignore_opensc = getenv ("NMA_IGNORE_OPENSC");
+	gboolean valid;
+	AutoselectCtx *actx;
 
-	modules = gck_modules_initialize_registered_finish (res, &error);
-	if (error) {
-		g_warning ("Error getting registered modules: %s", error->message);
-		g_clear_error (&error);
-		autoselect_ctx_free (actx);
+	/* Уже что-то выбрано — не перетираем (защита от гонок/повторов). */
+	if (priv->uri)
 		return;
-	}
 
-	if (ignore_opensc && strstr (ignore_opensc, "1")) {
-		for (GList *module = modules; module != NULL; module = module->next) {
-			char *manufacturer_id = gck_module_get_info (module->data)->manufacturer_id;
-			if (manufacturer_id && strstr (manufacturer_id, "OpenSC")) {
-				modules = g_list_remove_link (modules, module);
-				break;
-			}
-		}
-	}
+	/* Переиспользуем слоты, уже отфильтрованные и сложенные в модель
+	 * комбобокса функцией modules_initialized (is_this_a_slot_nobody_loves,
+	 * CKF_TOKEN_INITIALIZED и фильтр OpenSC уже применены там). */
+	model = gtk_combo_box_get_model (GTK_COMBO_BOX (priv->button));
+	for (valid = gtk_tree_model_get_iter_first (model, &iter);
+	     valid;
+	     valid = gtk_tree_model_iter_next (model, &iter)) {
+		GckSlot *slot = NULL;
 
-	slots = gck_modules_get_slots (modules, FALSE);
-	for (iter = slots; iter; iter = iter->next) {
-		GckSlot *slot = GCK_SLOT (iter->data);
-		GckTokenInfo *info;
-
-		if (is_this_a_slot_nobody_loves (slot))
-			continue;
-
-		info = gck_slot_get_token_info (slot);
-		if (!info)
-			continue;
-		if ((info->flags & CKF_TOKEN_INITIALIZED) == 0) {
-			gck_token_info_free (info);
-			continue;
-		}
-		gck_token_info_free (info);
-
+		gtk_tree_model_get (model, &iter, COLUMN_SLOT, &slot, -1);
+		if (!slot)
+			continue;             /* разделители и «Select from file…» */
 		token_count++;
 		if (token_count == 1)
-			the_slot = g_object_ref (slot);
+			the_slot = slot;      /* перехватываем ссылку из get */
+		else
+			g_object_unref (slot);
 	}
-
-	g_list_free_full (slots, g_object_unref);
-	g_list_free_full (modules, g_object_unref);
 
 	/* Ровно один активный токен — иначе пользователь выбирает вручную. */
 	if (token_count != 1) {
 		g_clear_object (&the_slot);
-		autoselect_ctx_free (actx);
 		return;
 	}
 
-	actx->slot = the_slot;
+	actx = g_slice_new0 (AutoselectCtx);
+	actx->button = g_object_ref (button);
+	actx->slot = the_slot;            /* владение передано */
+	actx->key_ids = g_hash_table_new_full (g_bytes_hash, g_bytes_equal,
+	                                       (GDestroyNotify) g_bytes_unref, NULL);
+	actx->certs = g_ptr_array_new_with_free_func ((GDestroyNotify) gck_attributes_unref);
+
 	gck_slot_open_session_async (actx->slot, GCK_SESSION_READ_ONLY,
 	                             NULL, NULL, autoselect_session_opened, actx);
 }
@@ -514,7 +482,6 @@ void
 nma_cert_chooser_button_autoselect_single_cert (NMACertChooserButton *button)
 {
 	NMACertChooserButtonPrivate *priv;
-	AutoselectCtx *actx;
 
 	g_return_if_fail (NMA_IS_CERT_CHOOSER_BUTTON (button));
 	priv = NMA_CERT_CHOOSER_BUTTON_GET_PRIVATE (button);
@@ -526,13 +493,12 @@ nma_cert_chooser_button_autoselect_single_cert (NMACertChooserButton *button)
 	if (priv->uri)
 		return;
 
-	actx = g_slice_new0 (AutoselectCtx);
-	actx->button = g_object_ref (button);
-	actx->key_ids = g_hash_table_new_full (g_bytes_hash, g_bytes_equal,
-	                                       (GDestroyNotify) g_bytes_unref, NULL);
-	actx->certs = g_ptr_array_new_with_free_func ((GDestroyNotify) gck_attributes_unref);
-
-	gck_modules_initialize_registered_async (NULL, autoselect_modules_initialized, actx);
+	/* Перечисление токенов уже идёт/прошло в modules_initialized —
+	 * подключаемся к его результату вместо второго прохода. */
+	if (priv->modules_ready)
+		autoselect_from_combo_model (button);
+	else
+		priv->autoselect_requested = TRUE;
 }
 #else
 typedef void GckSlot;

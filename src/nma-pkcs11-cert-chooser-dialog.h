@@ -48,4 +48,8 @@ gboolean nma_pkcs11_cert_chooser_dialog_get_remember_pin (NMAPkcs11CertChooserDi
 
 gboolean nma_pkcs11_cert_chooser_dialog_get_has_matching_key (NMAPkcs11CertChooserDialog *dialog);
 
+gchar *nma_pkcs11_cert_chooser_build_object_uri (GckSlot *slot,
+                                                 GckAttributes *attrs,
+                                                 gboolean id_only);
+
 #endif /* __NMA_PKCS11_CERT_CHOOSER_DIALOG_H__ */

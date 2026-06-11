@@ -603,6 +603,39 @@ nma_pkcs11_cert_chooser_dialog_new_valist (GckSlot *slot,
 	return self;
 }
 
+gchar *
+nma_pkcs11_cert_chooser_build_object_uri (GckSlot *slot,
+                                          GckAttributes *attrs,
+                                          gboolean id_only)
+{
+	GckBuilder *builder;
+	GckUriData uri_data = { 0, };
+	gulong cka_class;
+	gchar *uri;
+
+	if (   id_only
+	    && gck_attributes_find_ulong (attrs, CKA_CLASS, &cka_class)
+	    && cka_class == CKO_CERTIFICATE)
+		id_only = FALSE;
+
+	builder = gck_builder_new (GCK_BUILDER_NONE);
+	if (id_only) {
+		gck_builder_add_only (builder, attrs, CKA_ID, GCK_INVALID);
+	} else {
+		gck_builder_add_all (builder, attrs);
+	}
+
+	uri_data.attributes = gck_builder_end (builder);
+	uri_data.token_info = gck_slot_get_token_info (slot);
+	uri = gck_uri_data_build (&uri_data, GCK_URI_FOR_OBJECT_ON_TOKEN);
+
+	gck_attributes_unref (uri_data.attributes);
+	if (uri_data.token_info)
+		gck_token_info_free (uri_data.token_info);
+
+	return uri;
+}
+
 /**
  * nma_pkcs11_cert_chooser_dialog_get_uri:
  * @dialog: the #NMAPkcs11CertChooserDialog instance
@@ -620,8 +653,6 @@ nma_pkcs11_cert_chooser_dialog_get_uri (NMAPkcs11CertChooserDialog *dialog)
 	GtkTreeIter iter;
 	GckAttributes *attrs;
 	gboolean has_key;
-	GckBuilder *builder;
-	GckUriData uri_data = { 0, };
 	gchar *uri;
 
 	gtk_tree_view_get_cursor (priv->objects_view, &path, NULL);
@@ -636,21 +667,8 @@ nma_pkcs11_cert_chooser_dialog_get_uri (NMAPkcs11CertChooserDialog *dialog)
 	                    COLUMN_HAS_KEY, &has_key,
 	                    COLUMN_ATTRIBUTES, &attrs, -1);
 
-	builder = gck_builder_new (GCK_BUILDER_NONE);
-	if (has_key) {
-		/* We do have a object with matching id in the other store (a key)
-		 * but its other properties (label) may be unset or missing.
-		 * Still, we want an URI that matches both. */
-		gck_builder_add_only (builder, attrs, CKA_ID, GCK_INVALID);
-	} else {
-		gck_builder_add_all (builder, attrs);
-	}
+	uri = nma_pkcs11_cert_chooser_build_object_uri (priv->slot, attrs, has_key);
 
-	uri_data.attributes = gck_builder_end (builder);
-	uri_data.token_info = gck_slot_get_token_info (priv->slot);
-	uri = gck_uri_data_build (&uri_data, GCK_URI_FOR_OBJECT_ON_TOKEN);
-
-	gck_attributes_unref (uri_data.attributes);
 	gck_attributes_unref (attrs);
 
 	return uri;
