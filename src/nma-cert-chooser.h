@@ -161,6 +161,25 @@ gchar               *nma_cert_chooser_get_cert_id                  (NMACertChoos
 NMA_AVAILABLE_IN_1_8
 void                 nma_cert_chooser_autoselect_single_cert       (NMACertChooser *cert_chooser);
 
+/**
+ * NMATokenLoginResult:
+ * @NMA_TOKEN_LOGIN_SUCCESS: the PIN is correct
+ * @NMA_TOKEN_LOGIN_PIN_INCORRECT: the PIN is wrong (%CKR_PIN_INCORRECT)
+ * @NMA_TOKEN_LOGIN_OTHER_ERROR: any other failure
+ *
+ * Outcome of nma_cert_chooser_login_token().
+ */
+typedef enum {
+	NMA_TOKEN_LOGIN_SUCCESS,
+	NMA_TOKEN_LOGIN_PIN_INCORRECT,
+	NMA_TOKEN_LOGIN_OTHER_ERROR,
+} NMATokenLoginResult;
+
+NMA_AVAILABLE_IN_1_8
+NMATokenLoginResult  nma_cert_chooser_login_token                  (NMACertChooser *cert_chooser,
+                                                                    const guchar *pin,
+                                                                    gsize n_pin);
+
 G_END_DECLS
 
 #endif /* __NMA_CERT_CHOOSER_H__ */

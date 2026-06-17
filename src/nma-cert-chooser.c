@@ -787,6 +787,34 @@ nma_cert_chooser_autoselect_single_cert (NMACertChooser *cert_chooser)
 	nma_cert_chooser_button_autoselect_single_cert (NMA_CERT_CHOOSER_BUTTON (priv->cert_button));
 }
 
+/**
+ * nma_cert_chooser_login_token:
+ * @cert_chooser: certificate chooser instance
+ * @pin: (array length=n_pin): the PIN to verify
+ * @n_pin: length of @pin in bytes
+ *
+ * Verifies @pin against the PKCS\#11 token that holds the currently selected
+ * certificate by performing a test login. This lets the caller detect a wrong
+ * PIN before activating a connection.
+ *
+ * Returns: the outcome of the login attempt.
+ *
+ * Since: 1.8.0
+ */
+NMATokenLoginResult
+nma_cert_chooser_login_token (NMACertChooser *cert_chooser,
+                              const guchar *pin,
+                              gsize n_pin)
+{
+	NMACertChooserPrivate *priv;
+
+	g_return_val_if_fail (NMA_IS_CERT_CHOOSER (cert_chooser), NMA_TOKEN_LOGIN_OTHER_ERROR);
+	priv = NMA_CERT_CHOOSER_GET_PRIVATE (cert_chooser);
+
+	return (NMATokenLoginResult) nma_cert_chooser_button_login_token (
+	                                 NMA_CERT_CHOOSER_BUTTON (priv->cert_button), pin, n_pin);
+}
+
 static void
 cert_changed_cb (NMACertChooserButton *button, gpointer user_data)
 {

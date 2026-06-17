@@ -71,6 +71,11 @@ nma_cert_chooser_button_set_uri_autoselected (NMACertChooserButton *button,
 void
 nma_cert_chooser_button_autoselect_single_cert (NMACertChooserButton *button);
 
+int
+nma_cert_chooser_button_login_token (NMACertChooserButton *button,
+                                     const guchar *pin,
+                                     gsize n_pin);
+
 gchar *nma_cert_chooser_button_get_pin (NMACertChooserButton *button);
 
 gboolean nma_cert_chooser_button_get_remember_pin (NMACertChooserButton *button);

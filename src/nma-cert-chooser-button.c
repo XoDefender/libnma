@@ -51,9 +51,9 @@ typedef struct {
 	gboolean remember_pin;
 	gboolean has_matching_key;
 	NMACertChooserButtonFlags flags;
-	gboolean modules_ready;        /* modules_initialized отработал */
-	gboolean autoselect_requested; /* автовыбор ждёт завершения перечисления */
-
+	gboolean modules_ready;
+	gboolean autoselect_requested;
+	gpointer slot;
 	GtkWidget *button;
 	GtkWidget *button_label;
 } NMACertChooserButtonPrivate;
@@ -220,6 +220,16 @@ title_from_pkcs11 (NMACertChooserButton *button)
 }
 
 static void
+remember_slot (NMACertChooserButton *button, GckSlot *slot)
+{
+	NMACertChooserButtonPrivate *priv = NMA_CERT_CHOOSER_BUTTON_GET_PRIVATE (button);
+
+	if (priv->slot)
+		g_object_unref (priv->slot);
+	priv->slot = slot ? g_object_ref (slot) : NULL;
+}
+
+static void
 select_from_token (NMACertChooserButton *button, GckSlot *slot)
 {
 	NMACertChooserButtonPrivate *priv = NMA_CERT_CHOOSER_BUTTON_GET_PRIVATE (button);
@@ -241,6 +251,7 @@ select_from_token (NMACertChooserButton *button, GckSlot *slot)
 	                                             _("Cancel"), GTK_RESPONSE_CANCEL,
 	                                             NULL);
 	if (nma_gtk_dialog_run (GTK_DIALOG (dialog)) == GTK_RESPONSE_ACCEPT) {
+		remember_slot (button, slot);
 		if (priv->uri)
 			g_free (priv->uri);
 		priv->uri = nma_pkcs11_cert_chooser_dialog_get_uri (NMA_PKCS11_CERT_CHOOSER_DIALOG (dialog));
@@ -326,8 +337,10 @@ autoselect_finish (AutoselectCtx *actx)
 	}
 
 	uri = nma_pkcs11_cert_chooser_build_object_uri (actx->slot, attrs, has_key);
-	if (uri && NMA_IS_CERT_CHOOSER_BUTTON (actx->button))
+	if (uri && NMA_IS_CERT_CHOOSER_BUTTON (actx->button)) {
+		remember_slot (actx->button, actx->slot);
 		nma_cert_chooser_button_set_uri_autoselected (actx->button, uri, has_key);
+	}
 	g_free (uri);
 
 	autoselect_ctx_free (actx);
@@ -500,6 +513,45 @@ nma_cert_chooser_button_autoselect_single_cert (NMACertChooserButton *button)
 	else
 		priv->autoselect_requested = TRUE;
 }
+
+int
+nma_cert_chooser_button_login_token (NMACertChooserButton *button,
+                                     const guchar *pin,
+                                     gsize n_pin)
+{
+	NMACertChooserButtonPrivate *priv;
+	GckSession *session;
+	GError *error = NULL;
+	int result;
+
+	g_return_val_if_fail (NMA_IS_CERT_CHOOSER_BUTTON (button), 2);
+	priv = NMA_CERT_CHOOSER_BUTTON_GET_PRIVATE (button);
+
+	if (!priv->slot)
+		return 2;
+
+	session = gck_slot_open_session (priv->slot, GCK_SESSION_READ_ONLY, NULL, &error);
+	if (!session) {
+		g_warning ("Cannot open session for PIN check: %s",
+		           error ? error->message : "(unknown)");
+		g_clear_error (&error);
+		return 2;
+	}
+
+	if (gck_session_login (session, CKU_USER, pin, n_pin, NULL, &error)) {
+		gck_session_logout (session, NULL, NULL);
+		result = 0;
+	} else {
+		if (g_error_matches (error, GCK_ERROR, CKR_PIN_INCORRECT))
+			result = 1;
+		else
+			result = 2;
+		g_clear_error (&error);
+	}
+
+	g_object_unref (session);
+	return result;
+}
 #else
 typedef void GckSlot;
 #define GCK_TYPE_SLOT G_TYPE_POINTER
@@ -533,6 +585,14 @@ use_simple_button (NMACertChooserButtonFlags flags)
 void
 nma_cert_chooser_button_autoselect_single_cert (NMACertChooserButton *button)
 {
+}
+
+int
+nma_cert_chooser_button_login_token (NMACertChooserButton *button,
+                                     const guchar *pin,
+                                     gsize n_pin)
+{
+	return 2;
 }
 #endif
 
@@ -781,6 +841,7 @@ dispose (GObject *object)
 	nm_clear_g_free (&priv->title);
 	nm_clear_g_free (&priv->uri);
 	nm_clear_g_free (&priv->pin);
+	g_clear_object (&priv->slot);
 
         G_OBJECT_CLASS (nma_cert_chooser_button_parent_class)->dispose (object);
 }
@@ -879,6 +940,7 @@ nma_cert_chooser_button_set_uri (NMACertChooserButton *button, const gchar *uri)
 		g_free (priv->uri);
 	priv->uri = g_strdup (uri);
 	priv->has_matching_key = FALSE;
+	g_clear_object (&priv->slot);
 	update_title (button);
 }
 
