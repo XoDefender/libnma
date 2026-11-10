@@ -7,3 +7,11 @@ rbt-add-ignore-opensc-env-var.patch
 rbt-fix-cert-chooser-dialog-crash.patch
 rbt-fix-cert-chooser-button-crash.patch
 rbt-not-show-pub-key-in-cert-chooser.patch
+rbt-allow-wep-by-default.patch
+rbt-add-cert-chooser-get-cert-id.patch
+rbt-display-rfc822-in-cert-chooser.patch
+rbt-add-ccmp-to-sae-and-wpa-psk.patch
+rbt-add-ask-cert-data-on-wifi-connect-check.patch
+rbt-add-autoselect-private-key.patch
+rbt-add-single-client-cert-autoselect.patch
+rbt-add-token-pin-check.patch

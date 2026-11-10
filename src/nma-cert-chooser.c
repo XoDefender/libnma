@@ -31,16 +31,9 @@ typedef struct {
 } GckUriData;
 
 #define GCK_URI_FOR_OBJECT 0
-#define CKA_CLASS 0
 
 static GckUriData *
 gck_uri_parse (const gchar *string, GckUriFlags flags, GError **error)
-{
-	return NULL;
-}
-
-static const GckAttribute *
-gck_attributes_find (GckAttributes *attrs, gulong attr_type)
 {
 	return NULL;
 }
@@ -64,6 +57,7 @@ typedef struct {
 
 	NMACertChooserFlags flags;
 	char *title;
+	gboolean key_user_modified;
 } NMACertChooserPrivate;
 
 struct _NMACertChooser {
@@ -350,6 +344,8 @@ nma_cert_chooser_set_key_uri (NMACertChooser *cert_chooser,
 
 	g_return_if_fail (NMA_IS_CERT_CHOOSER (cert_chooser));
 	priv = NMA_CERT_CHOOSER_GET_PRIVATE (cert_chooser);
+
+	priv->key_user_modified = (uri != NULL);
 
 	if (uri) {
 		gtk_widget_set_sensitive (priv->key_button, TRUE);
@@ -761,6 +757,57 @@ nma_cert_chooser_get_key_password_flags (NMACertChooser *cert_chooser)
 	return nma_utils_menu_to_secret_flags (priv->key_password);
 }
 
+/**
+ * nma_cert_chooser_autoselect_single_cert:
+ * @cert_chooser: certificate chooser instance
+ *
+ * If exactly one PKCS\#11 token is active in the system and it carries exactly
+ * one certificate, selects that certificate automatically.
+ *
+ * Since: 1.8.0
+ */
+void
+nma_cert_chooser_autoselect_single_cert (NMACertChooser *cert_chooser)
+{
+	NMACertChooserPrivate *priv;
+
+	g_return_if_fail (NMA_IS_CERT_CHOOSER (cert_chooser));
+	priv = NMA_CERT_CHOOSER_GET_PRIVATE (cert_chooser);
+
+	if (priv->key_user_modified)
+		return;
+
+	nma_cert_chooser_button_autoselect_single_cert (NMA_CERT_CHOOSER_BUTTON (priv->cert_button));
+}
+
+/**
+ * nma_cert_chooser_login_token:
+ * @cert_chooser: certificate chooser instance
+ * @pin: (array length=n_pin): the PIN to verify
+ * @n_pin: length of @pin in bytes
+ *
+ * Verifies @pin against the PKCS\#11 token that holds the currently selected
+ * certificate by performing a test login. This lets the caller detect a wrong
+ * PIN before activating a connection.
+ *
+ * Returns: the outcome of the login attempt.
+ *
+ * Since: 1.8.0
+ */
+NMATokenLoginResult
+nma_cert_chooser_login_token (NMACertChooser *cert_chooser,
+                              const guchar *pin,
+                              gsize n_pin)
+{
+	NMACertChooserPrivate *priv;
+
+	g_return_val_if_fail (NMA_IS_CERT_CHOOSER (cert_chooser), NMA_TOKEN_LOGIN_OTHER_ERROR);
+	priv = NMA_CERT_CHOOSER_GET_PRIVATE (cert_chooser);
+
+	return (NMATokenLoginResult) nma_cert_chooser_button_login_token (
+	                                 NMA_CERT_CHOOSER_BUTTON (priv->cert_button), pin, n_pin);
+}
+
 static void
 cert_changed_cb (NMACertChooserButton *button, gpointer user_data)
 {
@@ -785,16 +832,23 @@ cert_changed_cb (NMACertChooserButton *button, gpointer user_data)
 	if (!gtk_widget_get_sensitive (priv->key_button)) {
 		gtk_widget_set_sensitive (priv->key_button, TRUE);
 		gtk_widget_set_sensitive (priv->key_button_label, TRUE);
+	}
 
-		if (uri_data) {
-			/* URI that is good both for a certificate and for a key. */
-			if (!gck_attributes_find (uri_data->attributes, CKA_CLASS)) {
-				nma_cert_chooser_button_set_uri (NMA_CERT_CHOOSER_BUTTON (priv->key_button), uri);
-				gtk_widget_set_sensitive (priv->key_password, TRUE);
-				gtk_widget_set_sensitive (priv->key_password_label, TRUE);
-				if (pin)
-					gtk_editable_set_text (GTK_EDITABLE (priv->key_password), pin);
-			}
+	/* Auto-derive the private key from the certificate's
+	 * PKCS#11 id and pre-fill the key chooser */
+	if (   !priv->key_user_modified
+	    && g_str_has_prefix (uri, "pkcs11:")
+	    && (priv->flags & NMA_CERT_CHOOSER_FLAG_AUTODETECT_KEY)
+	    && nma_cert_chooser_button_get_has_matching_key (button)) {
+		gchar *key_uri = nma_cert_chooser_button_derive_key_uri (NMA_CERT_CHOOSER_BUTTON (priv->cert_button), uri);
+
+		if (key_uri) {
+			nma_cert_chooser_button_set_uri (NMA_CERT_CHOOSER_BUTTON (priv->key_button), key_uri);
+			gtk_widget_set_sensitive (priv->key_password, TRUE);
+			gtk_widget_set_sensitive (priv->key_password_label, TRUE);
+			if (pin)
+				gtk_editable_set_text (GTK_EDITABLE (priv->key_password), pin);
+			g_free (key_uri);
 		}
 	}
 
@@ -845,6 +899,7 @@ key_changed_cb (NMACertChooserButton *button, gpointer user_data)
 
 	gtk_widget_set_sensitive (priv->key_password, TRUE);
 	gtk_widget_set_sensitive (priv->key_password_label, TRUE);
+	priv->key_user_modified = TRUE;
 	g_signal_emit_by_name (user_data, "changed");
 }
 
@@ -1040,7 +1095,8 @@ nma_cert_chooser_class_init (NMACertChooserClass *klass)
 	                                              NMA_CERT_CHOOSER_FLAG_CERT
 	                                            | NMA_CERT_CHOOSER_FLAG_PASSWORDS
 	                                            | NMA_CERT_CHOOSER_FLAG_PEM
-	                                            | NMA_CERT_CHOOSER_FLAG_NO_PASSWORDS,
+	                                            | NMA_CERT_CHOOSER_FLAG_NO_PASSWORDS
+	                                            | NMA_CERT_CHOOSER_FLAG_AUTODETECT_KEY,
 	                                            NMA_CERT_CHOOSER_FLAG_NONE,
 	                                              G_PARAM_WRITABLE
 	                                            | G_PARAM_CONSTRUCT_ONLY

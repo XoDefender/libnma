@@ -17,6 +17,9 @@
 #include <gck/gck.h>
 #if !GCK_CHECK_VERSION(3,90,0)
 #define gck_uri_data_parse gck_uri_parse
+#define gck_uri_data_build gck_uri_build
+#define gck_slot_open_session_async(self, options, interaction, cancellable, callback, user_data) \
+	gck_slot_open_session_async(self, options, cancellable, callback, user_data)
 #endif
 #endif
 
@@ -46,8 +49,11 @@ typedef struct {
 	gchar *uri;
 	gchar *pin;
 	gboolean remember_pin;
+	gboolean has_matching_key;
 	NMACertChooserButtonFlags flags;
-
+	gboolean modules_ready;
+	gboolean autoselect_requested;
+	gpointer slot;
 	GtkWidget *button;
 	GtkWidget *button_label;
 } NMACertChooserButtonPrivate;
@@ -68,6 +74,8 @@ static void
 update_title (NMACertChooserButton *button);
 
 #if WITH_GCR
+static void autoselect_from_combo_model (NMACertChooserButton *button);
+
 static gboolean
 is_this_a_slot_nobody_loves (GckSlot *slot)
 {
@@ -175,6 +183,12 @@ modules_initialized (GObject *object, GAsyncResult *res, gpointer user_data)
 
 	g_list_free_full (slots, g_object_unref);
 	g_list_free_full (modules, g_object_unref);
+
+	priv->modules_ready = TRUE;
+	if (priv->autoselect_requested) {
+		priv->autoselect_requested = FALSE;
+		autoselect_from_combo_model (self);
+	}
 }
 
 static char *
@@ -206,6 +220,16 @@ title_from_pkcs11 (NMACertChooserButton *button)
 }
 
 static void
+remember_slot (NMACertChooserButton *button, GckSlot *slot)
+{
+	NMACertChooserButtonPrivate *priv = NMA_CERT_CHOOSER_BUTTON_GET_PRIVATE (button);
+
+	if (priv->slot)
+		g_object_unref (priv->slot);
+	priv->slot = slot ? g_object_ref (slot) : NULL;
+}
+
+static void
 select_from_token (NMACertChooserButton *button, GckSlot *slot)
 {
 	NMACertChooserButtonPrivate *priv = NMA_CERT_CHOOSER_BUTTON_GET_PRIVATE (button);
@@ -227,6 +251,7 @@ select_from_token (NMACertChooserButton *button, GckSlot *slot)
 	                                             _("Cancel"), GTK_RESPONSE_CANCEL,
 	                                             NULL);
 	if (nma_gtk_dialog_run (GTK_DIALOG (dialog)) == GTK_RESPONSE_ACCEPT) {
+		remember_slot (button, slot);
 		if (priv->uri)
 			g_free (priv->uri);
 		priv->uri = nma_pkcs11_cert_chooser_dialog_get_uri (NMA_PKCS11_CERT_CHOOSER_DIALOG (dialog));
@@ -234,6 +259,7 @@ select_from_token (NMACertChooserButton *button, GckSlot *slot)
 			g_free (priv->pin);
 		priv->pin = nma_pkcs11_cert_chooser_dialog_get_pin (NMA_PKCS11_CERT_CHOOSER_DIALOG (dialog));
 		priv->remember_pin = nma_pkcs11_cert_chooser_dialog_get_remember_pin (NMA_PKCS11_CERT_CHOOSER_DIALOG (dialog));
+		priv->has_matching_key = nma_pkcs11_cert_chooser_dialog_get_has_matching_key (NMA_PKCS11_CERT_CHOOSER_DIALOG (dialog));
 		update_title (button);
 		g_signal_emit_by_name (button, "changed");
 	}
@@ -250,6 +276,262 @@ static int
 use_simple_button (NMACertChooserButtonFlags flags)
 {
 	return flags & NMA_CERT_CHOOSER_BUTTON_FLAG_PEM;
+}
+
+typedef struct {
+	NMACertChooserButton *button;
+	GckSlot *slot;
+	GckSession *session;
+	GHashTable *key_ids;
+	GPtrArray *certs;
+	guint pending;
+	gboolean enum_done;
+} AutoselectCtx;
+
+static void
+autoselect_ctx_free (AutoselectCtx *actx)
+{
+	if (!actx)
+		return;
+	if (actx->certs)
+		g_ptr_array_unref (actx->certs);
+	if (actx->key_ids)
+		g_hash_table_unref (actx->key_ids);
+	g_clear_object (&actx->session);
+	g_clear_object (&actx->slot);
+	g_clear_object (&actx->button);
+	g_slice_free (AutoselectCtx, actx);
+}
+
+static void
+autoselect_finish (AutoselectCtx *actx)
+{
+	GckAttributes *attrs;
+	const GckAttribute *id;
+	gboolean has_key = FALSE;
+	gchar *uri;
+
+	if (actx->certs->len != 1) {
+		autoselect_ctx_free (actx);
+		return;
+	}
+
+	attrs = actx->certs->pdata[0];
+
+	id = gck_attributes_find (attrs, CKA_ID);
+	if (id && id->value && id->length) {
+		GBytes *id_bytes = g_bytes_new_static (id->value, id->length);
+
+		has_key = g_hash_table_contains (actx->key_ids, id_bytes);
+		g_bytes_unref (id_bytes);
+	}
+
+	uri = nma_pkcs11_cert_chooser_build_object_uri (actx->slot, attrs, has_key);
+	if (uri && NMA_IS_CERT_CHOOSER_BUTTON (actx->button)) {
+		remember_slot (actx->button, actx->slot);
+		nma_cert_chooser_button_set_uri_autoselected (actx->button, uri, has_key);
+	}
+	g_free (uri);
+
+	autoselect_ctx_free (actx);
+}
+
+static void
+autoselect_object_details (GObject *source_object, GAsyncResult *res, gpointer user_data)
+{
+	GckObject *object = GCK_OBJECT (source_object);
+	AutoselectCtx *actx = user_data;
+	GckAttributes *attrs;
+	gulong cka_class;
+	const GckAttribute *attr;
+	GError *error = NULL;
+
+	attrs = gck_object_get_finish (object, res, &error);
+	if (!attrs) {
+		g_warning ("Error getting attributes: %s", error->message);
+		g_clear_error (&error);
+	} else {
+		if (gck_attributes_find_ulong (attrs, CKA_CLASS, &cka_class)) {
+			switch (cka_class) {
+			case CKO_PUBLIC_KEY:
+			case CKO_PRIVATE_KEY:
+				attr = gck_attributes_find (attrs, CKA_ID);
+				if (attr && attr->value && attr->length)
+					g_hash_table_add (actx->key_ids,
+					                  g_bytes_new (attr->value, attr->length));
+				break;
+			case CKO_CERTIFICATE:
+				g_ptr_array_add (actx->certs, gck_attributes_ref (attrs));
+				break;
+			default:
+				break;
+			}
+		}
+		gck_attributes_unref (attrs);
+	}
+
+	if (actx->pending > 0)
+		actx->pending--;
+	if (actx->enum_done && actx->pending == 0)
+		autoselect_finish (actx);
+}
+
+static void
+autoselect_next_object (GObject *obj, GAsyncResult *res, gpointer user_data)
+{
+	AutoselectCtx *actx = user_data;
+	GckEnumerator *enm = GCK_ENUMERATOR (obj);
+	GList *objects;
+	GList *iter;
+	GError *error = NULL;
+
+	objects = gck_enumerator_next_finish (enm, res, &error);
+	g_object_unref (enm);
+	if (error) {
+		g_warning ("Error getting object: %s", error->message);
+		g_clear_error (&error);
+		autoselect_ctx_free (actx);
+		return;
+	}
+
+	for (iter = objects; iter; iter = iter->next) {
+		GckObject *object = GCK_OBJECT (iter->data);
+		const gulong attr_types[] = { CKA_ID, CKA_LABEL, CKA_CLASS };
+
+		actx->pending++;
+		gck_object_get_async (object, attr_types, G_N_ELEMENTS (attr_types),
+		                      NULL, autoselect_object_details, actx);
+	}
+
+	actx->enum_done = TRUE;
+	g_list_free_full (objects, g_object_unref);
+
+	if (actx->pending == 0)
+		autoselect_finish (actx);
+}
+
+static void
+autoselect_session_opened (GObject *obj, GAsyncResult *res, gpointer user_data)
+{
+	AutoselectCtx *actx = user_data;
+	GckSession *session;
+	GckEnumerator *enm;
+	GError *error = NULL;
+
+	session = gck_slot_open_session_finish (actx->slot, res, &error);
+	if (!session) {
+		g_clear_error (&error);
+		autoselect_ctx_free (actx);
+		return;
+	}
+	actx->session = session;
+
+	enm = gck_session_enumerate_objects (session, gck_attributes_new_empty (GCK_INVALID));
+	gck_enumerator_next_async (enm, -1, NULL, autoselect_next_object, actx);
+}
+
+static void
+autoselect_from_combo_model (NMACertChooserButton *button)
+{
+	NMACertChooserButtonPrivate *priv = NMA_CERT_CHOOSER_BUTTON_GET_PRIVATE (button);
+	GtkTreeModel *model;
+	GtkTreeIter iter;
+	GckSlot *the_slot = NULL;
+	guint token_count = 0;
+	gboolean valid;
+	AutoselectCtx *actx;
+
+	if (priv->uri)
+		return;
+
+	model = gtk_combo_box_get_model (GTK_COMBO_BOX (priv->button));
+	for (valid = gtk_tree_model_get_iter_first (model, &iter);
+	     valid;
+	     valid = gtk_tree_model_iter_next (model, &iter)) {
+		GckSlot *slot = NULL;
+
+		gtk_tree_model_get (model, &iter, COLUMN_SLOT, &slot, -1);
+		if (!slot)
+			continue;
+		token_count++;
+		if (token_count == 1)
+			the_slot = slot;
+		else
+			g_object_unref (slot);
+	}
+
+	if (token_count != 1) {
+		g_clear_object (&the_slot);
+		return;
+	}
+
+	actx = g_slice_new0 (AutoselectCtx);
+	actx->button = g_object_ref (button);
+	actx->slot = the_slot;
+	actx->key_ids = g_hash_table_new_full (g_bytes_hash, g_bytes_equal,
+	                                       (GDestroyNotify) g_bytes_unref, NULL);
+	actx->certs = g_ptr_array_new_with_free_func ((GDestroyNotify) gck_attributes_unref);
+
+	gck_slot_open_session_async (actx->slot, GCK_SESSION_READ_ONLY,
+	                             NULL, NULL, autoselect_session_opened, actx);
+}
+
+void
+nma_cert_chooser_button_autoselect_single_cert (NMACertChooserButton *button)
+{
+	NMACertChooserButtonPrivate *priv;
+
+	g_return_if_fail (NMA_IS_CERT_CHOOSER_BUTTON (button));
+	priv = NMA_CERT_CHOOSER_BUTTON_GET_PRIVATE (button);
+
+	if (use_simple_button (priv->flags))
+		return;
+	if (priv->uri)
+		return;
+
+	if (priv->modules_ready)
+		autoselect_from_combo_model (button);
+	else
+		priv->autoselect_requested = TRUE;
+}
+
+int
+nma_cert_chooser_button_login_token (NMACertChooserButton *button,
+                                     const guchar *pin,
+                                     gsize n_pin)
+{
+	NMACertChooserButtonPrivate *priv;
+	GckSession *session;
+	GError *error = NULL;
+	int result;
+
+	g_return_val_if_fail (NMA_IS_CERT_CHOOSER_BUTTON (button), 2);
+	priv = NMA_CERT_CHOOSER_BUTTON_GET_PRIVATE (button);
+
+	if (!priv->slot)
+		return 2;
+
+	session = gck_slot_open_session (priv->slot, GCK_SESSION_READ_ONLY, NULL, &error);
+	if (!session) {
+		g_warning ("Cannot open session for PIN check: %s",
+		           error ? error->message : "(unknown)");
+		g_clear_error (&error);
+		return 2;
+	}
+
+	if (gck_session_login (session, CKU_USER, pin, n_pin, NULL, &error)) {
+		gck_session_logout (session, NULL, NULL);
+		result = 0;
+	} else {
+		if (g_error_matches (error, GCK_ERROR, CKR_PIN_INCORRECT))
+			result = 1;
+		else
+			result = 2;
+		g_clear_error (&error);
+	}
+
+	g_object_unref (session);
+	return result;
 }
 #else
 typedef void GckSlot;
@@ -279,6 +561,19 @@ static int
 use_simple_button (NMACertChooserButtonFlags flags)
 {
 	return TRUE;
+}
+
+void
+nma_cert_chooser_button_autoselect_single_cert (NMACertChooserButton *button)
+{
+}
+
+int
+nma_cert_chooser_button_login_token (NMACertChooserButton *button,
+                                     const guchar *pin,
+                                     gsize n_pin)
+{
+	return 2;
 }
 #endif
 
@@ -362,6 +657,7 @@ select_from_file (NMACertChooserButton *button)
 			priv->pin = NULL;
 		}
 		priv->remember_pin = FALSE;
+		priv->has_matching_key = FALSE;
 		update_title (button);
 		g_signal_emit_by_name (button, "changed");
 	}
@@ -526,6 +822,7 @@ dispose (GObject *object)
 	nm_clear_g_free (&priv->title);
 	nm_clear_g_free (&priv->uri);
 	nm_clear_g_free (&priv->pin);
+	g_clear_object (&priv->slot);
 
         G_OBJECT_CLASS (nma_cert_chooser_button_parent_class)->dispose (object);
 }
@@ -623,8 +920,41 @@ nma_cert_chooser_button_set_uri (NMACertChooserButton *button, const gchar *uri)
 	if (priv->uri)
 		g_free (priv->uri);
 	priv->uri = g_strdup (uri);
+	priv->has_matching_key = FALSE;
+	g_clear_object (&priv->slot);
 	update_title (button);
 }
+
+/**
+ * nma_cert_chooser_button_set_uri_autoselected:
+ * @button: the #NMACertChooserButton instance
+ * @uri: the PKCS\#11 URI of the certificate to select
+ * @has_matching_key: whether the token carries a key with a matching CKA_ID
+ *
+ * Sets the chosen URI as if it had been picked by the user from a token and
+ * emits "changed", so that the consumer (NMACertChooser) runs its private key
+ * autodetection.
+ */
+void
+nma_cert_chooser_button_set_uri_autoselected (NMACertChooserButton *button,
+                                              const gchar *uri,
+                                              gboolean has_matching_key)
+{
+	NMACertChooserButtonPrivate *priv = NMA_CERT_CHOOSER_BUTTON_GET_PRIVATE (button);
+
+	if (priv->uri)
+		g_free (priv->uri);
+	priv->uri = g_strdup (uri);
+	priv->has_matching_key = has_matching_key;
+
+	nm_clear_g_free (&priv->pin);
+	priv->remember_pin = FALSE;
+
+	update_title (button);
+
+	g_signal_emit_by_name (button, "changed");
+}
+
 
 /**
  * nma_cert_chooser_button_get_id:
@@ -667,6 +997,59 @@ nma_cert_chooser_button_get_id (NMACertChooserButton *button, const gchar *uri)
 	return id_chunk;
 }
 
+/**
+ * nma_cert_chooser_button_derive_key_uri:
+ * @button: the #NMACertChooserButton instance
+ * @cert_uri: a PKCS\#11 URI of a certificate on a token
+ *
+ * Derives a private key URI from a certificate URI by keeping the token
+ * identification and the object id (CKA_ID).
+ *
+ * Returns: the derived key URI, or %NULL if @cert_uri is not a PKCS\#11
+ *   URI or carries no id.
+ */
+gchar *
+nma_cert_chooser_button_derive_key_uri (NMACertChooserButton *button, const gchar *cert_uri)
+{
+#if WITH_GCR
+	GckUriData *data;
+	GckBuilder *builder;
+	GckUriData key_uri_data = { 0, };
+	const GckAttribute *id;
+	gchar *key_uri = NULL;
+	GError *error = NULL;
+
+	if (!cert_uri)
+		return NULL;
+
+	data = gck_uri_parse (cert_uri, GCK_URI_FOR_OBJECT_ON_TOKEN, &error);
+	if (!data) {
+		g_warning ("Bad URI '%s': %s\n", cert_uri, error ? error->message : "(unknown)");
+		g_clear_error (&error);
+		return NULL;
+	}
+
+	id = gck_attributes_find (data->attributes, CKA_ID);
+	if (!id || !id->value || !id->length) {
+		gck_uri_data_free (data);
+		return NULL;
+	}
+
+	builder = gck_builder_new (GCK_BUILDER_NONE);
+	gck_builder_add_only (builder, data->attributes, CKA_ID, GCK_INVALID);
+	key_uri_data.attributes = gck_builder_end (builder);
+	key_uri_data.token_info = data->token_info;
+	key_uri = gck_uri_data_build (&key_uri_data, GCK_URI_FOR_OBJECT_ON_TOKEN);
+
+	gck_attributes_unref (key_uri_data.attributes);
+	gck_uri_data_free (data);
+
+	return key_uri;
+#else
+	return NULL;
+#endif
+}
+
 
 /**
  * nma_cert_chooser_button_get_pin:
@@ -700,6 +1083,24 @@ nma_cert_chooser_button_get_remember_pin (NMACertChooserButton *button)
 	NMACertChooserButtonPrivate *priv = NMA_CERT_CHOOSER_BUTTON_GET_PRIVATE (button);
 
 	return priv->remember_pin;
+}
+
+/**
+ * nma_cert_chooser_button_get_has_matching_key:
+ * @button: the #NMACertChooserButton instance
+ *
+ * Returns whether recent selection was made from a PKCS\#11 token
+ * and that token carries a key object (private or public) whose CKA_ID
+ * matches the selected certificate.
+ *
+ * Returns: TRUE if a matching key was observed on the token;
+ */
+gboolean
+nma_cert_chooser_button_get_has_matching_key (NMACertChooserButton *button)
+{
+	NMACertChooserButtonPrivate *priv = NMA_CERT_CHOOSER_BUTTON_GET_PRIVATE (button);
+
+	return priv->has_matching_key;
 }
 
 /**

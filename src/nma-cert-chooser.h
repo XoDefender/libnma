@@ -23,6 +23,7 @@ G_BEGIN_DECLS
  * @NMA_CERT_CHOOSER_FLAG_PASSWORDS: Hide all controls but the secrets entries
  * @NMA_CERT_CHOOSER_FLAG_PEM: Ensure the chooser only selects regular PEM files
  * @NMA_CERT_CHOOSER_FLAG_NO_PASSWORDS: Do not show password entries (Since: 1.8.34)
+ * @NMA_CERT_CHOOSER_FLAG_AUTODETECT_KEY: Auto-fill the private key from the selected certificate's PKCS\#11 id
  *
  * Flags that controls what is the certificate chooser button able to pick.
  * Currently only local files are supported, but might be extended to use URIs,
@@ -37,6 +38,7 @@ typedef enum {
 	NMA_CERT_CHOOSER_FLAG_PASSWORDS    = 0x2,
 	NMA_CERT_CHOOSER_FLAG_PEM          = 0x4,
 	NMA_CERT_CHOOSER_FLAG_NO_PASSWORDS = 0x8,
+	NMA_CERT_CHOOSER_FLAG_AUTODETECT_KEY = 0x10,
 } NMACertChooserFlags;
 
 #define NMA_TYPE_CERT_CHOOSER                   (nma_cert_chooser_get_type ())
@@ -156,6 +158,28 @@ NMA_AVAILABLE_IN_1_8
 gchar               *nma_cert_chooser_get_cert_id                  (NMACertChooser *cert_chooser,
                                                                     const gchar *uri);
                                                                     
+NMA_AVAILABLE_IN_1_8
+void                 nma_cert_chooser_autoselect_single_cert       (NMACertChooser *cert_chooser);
+
+/**
+ * NMATokenLoginResult:
+ * @NMA_TOKEN_LOGIN_SUCCESS: the PIN is correct
+ * @NMA_TOKEN_LOGIN_PIN_INCORRECT: the PIN is wrong (%CKR_PIN_INCORRECT)
+ * @NMA_TOKEN_LOGIN_OTHER_ERROR: any other failure
+ *
+ * Outcome of nma_cert_chooser_login_token().
+ */
+typedef enum {
+	NMA_TOKEN_LOGIN_SUCCESS,
+	NMA_TOKEN_LOGIN_PIN_INCORRECT,
+	NMA_TOKEN_LOGIN_OTHER_ERROR,
+} NMATokenLoginResult;
+
+NMA_AVAILABLE_IN_1_8
+NMATokenLoginResult  nma_cert_chooser_login_token                  (NMACertChooser *cert_chooser,
+                                                                    const guchar *pin,
+                                                                    gsize n_pin);
+
 G_END_DECLS
 
 #endif /* __NMA_CERT_CHOOSER_H__ */

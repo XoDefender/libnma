@@ -56,6 +56,26 @@ gchar *
 nma_cert_chooser_button_get_id (NMACertChooserButton *button, 
 								const gchar *uri);
 
+gchar *
+nma_cert_chooser_button_derive_key_uri (NMACertChooserButton *button,
+                                        const gchar *cert_uri);
+
+gboolean
+nma_cert_chooser_button_get_has_matching_key (NMACertChooserButton *button);
+
+void
+nma_cert_chooser_button_set_uri_autoselected (NMACertChooserButton *button,
+                                              const gchar *uri,
+                                              gboolean has_matching_key);
+
+void
+nma_cert_chooser_button_autoselect_single_cert (NMACertChooserButton *button);
+
+int
+nma_cert_chooser_button_login_token (NMACertChooserButton *button,
+                                     const guchar *pin,
+                                     gsize n_pin);
+
 gchar *nma_cert_chooser_button_get_pin (NMACertChooserButton *button);
 
 gboolean nma_cert_chooser_button_get_remember_pin (NMACertChooserButton *button);
