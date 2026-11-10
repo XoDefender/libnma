@@ -7,3 +7,7 @@ rbt-fix-grab-focus-on-psk-entry.patch
 rbt-add-ignore-opensc-env-var.patch
 rbt-fix-cert-chooser-dialog-crash.patch
 rbt-fix-pkcs11-object-selection.patch
+rbt-expand-nm-applet-gschema.patch
+rbt-add-cert-chooser-flag-no-password.patch
+rbt-display-rfc822-in-cert-chooser.patch
+rbt-add-ask-cert-data-on-wifi-connect-check.patch
